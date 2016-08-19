@@ -1,9 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from . import choices
 
 
-class Usuario(User):
+class Usuario(AbstractUser):
     cargo = models.CharField(max_length=50, choices=choices.CARGO_CHOICES)
 
     class Meta:
