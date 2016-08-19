@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Organizacion(models.Model):
-    FILTROS = ["razonSocial__icontains", "localidad__icontains"]
+    FILTROS = ["razonSocial__icontains", "localidad__icontains"]#prueba git farma plus
     razonSocial = models.CharField(max_length=50, unique=True)
     cuit = models.CharField(max_length=80, unique=True,
                             error_messages={'unique': "Ya existe una organizacion con este CUIT"})
