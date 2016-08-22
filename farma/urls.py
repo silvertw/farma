@@ -70,7 +70,6 @@ url(r'^medicamentos/estadisticas/topOrganizacionesPorPedido/downloadExcel/$', mv
     url(r'^farmacias/update/(?P<id_farmacia>\d+)/$', oviews.farmacia_update, name="farmacia_update"),
     url(r'^farmacias/tryDelete/(?P<id_farmacia>\d+)/$', oviews.farmacia_try_delete, name="farmacia_try_delete"),
     url(r'^farmacias/delete/(?P<id_farmacia>\d+)/$', oviews.farmacia_delete, name="farmacia_delete"),
-    
     # ***************************************** Clinica *******************************************
     url(r'^clinicas/$',oviews.clinicas, name="clinicas"),
     url(r'^clinicas/add/$', oviews.clinica_add, name="clinica_add"),
@@ -85,7 +84,9 @@ url(r'^medicamentos/estadisticas/topOrganizacionesPorPedido/downloadExcel/$', mv
     url(r'^laboratorios/delete/(?P<id_laboratorio>\d+)/$', oviews.laboratorio_delete, name="laboratorio_delete"),
 
     # *************************************** Obra Social *****************************************
-    url(r'^obrasSociales/$', views.paginaEnConstruccion, name="paginaEnConstruccion"),
+
+    url(r'^obrasSociales/$', oviews.ObrasSociales, name="ObrasSociales"),
+    url(r'^obSocAdjuntarAclinica/(?P<id_clinica>\d+)/$', oviews.ObSocAdjuntarAclinica, name="ObSocAdjuntarAclinica"),
 
     # =============================================================================================== #
     #                                           PEDIDOS

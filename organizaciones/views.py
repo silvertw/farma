@@ -108,9 +108,6 @@ def farmacia_delete(request, id_farmacia):
         return redirect('farmacias')
 
 
-
-
-
 # ****** CLINICAS ******
 
 @login_required(login_url='login')
@@ -235,3 +232,30 @@ def laboratorio_delete(request, id_laboratorio):
 
         laboratorio.delete()
         return redirect('laboratorios')
+
+# ******* OBRAS SAOCIALES ******
+
+@login_required(login_url='login')
+def ObrasSociales(request):
+    filters = get_filtros(request.GET, models.ObraSocial)
+    mfilters = dict(filter(lambda v: v[0] in models.ObraSocial.FILTROS, filters.items()))
+    lObrasSociales = models.ObraSocial.objects.filter(**mfilters)
+    estadisticas = {
+        'total': models.ObraSocial.objects.all().count(),
+        'filtrados': lObrasSociales.count()
+    }
+    return render(request, "obraSocial/ObrasSociales.html", {"ObrasSociales": lObrasSociales, "filtros": filters, 'estadisticas': estadisticas})
+
+@login_required(login_url='login')
+def ObSocAdjuntarAclinica(request, id_clinica):
+    clinica = models.Clinica.objects.get(pk=id_clinica)
+    lObSoc=(models.ObraSocial.objects.filter(clinica__pk=id_clinica))#obteniendo objetos de la relacion
+    filters = get_filtros(request.GET, models.ObraSocial)
+    mfilters = dict(filter(lambda v: v[0] in models.ObraSocial.FILTROS, filters.items()))
+    lObrasSociales = lObSoc.filter(**mfilters)
+
+    estadisticas = {
+        'total': models.ObraSocial.objects.all().count(),
+        'filtrados': lObrasSociales.count()
+    }
+    return render(request, "obraSocial/ObSocAdjuntarAclinica.html", {"ObrasSociales": lObrasSociales, "filtros": filters, 'estadisticas': estadisticas, "clinica":clinica})

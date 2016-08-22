@@ -29,7 +29,7 @@ class ObraSocial(Organizacion):
 
 class Clinica(Organizacion):
     FILTROS = ["razonSocial__icontains", "localidad__icontains", "obraSocial__icontains"]
-    obraSocial = models.ManyToManyField('ObraSocial')
+    obraSocial = models.ManyToManyField(ObraSocial, blank=True)
 
     def __str__(self):
         return self.razonSocial
