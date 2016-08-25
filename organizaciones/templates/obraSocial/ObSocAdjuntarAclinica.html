@@ -20,7 +20,17 @@
 
 {% block botones-header-tabla %} 
     {% if perms.usuarios.encargado_general %}
-        <a class="btn-alta" href="{% url 'farmacia_add' %}"><span class="glyphicon glyphicon-plus"></span> Agregar Obra Social a Clinica {{clinica}}</a>
+
+            <div class="input-group">
+
+                <span class="input-group-btn">
+                    <button class="btn btn-default" onclick="envioForm();">
+                        AGREGAR OBRA SOCIAL
+                    </button>
+                </span>
+                <input class="form-control form-field form-field-simple" type="text" id="razonSocialAgr" name="razonSocialAgr" value="{{filtros.razonSocial}}" placeholder="Razon Social"/>
+            </div>
+
     {% endif %}
 {% endblock %}
 
@@ -38,7 +48,7 @@
     </thead>
     <tbody>
         {% for obrasSocial in ObrasSociales %}
-            <tr class="clickeable" data-id="{{ obrasSocial.id }}">
+            <tr class="clickeable" data-id="{{ obrasSocial.id }}" id="listadoOS">
                 <td>{{obrasSocial.razonSocial}}</td>
                 <td>{{obrasSocial.localidad}}</td>
                 <td>{{obrasSocial.direccion}}</td>
@@ -50,6 +60,7 @@
                         Acción
                         <span class="caret"></span>
                         </button>
+
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
 
                             <li>
@@ -85,11 +96,48 @@
 {% block mensaje-fallo-eliminacion %}Esta farmacia no puede ser eliminada por las siguientes razones:{% endblock %}
 
 {% block more-scripts %}
+
     <script>
+
         $(document).on("keyup", function(e){
             if(e.keyCode == 112){
                 window.open("{% static 'documentacion/build/html/farmacias.html' %}");
             }
         });
+
+
+
+        function envioForm(){
+
+           /* window.location.assign("{% url 'ObSocAdjuntarAclinica' clinica.pk %}");*/
+
+            var valor = document.getElementById("razonSocialAgr").value;
+            valor=valor + "_" + {{clinica.pk}}
+
+            $.ajax({
+
+                contentType: false,
+                processData: false,
+                data: valor,
+                type: 'get',
+
+                url: {% url 'ObSocAdjuntarAclinicaR' %},
+
+                beforeSend:function(){
+
+                },
+                success:function(response){
+                    alert(response);
+                    window.location.assign("{% url 'ObSocAdjuntarAclinica' clinica.pk %}");
+
+                    /*location.reload()*/
+
+                }
+
+            });
+
+
+        }
     </script>
+
 {% endblock %}

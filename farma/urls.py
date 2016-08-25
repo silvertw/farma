@@ -58,7 +58,7 @@ urlpatterns = [
     url(r'^medicamentos/estadisticas/topOrganizacionesPorCantidad/$', mviews.medicamentos_topOrganizacionesPorCantidad, name="medicamentos_topOrganizacionesPorCantidad"),
     url(r'^medicamentos/estadisticas/topOrganizacionesPorCantidad/downloadExcel/$', mviews.medicamentos_topOrganizacionesPorCantidadExcel, name="medicamentos_topOrganizacionesPorCantidadExcel"),
     url(r'^medicamentos/estadisticas/topOrganizacionesPorPedidos/$', mviews.medicamentos_topOrganizacionesPorPedidos, name="medicamentos_topOrganizacionesPorPedidos"),
-url(r'^medicamentos/estadisticas/topOrganizacionesPorPedido/downloadExcel/$', mviews.medicamentos_topOrganizacionesPorPedidoExcel, name="medicamentos_topOrganizacionesPorPedidoExcel"),
+    url(r'^medicamentos/estadisticas/topOrganizacionesPorPedido/downloadExcel/$', mviews.medicamentos_topOrganizacionesPorPedidoExcel, name="medicamentos_topOrganizacionesPorPedidoExcel"),
 
     # =============================================================================================== #
     #                                       ORGANIZACIONES
@@ -87,6 +87,7 @@ url(r'^medicamentos/estadisticas/topOrganizacionesPorPedido/downloadExcel/$', mv
 
     url(r'^obrasSociales/$', oviews.ObrasSociales, name="ObrasSociales"),
     url(r'^obSocAdjuntarAclinica/(?P<id_clinica>\d+)/$', oviews.ObSocAdjuntarAclinica, name="ObSocAdjuntarAclinica"),
+    url(r'^obSocAdjuntarAclinicaR/$', oviews.ObSocAdjuntarAclinicaR, name="ObSocAdjuntarAclinicaR"),
 
     # =============================================================================================== #
     #                                           PEDIDOS

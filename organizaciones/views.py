@@ -248,6 +248,7 @@ def ObrasSociales(request):
 
 @login_required(login_url='login')
 def ObSocAdjuntarAclinica(request, id_clinica):
+
     clinica = models.Clinica.objects.get(pk=id_clinica)
     lObSoc=(models.ObraSocial.objects.filter(clinica__pk=id_clinica))#obteniendo objetos de la relacion
     filters = get_filtros(request.GET, models.ObraSocial)
@@ -259,3 +260,46 @@ def ObSocAdjuntarAclinica(request, id_clinica):
         'filtrados': lObrasSociales.count()
     }
     return render(request, "obraSocial/ObSocAdjuntarAclinica.html", {"ObrasSociales": lObrasSociales, "filtros": filters, 'estadisticas': estadisticas, "clinica":clinica})
+
+def ObSocAdjuntarAclinicaR (request):
+
+    var = request.GET #Se otiene el request
+    val=var.keys()#Se obtiene la cadena que llega en este caso es la clave del diccionario
+    rasocYkeyClin = val[0]#Como se retorna una se obtiene la cadena xxxx_x
+
+    rasocYkeyClin=str(rasocYkeyClin)#Se debe convertir a cadena
+    rasocYkeyClinArr = rasocYkeyClin.split("_")#Se hace un split para dividir razon social de os y el id de clinica
+
+    razonSocialOS=rasocYkeyClinArr[0]
+    idClinica = rasocYkeyClinArr[1]
+
+    clinicaz = models.Clinica.objects.get(pk=idClinica)
+    lObSocAll = models.ObraSocial.objects.all()
+    lObSoc = (models.ObraSocial.objects.filter(clinica__pk=idClinica))#obteniendo objetos de la relacion
+
+    verifEnTodasLaOs = lObSocAll.filter(razonSocial=razonSocialOS)#obtiene la obra social de todas las existentes
+    verifEnOsVinculadas=lObSoc.filter(razonSocial=razonSocialOS)#obtiene la obra social de las que estan vinculadas a la clinica
+
+    if verifEnTodasLaOs:
+        if verifEnOsVinculadas:
+            msj = "La obra social ya esta vinculada a esta Clinica"
+        else:
+            #logica de vinculacion
+            clinicaz.obraSocial.add(verifEnTodasLaOs[0])
+            clinicaz.save()
+            #models.ObraSocial.objects.filter(razonSocial=razonSocialOS)
+            msj="La Obra Social se vinculo correctamente"
+    else:
+        msj = "La obra social que intenta vincular no existe"
+
+    response = HttpResponse(msj)
+
+    return response
+
+
+
+
+
+
+
+
