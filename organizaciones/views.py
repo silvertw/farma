@@ -277,15 +277,15 @@ def ObSocAdjuntarAclinicaR (request):
     lObSocAll = models.ObraSocial.objects.all()
     lObSoc = (models.ObraSocial.objects.filter(clinica__pk=idClinica))#obteniendo objetos de la relacion
 
-    verifEnTodasLaOs = lObSocAll.filter(razonSocial=razonSocialOS)#obtiene la obra social de todas las existentes
-    verifEnOsVinculadas=lObSoc.filter(razonSocial=razonSocialOS)#obtiene la obra social de las que estan vinculadas a la clinica
+    obSocTodas = lObSocAll.filter(razonSocial=razonSocialOS)#obtiene la obra social de todas las existentes
+    obSocClinica=lObSoc.filter(razonSocial=razonSocialOS)#obtiene la obra social de las que estan vinculadas a la clinica
 
-    if verifEnTodasLaOs:
-        if verifEnOsVinculadas:
+    if obSocTodas:
+        if obSocClinica:
             msj = "La obra social ya esta vinculada a esta Clinica"
         else:
             #logica de vinculacion
-            clinicaz.obraSocial.add(verifEnTodasLaOs[0])
+            clinicaz.obraSocial.add(obSocTodas[0])
             clinicaz.save()
             #models.ObraSocial.objects.filter(razonSocial=razonSocialOS)
             msj="La Obra Social se vinculo correctamente"
