@@ -263,31 +263,42 @@ def ObSocAdjuntarAclinica(request, id_clinica):
 
 def ObSocAdjuntarAclinicaR (request):
 
+
+    request.session["ObSocAdjuntarAclinicaR"]=request.GET
+    print "ObSocAdjuntarAclinicaR===>>>", request.session["ObSocAdjuntarAclinicaR"]
+
+
     var = request.GET #Se otiene el request
-    val=var.keys()#Se obtiene la cadena que llega en este caso es la clave del diccionario
-    rasocYkeyClin = val[0]#Como se retorna una se obtiene la cadena xxxx_x
+    data_request = var.keys()#Obtiene el JSON del request
+    decoded_json = json.loads(data_request[0])#Decodificacion de JSON
 
-    rasocYkeyClin=str(rasocYkeyClin)#Se debe convertir a cadena
-    rasocYkeyClinArr = rasocYkeyClin.split("_")#Se hace un split para dividir razon social de os y el id de clinica
+    #================SE OBTIENE CADA VALOR=======================
+    idDeClin = decoded_json["idDeClin"]
+    RazonSocClin = decoded_json["razSocClinAenviar"]
+    razonSocialOS = decoded_json["razSocOsAenviar"]
 
-    razonSocialOS=rasocYkeyClinArr[0]
-    idClinica = rasocYkeyClinArr[1]
+    clinicaObject = models.Clinica.objects.get(pk=idDeClin)#Se obtiene el objeto clinica
+    lObSocAll = models.ObraSocial.objects.all()#Se obtienen todas las obras sociales existentes
+    lObSoc = (models.ObraSocial.objects.filter(clinica__pk=idDeClin))#Se obtienen todos las ob soc que estan relacionadas a la clinica actual
 
-    clinicaz = models.Clinica.objects.get(pk=idClinica)
-    lObSocAll = models.ObraSocial.objects.all()
-    lObSoc = (models.ObraSocial.objects.filter(clinica__pk=idClinica))#obteniendo objetos de la relacion
-
-    obSocTodas = lObSocAll.filter(razonSocial=razonSocialOS)#obtiene la obra social de todas las existentes
-    obSocClinica=lObSoc.filter(razonSocial=razonSocialOS)#obtiene la obra social de las que estan vinculadas a la clinica
+    obSocTodas = lObSocAll.filter(razonSocial=razonSocialOS)#Obtiene la obra social de todas las existentes
+    obSocClinica = lObSoc.filter(razonSocial=razonSocialOS)#Obtiene la obra social de todas las que estan vinculadas a la clinica
 
     if obSocTodas:
         if obSocClinica:
-            msj = "La obra social ya esta vinculada a esta Clinica"
+            #----------------------------------------------------------
+            if decoded_json["action"]=="desvincular":
+                IdObraSocial = decoded_json["idDeObraSocial"]
+                ObSocRemov = models.ObraSocial.objects.get(pk=IdObraSocial)
+                clinicaObject.obraSocial.remove(ObSocRemov)
+            else:
+                msj = "La obra social ya esta vinculada a esta Clinica"
+            #----------------------------------------------------------
         else:
-            #logica de vinculacion
-            clinicaz.obraSocial.add(obSocTodas[0])
-            clinicaz.save()
-            #models.ObraSocial.objects.filter(razonSocial=razonSocialOS)
+
+            clinicaObject.obraSocial.add(obSocTodas[0])
+            clinicaObject.save()
+
             msj="La Obra Social se vinculo correctamente"
     else:
         msj = "La obra social que intenta vincular no existe"
@@ -295,7 +306,6 @@ def ObSocAdjuntarAclinicaR (request):
     response = HttpResponse(msj)
 
     return response
-
 
 
 

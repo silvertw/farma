@@ -21,15 +21,23 @@
 {% block botones-header-tabla %} 
     {% if perms.usuarios.encargado_general %}
 
-            <div class="input-group">
 
+
+
+
+            <div class="input-group">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" onclick="envioForm();">
+                    <button class="btn btn-default" id="agregaOSid" name="campoOS">
                         AGREGAR OBRA SOCIAL
                     </button>
                 </span>
                 <input class="form-control form-field form-field-simple" type="text" id="razonSocialAgr" name="razonSocialAgr" value="{{filtros.razonSocial}}" placeholder="Razon Social"/>
             </div>
+
+
+
+
+
 
     {% endif %}
 {% endblock %}
@@ -46,7 +54,8 @@
             {% endif %}
         </tr>
     </thead>
-    <tbody>
+    <tbody name="tbl">
+
         {% for obrasSocial in ObrasSociales %}
             <tr class="clickeable" data-id="{{ obrasSocial.id }}" id="listadoOS">
                 <td>{{obrasSocial.razonSocial}}</td>
@@ -72,8 +81,8 @@
                             </li>
                             <li>
 
-                                <a class="action-link btn-eliminar-ajax" href="#">
-                                    <span class="action-link-icon animated glyphicon glyphicon-trash"></span> Quitar
+                                <a class="action-link btn-desvincular" id="{{ obrasSocial.id }}" name="desvinculacion" href="">
+                                    <span class="action-link-icon animated glyphicon glyphicon-trash"></span> Desvincular
                                 </a>
 
                             </li>
@@ -84,6 +93,7 @@
                 {% endif %}
             </tr>
         {% endfor %}
+
     </tbody>
 {% endblock %}
 
@@ -98,6 +108,7 @@
 {% block more-scripts %}
 
     <script>
+       
 
         $(document).on("keyup", function(e){
             if(e.keyCode == 112){
@@ -106,19 +117,57 @@
         });
 
 
+        $(document).on("click",function(e){
 
-        function envioForm(){
+            identificadorDeID = e.target.id; /*obtiene el id del elemento del DOM que fue clickeado*/
+            identificadorDeNombre = e.target.name; /*obtiene el name del elemento del DOM que fue clickeado*/
+            var identificador = new Array();
+            identificador[0] = identificadorDeNombre;
+            identificador[1] = identificadorDeID;
 
-           /* window.location.assign("{% url 'ObSocAdjuntarAclinica' clinica.pk %}");*/
+            envioForm(identificador);
 
-            var valor = document.getElementById("razonSocialAgr").value;
-            valor=valor + "_" + {{clinica.pk}}
+        });
+
+        function envioForm(identificador){
+
+            var razSocOsAenviar,idDeObraSocial,accion;
+
+            if(identificador[1]== "agregaOSid" ){
+                razSocOsAenviar = document.getElementById("razonSocialAgr").value;
+                accion="vincular";
+            }
+            if(identificador[0] == "desvinculacion"){
+
+                confirmar = confirm("Realmente quiere desvinular la Obra Social?");
+
+                if (confirmar){
+                    idDeObraSocial = identificador[1];/*Se obtiene el id de la OS que se selecciono en la tabla*/
+                    {% for obraSocial in ObrasSociales %}/*MEJORAR se usa para obtener la razon social de la OS*/
+                        if ( {{obraSocial.id}} == idDeObraSocial ){
+                            razSocOsAenviar = '{{obraSocial.razonSocial}}';
+                        }
+                    {% endfor %}
+                    accion="desvincular";
+                }
+            }
+            var razSocClinAenviar = '{{clinica.razonSocial}}';
+            var idDeClin = '{{clinica.id}}';
+
+            /*===========CREACION DE UN OBJETO JSON========*/
+            var paquete = new Object();
+            paquete.idDeClin = idDeClin;
+            paquete.razSocClinAenviar = razSocClinAenviar;
+            paquete.idDeObraSocial = idDeObraSocial;
+            paquete.razSocOsAenviar = razSocOsAenviar;
+            paquete.action=accion;
+            var paqueteJson = JSON.stringify(paquete);
 
             $.ajax({
 
-                contentType: false,
+                contentType: 'json',
                 processData: false,
-                data: valor,
+                data: paqueteJson,
                 type: 'get',
 
                 url: {% url 'ObSocAdjuntarAclinicaR' %},
@@ -129,15 +178,11 @@
                 success:function(response){
                     alert(response);
                     window.location.assign("{% url 'ObSocAdjuntarAclinica' clinica.pk %}");
-
                     /*location.reload()*/
-
                 }
-
             });
-
-
         }
     </script>
+    <!--script type="text/javascript" src = estaticos\js\vincYdesvincOS.js></script-->
 
 {% endblock %}
