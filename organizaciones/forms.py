@@ -127,15 +127,15 @@ class FarmaciaFormUpdate(FarmaciaFormGenerico):
 class ClinicaFormGenerico(forms.ModelForm):
     class Meta:
         model = models.Clinica
-        fields = ["razonSocial", "cuit", "localidad", "direccion", "obraSocial", "telefono", "email"]
+        fields = ["razonSocial", "cuit", "localidad", "direccion", "telefono", "email", "obraSocial"]
         labels = {
             'razonSocial': _('Razon social'),
             'cuit': _('CUIT'),
             'localidad': _('Localidad'),
             'direccion': _('Direccion'),
-            'obraSocial': _('Obra social'),
             'telefono': _('Telefono'),
             'email': _('Email'),
+            'obraSocial': _('Obra Social'),
         }
 
     def clean_razonSocial(self):
@@ -159,16 +159,6 @@ class ClinicaFormGenerico(forms.ModelForm):
                 raise forms.ValidationError('La direccion no puede contener caracteres especiales, excepto "°"')
         return direccion
 
-    def clean_obraSocial(self):
-        obraSocial = self.cleaned_data['obraSocial']
-        if obraSocial:
-            obraSocial.upper()
-            obrasSociales = obraSocial.split(',')
-            for obrasSocial in obrasSociales:
-                if not re.match(r"^[a-zA-Z]+((\s[a-zA-Z]+)+)?$", obrasSocial):
-                    raise forms.ValidationError('Las Obras Sociales solo puede contener letras y espacios')
-            return obraSocial.upper()
-        return obraSocial
 
 
 class ClinicaFormAdd(ClinicaFormGenerico):
@@ -181,7 +171,6 @@ class ClinicaFormAdd(ClinicaFormGenerico):
         Field('cuit', placeholder='CUIT'),
         Field('localidad', placeholder='Localidad'),
         Field('direccion', placeholder='Direccion'),
-        Field('obraSocial', placeholder='Obra social'),
         Field('telefono', placeholder='Telefono'),
         Field('email', placeholder='Email'),
         FormActions(
@@ -219,7 +208,6 @@ class ClinicaFormUpdate(ClinicaFormGenerico):
         Field('cuit', placeholder='CUIT', readonly=True),
         Field('localidad', placeholder='Localidad'),
         Field('direccion', placeholder='Direccion'),
-        Field('obraSocial', placeholder='Obra social'),
         Field('telefono', placeholder='Telefono'),
         Field('email', placeholder='Email'),
         FormActions(
@@ -320,3 +308,103 @@ class LaboratorioFormUpdate(LaboratorioFormGenerico):
             HTML("<p class=\"campos-obligatorios pull-right\"><span class=\"glyphicon glyphicon-info-sign\"></span> Estos campos son obligatorios (*)</p>")
         )
     )  
+
+class ObraSocialFormGenerico(forms.ModelForm):
+    class Meta:
+        model = models.ObraSocial
+        fields = ["razonSocial", "cuit", "localidad", "direccion", "nombreGerente", "telefono", "email"]
+        labels = {
+            'razonSocial': _('Razon social'),
+            'cuit': _('CUIT'),
+            'localidad': _('Localidad'),
+            'direccion': _('Direccion'),
+            'nombreGerente': _('Nombre de gerente'),
+            'telefono': _('Telefono'),
+            'email': _('Email'),
+        }
+
+    def clean_razonSocial(self):
+        razonSocial = self.cleaned_data['razonSocial']
+        if razonSocial:
+            if not re.match(r"^[a-zA-Z\d]+((\s[a-zA-Z\d]+)+)?$", razonSocial):
+                raise forms.ValidationError('La razon social no puede contener caracteres especiales')
+        return razonSocial
+
+    def clean_localidad(self):
+        localidad = self.cleaned_data['localidad']
+        if localidad:
+            if not re.match(r"^[a-zA-Z]+((\s[a-zA-Z]+)+)?$", localidad):
+                raise forms.ValidationError('La localidad solo puede contener letras y espacios')
+        return localidad
+
+    def clean_direccion(self):
+        direccion = self.cleaned_data['direccion']
+        if direccion:
+            if not re.match(r"^[a-zA-Z\d°]+((\s[a-zA-Z\d°]+)+)?$", direccion):
+                raise forms.ValidationError('La direccion no puede contener caracteres especiales, excepto "°"')
+        return direccion
+
+    def clean_nombreGerente(self):
+        nombreGerente = self.cleaned_data['nombreGerente']
+        if nombreGerente:
+            if not re.match(r"^[a-zA-Z]+((\s[a-zA-Z]+)+)?$", nombreGerente):
+                raise forms.ValidationError('El nombre del gerente solo puede contener letras y espacios')
+        return nombreGerente
+
+
+class ObraSocialFormAdd(ObraSocialFormGenerico):
+    helper = FormHelper()
+    helper.form_class = 'form'
+    helper.form_id = 'my-form'
+    helper.form_action = 'obraSocial_add'
+    helper.layout = Layout(
+        Field('razonSocial', placeholder='Razon Social'),
+        Field('cuit', placeholder='CUIT',),
+        Field('localidad', placeholder='Localidad'),
+        Field('direccion', placeholder='Direccion'),
+        Field('nombreGerente', placeholder='Gerente'),
+        Field('telefono', placeholder='Telefono'),
+        Field('email', placeholder='Email'),
+        FormActions(
+            StrictButton('Guardar y Continuar', type="submit", name="_continuar", value="_continuar", id="btn-guardar-continuar",
+                        css_class="btn btn-primary"),
+            StrictButton('Guardar y Volver', type="submit", name="_volver", value="_volver", id="btn-guardar-volver",
+                        css_class="btn btn-primary"),
+            HTML("<p class=\"campos-obligatorios pull-right\"><span class=\"glyphicon glyphicon-info-sign\"></span> Estos campos son obligatorios (*)</p>")
+        )
+    )
+
+    def clean_cuit(self):
+        cuit = self.cleaned_data['cuit']
+        if cuit:
+            if models.Farmacia.objects.filter(cuit=cuit).exists():
+                raise forms.ValidationError('Ya existe una farmacia con este CUIT')
+
+            if models.Clinica.objects.filter(cuit=cuit).exists():
+                raise forms.ValidationError('Ya existe una clínica con este CUIT')
+
+            if models.Laboratorio.objects.filter(cuit=cuit).exists():
+                raise forms.ValidationError('Ya existe un laboratorio con este CUIT')
+
+            if not re.match(r"^[0-9]{2}-[0-9]{8}-[0-9]$", cuit):
+                raise forms.ValidationError('CUIT inválido, por favor siga este formato xx-xxxxxxxx-x')
+        return cuit
+
+class ObraSocialFormUpdate(ObraSocialFormGenerico):
+    helper = FormHelper()
+    helper.form_class = 'form'
+    helper.form_id = 'my-form'
+    helper.layout = Layout(
+        Field('razonSocial', placeholder='Razon social', readonly=True),
+        Field('cuit', placeholder='CUIT', readonly=True),
+        Field('localidad', placeholder='Localidad'),
+        Field('direccion', placeholder='Direccion'),
+        Field('nombreGerente', placeholder='Gerente'),
+        Field('telefono', placeholder='Telefono'),
+        Field('email', placeholder='Email'),
+        FormActions(
+            StrictButton('Guardar Cambios', type="submit", name="_continuar", value="_continuar", id="btn-guardar-continuar",
+                        css_class="btn btn-primary"),
+            HTML("<p class=\"campos-obligatorios pull-right\"><span class=\"glyphicon glyphicon-info-sign\"></span> Estos campos son obligatorios (*)</p>")
+        )
+    )

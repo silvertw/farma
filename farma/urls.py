@@ -86,6 +86,8 @@ urlpatterns = [
     # *************************************** Obra Social *****************************************
 
     url(r'^obrasSociales/$', oviews.ObrasSociales, name="ObrasSociales"),
+    url(r'obraSocial/add/$', oviews.obraSocial_add, name="obraSocial_add"),
+    url(r'^obraSocial/update/(?P<id_obraSocial>\d+)/$', oviews.obraSocial_update, name="obraSocial_update"),
     url(r'^obSocAdjuntarAclinica/(?P<id_clinica>\d+)/$', oviews.ObSocAdjuntarAclinica, name="ObSocAdjuntarAclinica"),
     url(r'^obSocAdjuntarAclinicaR/$', oviews.ObSocAdjuntarAclinicaR, name="ObSocAdjuntarAclinicaR"),
 

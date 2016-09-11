@@ -35,7 +35,9 @@ INSTALLED_APPS = (
     'medicamentos',
     'organizaciones',
     'pedidos',
-    'usuarios'
+    'usuarios',
+
+    'minidetector',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -47,6 +49,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'minidetector.Middleware',
 )
 
 ROOT_URLCONF = 'farma.urls'

@@ -261,6 +261,37 @@ def ObSocAdjuntarAclinica(request, id_clinica):
     }
     return render(request, "obraSocial/ObSocAdjuntarAclinica.html", {"ObrasSociales": lObrasSociales, "filtros": filters, 'estadisticas': estadisticas, "clinica":clinica})
 
+@permission_required('usuarios.encargado_general', login_url='login')
+@login_required(login_url='login')
+def obraSocial_add(request):
+    if request.method == "POST":
+        form = forms.ObraSocialFormAdd(request.POST)
+        if form.is_valid():
+            form.save()
+            if '_volver' in request.POST:
+                return redirect('ObrasSociales')
+            else:
+                request.session['successAdd'] = True
+                return redirect('obraSocial_add')
+    else:
+        form = forms.ObraSocialFormAdd()
+    successAdd = hubo_alta(request.session)
+    return render(request, "obraSocial/obraSocialAdd.html", {"form": form, 'successAdd': successAdd})
+
+@permission_required('usuarios.encargado_general', login_url='login')
+@login_required(login_url='login')
+def obraSocial_update(request, id_obraSocial):
+    obraSocial = get_object_or_404(models.ObraSocial, pk=id_obraSocial)
+    if request.method == "POST":
+        form = forms.ObraSocialFormUpdate(request.POST, instance=obraSocial)
+        if form.is_valid():
+            form.save()
+            return redirect('ObrasSociales')
+    else:
+        form = forms.ObraSocialFormUpdate(instance=obraSocial)
+    return render(request, "obraSocial/obraSocialUpdate.html", {'form': form, 'obraSocial': obraSocial})
+
+
 def ObSocAdjuntarAclinicaR (request):
 
 

@@ -1,7 +1,7 @@
 {% extends "base/base-listado.html" %}
 {% load staticfiles %}
 
-{% block title %} Farmacias {% endblock %}
+{% block title %} Obras Sociales {% endblock %}
 
 {% block breadcrumb-items %}
     <li><a href="{% url 'inicio' %}">Inicio</a></li>
@@ -20,7 +20,7 @@
 
 {% block botones-header-tabla %} 
     {% if perms.usuarios.encargado_general %}
-        <a class="btn-alta" href="{% url 'farmacia_add' %}"><span class="glyphicon glyphicon-plus"></span> Alta</a>
+        <a class="btn-alta" href="{% url 'obraSocial_add' %}"><span class="glyphicon glyphicon-plus"></span> Alta</a>
     {% endif %}
 {% endblock %}
 
@@ -42,7 +42,7 @@
                 <td>{{obrasSocial.razonSocial}}</td>
                 <td>{{obrasSocial.localidad}}</td>
                 <td>{{obrasSocial.direccion}}</td>
-                <td>{{obrasSocial.nombreEncargado}}</td>
+                <td>{{obrasSocial.nombreGerente}}</td>
                 {% if perms.usuarios.encargado_general %}
                 <td class="action">
                     <div class="dropdown">
@@ -53,7 +53,7 @@
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
                             <li>
 
-                                <a class="action-link" href="#">
+                                <a class="action-link" href="{% url 'obraSocial_update' obrasSocial.pk %}">
                                     <span class="action-link-icon animated glyphicon glyphicon-edit"></span> Modificar
                                 </a>
 

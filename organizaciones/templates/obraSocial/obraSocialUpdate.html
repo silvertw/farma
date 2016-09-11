@@ -1,0 +1,36 @@
+{% extends "base/base-add-update-2.html" %}
+{% load staticfiles %}
+
+{% block title %}Modificar Obra Social{% endblock %}
+
+{% block breadcrumb-items %}
+    <li><a href="{% url 'inicio' %}">Inicio</a></li>
+    <li><a href="{% url 'ObrasSociales' %}">Obras Sociales</a></li>
+    <li class="active">Modificar</li>
+{% endblock %}
+
+{% block url-volver %}{% url 'ObrasSociales' %}{% endblock %}
+
+{% block header-title %} Modificar Obra Social {% endblock %}
+
+{% block title-header-form %}Actualizar <span class="element-update">"{{obraSocial.razonSocial}}"</span>{% endblock %}
+
+{% block icon-header-form %}
+    <span class="glyphicon glyphicon-edit page-header-icon"></span>
+{% endblock%}
+
+{% block sub-header-form %}Actualice los datos deseados{% endblock %}
+
+{% block no-msg-success %} {% endblock %}
+
+{% block more-scripts %}
+    <script>
+        $(document).on("keyup", function(e){
+            if(e.keyCode == 112){
+                var url = "{% static 'documentacion/build/html/farmacias.html' %}";
+                url += "#modificar-farmacia";
+                window.open(url);
+            }
+        });
+    </script>
+{% endblock %}

@@ -23,6 +23,7 @@ class Farmacia(Organizacion):
 
 class ObraSocial(Organizacion):
     FILTROS = ["razonSocial__icontains"]
+    nombreGerente = models.CharField(max_length=80, blank=True)
 
     def __str__(self):
         return self.razonSocial
