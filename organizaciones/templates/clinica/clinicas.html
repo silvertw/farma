@@ -21,7 +21,7 @@
 
 {% block botones-header-tabla %} 
     {% if perms.usuarios.encargado_general %}
-        <a class="btn-alta" href="{% url 'clinica_add' %}"><span class="glyphicon glyphicon-plus"></span> Alta</a>
+        <a class="btn-alta" href="{% url 'clinica_add' %}"><span class="glyphicon glyphicon-plus" name="coquito" id="btnAlta"></span> Alta</a>
     {% endif %}
 {% endblock %}
 
@@ -117,11 +117,32 @@
 
 {% block more-scripts %}
     <script>
+
+        window.onload = function () {
+            document.getElementById('btnAlta').focus();
+
+            /*-->PORQUERIA QUE NO ME SIRVE PARA NADA var valor=document.activeElement.tagName;
+            alert(valor.value);*/
+
+        }
+
         $(document).on("keyup", function(e){
-            if(e.keyCode == 112){
-                window.open("{% static 'documentacion/build/html/clinicas.html' %}");
+            if(e.keyCode == 65){ /*si el foco esta en alta y apreto la tecla "a" o "A" va a altas*/
+                    window.location.assign("{% url 'clinica_add' %}");
             }
         });
+
+
+        $(document).on("keyup", function(e){
+            if(e.keyCode == 112){
+
+
+                    window.open("{% static 'documentacion/build/html/clinicas.html' %}");
+
+            }
+        });
+
+
 
         var obrasSociales = {
             {% for clinica in clinicas %}

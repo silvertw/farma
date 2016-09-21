@@ -216,11 +216,11 @@ class PedidoDeClinica(PedidoVenta):
     FILTERMAPPER = {
         'desde': "fecha__gte",
         'hasta': "fecha__lte",
-        'obraSocial': "obraSocial__icontains",
+        'obraSocial': "obraSocial__razonSocial__icontains",
         'clinica': "clinica__razonSocial__icontains"
     }
     clinica = models.ForeignKey('organizaciones.Clinica', on_delete=models.CASCADE)
-    obraSocial = models.CharField(max_length=80)
+    obraSocial = models.ForeignKey('organizaciones.ObraSocial', on_delete=models.CASCADE)
     medicoAuditor = models.CharField(max_length=80)
 
     class Meta(PedidoVenta.Meta):
@@ -231,7 +231,7 @@ class PedidoDeClinica(PedidoVenta):
             return {'clinica': {'id': self.clinica.id,
                                  'razonSocial': self.clinica.razonSocial},
                     'fecha': self.fecha.strftime('%d/%m/%Y'),
-                    'obraSocial': self.obraSocial,
+                    'obraSocial': self.obraSocial.razonSocial,
                     'medicoAuditor': self.medicoAuditor}
         else:
             return {}

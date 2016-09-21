@@ -254,9 +254,12 @@ def pedidoDeClinica_add(request):
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def get_obrasSociales(request, id_clinica):
+    print("llegue1")
     clinica = omodels.Clinica.objects.get(pk=id_clinica)
+    print("llegue2")
     obrasSociales = clinica.obraSocial.split(',')
     options = []
+    print("llegue3")
     for obraSocial in obrasSociales:
         options.append({'text': obraSocial, 'value': obraSocial})
     return options

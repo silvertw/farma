@@ -36,6 +36,8 @@ INSTALLED_APPS = (
     'organizaciones',
     'pedidos',
     'usuarios',
+    'mobile',
+    'facturacion',
 
     'minidetector',
 )

@@ -36,6 +36,7 @@
     {{ form.media.js }}
     <script type="text/javascript" src="{%  static 'js/selectize.js' %}"></script>
     <script>
+
         $('select').selectize({
             sortField: {
                 field: 'text',
@@ -51,14 +52,19 @@
         setOptionsSelect();
 
         function setOptionsSelect() {
-            var id_clinica = $selectClinica.val()
+
+            var id_clinica = $selectClinica.val();
+
             if(id_clinica) {
                 $.ajax({
                     type: 'GET',
                     url: '/getObrasSociales/' + id_clinica + '/',
+
                     dataType: 'json',
                     success: function(data){
-                        console.log(data)
+                        alert(data);
+
+                        console.log(data);
                         var selectize =   $('select')[1].selectize;
                         selectize.clearOptions();
                         $.each(data, function(key, opt) {
@@ -70,6 +76,7 @@
                     }
                 });
             }
+
         }
 
         $(document).on("keyup", function(e){

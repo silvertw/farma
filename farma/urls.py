@@ -5,6 +5,8 @@ from medicamentos import views as mviews
 from organizaciones import views as oviews
 from pedidos import views as pviews
 from usuarios import views as uviews
+from mobile import views as moviews
+from facturacion import views as fviews
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -165,4 +167,17 @@ urlpatterns = [
     url(r'^devolucionMedicamentosVencidos/detalles/(?P<id_laboratorio>\d+)/$', pviews.devolucionMedicamentosVencidos_detalle, name="devolucionMedicamentosVencidos_detalle"),
     url(r'^devolucionMedicamentosVencidos/detalles/(?P<id_laboratorio>\d+)/registar/$', pviews.devolucionMedicamentosVencidos_registrar, name="devolucionMedicamentosVencidos_registrar"),
     url(r'^devolucionMedicamentosVencidos/remitoDevolucion/(?P<id_remito>\d+)/$', pviews.remitoDevolucion.as_view(), name="remitoDevolucion"),
+
+
+    #******************************************Mobile**************************************************
+    url(r'^mobileVerMedicamentos/$', moviews.VerMedicamentos, name="VerMedicamentos"),
+    url(r'^mobileVerOrganizaciones/$', moviews.VerOrganizaciones, name="VerOrganizaciones"),
+    url(r'^mobileVerPedidos/$', moviews.VerPedidos, name="VerPedidos"),
+
+    #******************************************Facturacion**************************************************
+    #----------------------------------ventas---------------------------------------------------------------
+    url(r'^facturacionVentas/$', fviews.facturacionVentas, name="facturacionVentas"),
+    url(r'^facturacionCompras/$', fviews.facturacionCompras, name="facturacionCompras"),
+
+
 ]

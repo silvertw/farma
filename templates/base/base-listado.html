@@ -11,14 +11,18 @@
 {% block url-volver %} {% url 'inicio' %}{% endblock %}
 
 {% block content %}
+
 	<div class="container-fluid container-main">
 		<div class="row">
 	        <aside id="aside" class="aside col-md-3 hidden-xs hidden-sm">
+
 	            <form id="form-busqueda" class="form-busqueda" action="">
+
 	                <div class="form-simple">
 	                    <button type="submit" class="btn-form-simple"><span class="glyphicon glyphicon-search"></span></button>
-	                	{% block form-field-simple %} {% endblock %}
+						{% block form-field-simple %} {% endblock %}
 	                </div>
+
 	                {% block form-sin-busqueda-avanzada %}
 	                	<div class="form-avanzado">
 		                	{% block form-fields-avanzados %} {% endblock %}

@@ -99,9 +99,9 @@ class PedidoDeClinicaForm(forms.ModelForm):
             'obraSocial': _('Obra social'),
             'medicoAuditor': _('Medico auditor'),
         }
-        widgets = {
-            'obraSocial': forms.Select()
-        }
+        #widgets = {
+        #    'obraSocial': forms.Select()
+        #}
 
     def clean_fecha(self):
         fecha = self.cleaned_data['fecha']
@@ -210,6 +210,8 @@ class PedidoLaboratorioForm(forms.ModelForm):
     )
 
     laboratorio = forms.ModelChoiceField(queryset=omodels.Laboratorio.objects.none())
+
+    print("LOS LABO SON: ", laboratorio)
 
     class Meta:
         model = models.PedidoAlaboratorio
