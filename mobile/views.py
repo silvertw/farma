@@ -3,11 +3,11 @@ from medicamentos import models as Mmodels
 from organizaciones import models as Omodels
 from pedidos import models as Pmodels
 
-from pedidos.views import get_filtros as get_filtros_pedidos, get_filtros
+from medicamentos.views import get_filtros as get_filtros_medicamentos
 
 
 def VerMedicamentos(request):
-    filters = get_filtros(request.GET, Mmodels.Medicamento)
+    filters = get_filtros_medicamentos(request.GET, Mmodels.Medicamento)
     mfilters = dict(filter(lambda v: v[0] in Mmodels.Medicamento.FILTROS, filters.items()))
     medicamentos = Mmodels.Medicamento.objects.filter(**mfilters)
     estadisticas = {

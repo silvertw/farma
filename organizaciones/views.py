@@ -49,6 +49,7 @@ def farmacias(request):
 def farmacia_add(request):
     if request.method == "POST":
         form = forms.FarmaciaFormAdd(request.POST)
+
         if form.is_valid():
             form.save()
             if '_volver' in request.POST:
@@ -293,10 +294,6 @@ def obraSocial_update(request, id_obraSocial):
 
 
 def ObSocAdjuntarAclinicaR (request):
-
-
-    request.session["ObSocAdjuntarAclinicaR"]=request.GET
-    print "ObSocAdjuntarAclinicaR===>>>", request.session["ObSocAdjuntarAclinicaR"]
 
 
     var = request.GET #Se otiene el request

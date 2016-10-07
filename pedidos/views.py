@@ -253,15 +253,13 @@ def pedidoDeClinica_add(request):
 @json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
-def get_obrasSociales(request, id_clinica):
-    print("llegue1")
-    clinica = omodels.Clinica.objects.get(pk=id_clinica)
-    print("llegue2")
-    obrasSociales = clinica.obraSocial.split(',')
+def get_obrasSociales(request, id_clinica):#QUEDO OBSOLETO
+    clinica = omodels.Clinica.objects.get(pk=id_clinica)#Obtiene la clinica que fue seleccionada
+    obrasSociales=omodels.ObraSocial.objects.get(clinica__pk=id_clinica)
     options = []
-    print("llegue3")
     for obraSocial in obrasSociales:
-        options.append({'text': obraSocial, 'value': obraSocial})
+        options.append({'text': obraSocial.razonSocial, 'value': obraSocial.razonSocial})
+
     return options
 
 
@@ -305,9 +303,14 @@ def pedidoDeClinica_registrar(request):
     if detalles:
         clinica = omodels.Clinica.objects.get(pk=pedido['clinica']['id'])
         fecha = datetime.datetime.strptime(pedido['fecha'], '%d/%m/%Y').date()
-        obraSocial = pedido['obraSocial']
+
+        obraSocialS = pedido['obraSocial']#STRING QUE AHORA SE USA EN EL FILTER
+        obraSocial = omodels.ObraSocial.objects.get(razonSocial=obraSocialS)#EL PROBLEMA ESTABA EN QUE SE DEBE OBTENER
+                                                                            #EL OBJETO NO EL STRING.
+
         medicoAuditor = pedido['medicoAuditor']
         if not(models.PedidoDeClinica.objects.filter(pk=pedido["nroPedido"]).exists()):
+
             p = models.PedidoDeClinica(clinica=clinica, fecha=fecha, obraSocial=obraSocial, medicoAuditor=medicoAuditor)
             p.save()
             for detalle in detalles:
@@ -316,6 +319,7 @@ def pedidoDeClinica_registrar(request):
                 d.save()
             utils.procesar_pedido_de_clinica(p)
             nroRemito = models.RemitoDeClinica.objects.get(pedidoDeClinica__pk=p.pk)
+
             return {'success': True, 'existeRemito': True, 'nroRemito': nroRemito.id}
         else:
             mensaje_error = "El pedido ya Existe!"
@@ -413,7 +417,17 @@ class remitoDeClinica(PDFTemplateView):
 @login_required(login_url='login')
 def pedidosAlaboratorio(request):
     mfilters = get_filtros(request.GET, models.PedidoAlaboratorio)
+
+    claves = mfilters.keys()#Se obtiene las claves que vienen en el diccionario filtro
+
+    if ((len(claves)>1) and ((claves[0]=="fecha__lte")or(claves[1]=="fecha__lte")) ):#Se verifica si vino un filtro y ademas si vienen fechas
+        #El formato de facha dd/mm/yyyy hace que el render falle
+        fecha1 = utils.formatearFecha(mfilters["fecha__lte"])#Esta funcion convierte de dd/mm/yyyy a yyyy-mm-dd
+        fecha2 = utils.formatearFecha(mfilters["fecha__gte"])#para que funcione bien
+        mfilters={'fecha__lte': fecha1, 'fecha__gte': fecha2}#Hay que reconstruir el diccionario con el formato nuevo
+
     pedidos = models.PedidoAlaboratorio.objects.filter(**mfilters).exclude(estado="Cancelado")
+
     estadisticas = {
         'total': models.PedidoAlaboratorio.objects.all().exclude(estado="Cancelado").count(),
         'filtrados': pedidos.count()

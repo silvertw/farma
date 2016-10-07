@@ -32,7 +32,7 @@
 {% endblock %}
 
 {% block more-scripts %}
-<script src="{% static 'js/datepicker.js' %}"></script>
+    <script src="{% static 'js/datepicker.js' %}"></script>
     {{ form.media.js }}
     <script type="text/javascript" src="{%  static 'js/selectize.js' %}"></script>
     <script>
@@ -51,6 +51,8 @@
         $selectClinica.on('change', setOptionsSelect);
         setOptionsSelect();
 
+    /* =======FUNCION OBSOLETA========
+
         function setOptionsSelect() {
 
             var id_clinica = $selectClinica.val();
@@ -59,7 +61,6 @@
                 $.ajax({
                     type: 'GET',
                     url: '/getObrasSociales/' + id_clinica + '/',
-
                     dataType: 'json',
                     success: function(data){
                         alert(data);
@@ -78,7 +79,7 @@
             }
 
         }
-
+    */
         $(document).on("keyup", function(e){
             if(e.keyCode == 112){
                 var url = "{% static 'documentacion/build/html/pedidosclinica.html' %}";

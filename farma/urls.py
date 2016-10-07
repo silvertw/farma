@@ -175,7 +175,6 @@ urlpatterns = [
     url(r'^mobileVerPedidos/$', moviews.VerPedidos, name="VerPedidos"),
 
     #******************************************Facturacion**************************************************
-    #----------------------------------ventas---------------------------------------------------------------
     url(r'^facturacionVentas/$', fviews.facturacionVentas, name="facturacionVentas"),
     url(r'^facturacionCompras/$', fviews.facturacionCompras, name="facturacionCompras"),
 

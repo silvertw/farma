@@ -6,7 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, HTML
 from crispy_forms.bootstrap import StrictButton, FormActions, PrependedText
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
 
@@ -44,7 +43,7 @@ class UsuarioAddForm(forms.ModelForm):
     def clean_username(self):
         username = self.cleaned_data['username']
         if username:
-            if User.objects.filter(username=username).exists():
+            if Usuario.objects.filter(username=username).exists():
                 raise forms.ValidationError('El nombre de usuario no está disponible')
         return username
 

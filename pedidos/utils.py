@@ -146,7 +146,7 @@ def get_medicamentos_con_stock():
 
 
 def procesar_pedido_de_clinica(pedido):
-    detalles = models.DetallePedidoDeClinica.objects.filter(pedidoDeClinica=pedido.nroPedido)  # obtengo todos los detalles del pedido
+    detalles = models.DetallePedidoDeClinica.objects.filter(pedidoDeClinica=pedido.nroPedido) #Obtiene todos los detalles del pedido
     remito = models.RemitoDeClinica(pedidoDeClinica=pedido, fecha=pedido.fecha)
     remito.save()
     for detalle in detalles:
@@ -775,3 +775,12 @@ def top_por_solicitud_pedidos_laboratorio(get_filtros, get):
         estadisticas['pieChart'].append({'name': u'otros', 'y': avg})
 
     return estadisticas
+
+def formatearFecha(fecha):
+     fechaConv = datetime.datetime.strptime(fecha, "%d/%m/%Y").strftime('%Y-%m-%d')#metodo de datetime
+     return fechaConv
+
+
+
+
+
