@@ -52,7 +52,6 @@ def facturacionCompras(request):
                 subtotal = subtotal + (detP.cantidad * lote.precio)
                 listaDetallesFactura.append(detF)
 
-
             pieFactura = factmodels.pieDeFactura()
             pieFactura.factura = factura
             pieFactura.subtotal = subtotal
@@ -70,6 +69,9 @@ def facturacionCompras(request):
             guardarDetalle()
 
             pieFactura.save()#Guarda el pie de pagina.
+            pedido = pmodels.PedidoAlaboratorio.objects.get(pk=nroPedido)
+            pedido.facturaAsociada = True
+            pedido.save()
             #======================================================================
 
             erroresEnElForm = "FalseYsave"#Variable que establece que el form no tiene errores y que fue guardado en base.

@@ -54,7 +54,7 @@ class DetalleFactura(models.Model):
 
 class pieDeFactura(models.Model):
 
-    factura = models.ForeignKey('Factura', null=True, on_delete=models.CASCADE)
+    factura = models.OneToOneField('Factura',null=True)
     subtotal = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     iva = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     total = models.DecimalField(max_digits=8, decimal_places=2, default=0)
