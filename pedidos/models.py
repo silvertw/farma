@@ -284,7 +284,7 @@ class PedidoAlaboratorio(models.Model):
     laboratorio = models.ForeignKey('organizaciones.Laboratorio', on_delete=models.CASCADE)
 
     estado = models.CharField(max_length=25, blank=True, default="Pendiente")# cancelado, parcialmente recibido, pendiente, completo
-    #facturaAsociada = models.BooleanField(default=False)
+    facturaAsociada = models.BooleanField(default=False)
 
     def __str__(self):
         return 'Pedido Nro %s - Laboratorio: %s' % (self.nroPedido, self.laboratorio)

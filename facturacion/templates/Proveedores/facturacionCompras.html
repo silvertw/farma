@@ -33,7 +33,6 @@
           </a>
 
         </div>
-        <a class="btn-alta" href="{% url 'pedidoAlaboratorio_add' %}"><span class="glyphicon glyphicon-plus"></span> Alta</a>
     {% endif %}
 {% endblock %}
 
@@ -116,20 +115,13 @@
 {% endblock %}
 
 
-
-
-
-
-
-
 {% block more-scripts %}
     <script>
 
-        var dataId = [];
-
         $(function() {
+
             var error = '{{erroresEnElForm}}';//Se recupera info sobre si el form fue mal cargado (info que llega desde la view)
-            var idLab ='{{idLabPorGet}}';//Se recupera el id del pedido al cual se esta registrando la factura (info que llega desde la view)
+            var idLab ='{{nroPedidoAlab}}';//Se recupera el nro del pedido al cual se esta registrando la factura (info que llega desde la view)
 
             if(error=='True'){
                 selectorLab = '#'+ idLab;//Si hay un error en el form se convierte el id a formato de selector
@@ -138,6 +130,11 @@
                 $(selectorLab).trigger("click");//Entonces el trigger va a reabrir el modal en base al
                                                 //id correspondiente.
             }
+
+            if(error=='FalseYsave'){
+               window.location.assign("{% url 'facturacionCompras' %}");//Limpia formularios
+            }
+
         });
 
         $(document).on("click",function(e){
@@ -146,26 +143,14 @@
             if(nombre=='rowRegFact'){
                 idRow = e.target.id; /*obtiene el id del elemento del DOM que fue clickeado*/
                 $('#lineModalLabelR').text("Registrar factura para el pedido N° " + idRow);
-                guardar(idRow);
-                envioForm(dataId);
+                envioForm(idRow);
             }
 
         });
 
         $('#cerrarM').on("click",function(e){
-
            window.location.assign("{% url 'facturacionCompras' %}");
-
         });
-        $('#squarespaceModal').keypress(function(e){
-           if(e.which == 27){
-           window.location.assign("{% url 'facturacionCompras' %}");
-           }
-        });
-        function guardar(id){
-
-            dataId.push(id);
-        }
 
         function envioForm(dataId){
 
@@ -180,9 +165,7 @@
                 data: {'idRow':dataId[0]},
                 type: 'get',
                 url: {% url 'facturacionCompras' %},
-
             });
-            dataId.pop();
         }
 
         (function(){

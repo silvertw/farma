@@ -30,17 +30,38 @@ class Factura(models.Model):
 
 class DetalleFactura(models.Model):
 
-    renglon = models.AutoField(primary_key=True)
     factura = models.ForeignKey('Factura', null=True, on_delete=models.CASCADE)
+    renglon = models.AutoField(primary_key=True)
     medicamento = models.ForeignKey('medicamentos.Medicamento')
     cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1),
                                            MaxValueValidator(config.MAXIMA_CANTIDAD_MEDICAMENTOS)])
 
     precioUnitario = models.DecimalField(max_digits=8, decimal_places=2, default=0)
-    @property #Decorador que asigna signo pesos frente al precio unitario
-    def precioUnitario(self):
-        return "$%s" % self.precioUnitario
+    importe = models.DecimalField(max_digits=8, decimal_places=2, default=0)
 
+
+    #@property #Decorador que asigna signo pesos frente al precio unitario
+    #def precioUnitario(self):
+    #    return "$%s" % self.precioUnitario
+
+    #@property #Decorador que asigna signo pesos frente al precio unitario
+    #def importe(self):
+    #    return "$%s" % self.importe
+
+    #@property #Decorador que asigna signo pesos frente al precio unitario
+    #def subtotal(self):
+    #    return "$%s" % self.subtotal
+
+class pieDeFactura(models.Model):
+
+    factura = models.ForeignKey('Factura', null=True, on_delete=models.CASCADE)
+    subtotal = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    iva = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    total = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+
+    #@property #Decorador que asigna signo pesos frente al precio unitario
+    #def total(self):
+    #    return "$%s" % self.total
 
 
 

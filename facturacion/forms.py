@@ -47,7 +47,7 @@ class RegistrarFactura(FacturaGenerico):
             #StrictButton('Registrar', type="submit", name="_registrar", value="_registrar", id="btn-registrar",
             #            css_class="btn btn-primary"),
 
-            HTML("<button type='submit' class='btn btn-default'>Registrar</button>")
+            HTML("<button type='submit' id='btnReg' class='btn btn-default'>Registrar</button>")
             #HTML("<p class=\"campos-obligatorios pull-right\"><span class=\"glyphicon glyphicon-info-sign\"></span> Estos campos son obligatorios (*)</p>")
         )
     )
