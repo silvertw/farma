@@ -20,9 +20,9 @@ from xlsxwriter import Workbook
 import io
 
 
-def get_filtros(get, modelo):
+def get_filtros(get, modelo):#las llamada es-->get_filtros(request.GET, models.PedidoAlaboratorio)
     mfilter = {}
-    for filtro in modelo.FILTROS:
+    for filtro in modelo.FILTROS:#se recorre el arreglo filtros-->FILTROS = ["laboratorio", "desde", "hasta"]
         if filtro in get and get[filtro]:
             attr = filtro
             value = get[filtro]

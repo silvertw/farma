@@ -1,0 +1,47 @@
+                    <div class="table-responsive">
+                          <div class="encabezado-factura">
+                          <table class="table">
+                              <thead>
+                                <tr>
+                                  <th>Identificador: {{encabezadoFactura.identificador}}</th>
+                                  <th>Tipo:{{encabezadoFactura.get_tipo_display}}</th>
+                                  <th id="miId"></th>
+                                </tr>
+                                <tr>
+                                  <th>Fecha: {{encabezadoFactura.fecha}}</th>
+                                  <th>Titular: {{encabezadoFactura.titular}}</th>
+                                </tr>
+                              </thead>
+                          </table>
+
+                          </div>
+                          <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Nro</th>
+                              <th>Detalle</th>
+                              <th>Cantidad</th>
+                              <th>Precio Unitario</th>
+                              <th>Importe</th>
+                            </tr>
+                          </thead>
+                          <tbody class="listadoFact">
+                            {% for detalle in detalleFactura %}
+                                <tr>
+                                  <td>{{forloop.counter}}</td>
+                                  <td>{{detalle.medicamento}}</td>
+                                  <td>{{detalle.cantidad}}</td>
+                                  <td>${{detalle.precioUnitario}}</td>
+                                  <td>${{detalle.importe}}</td>
+                                </tr>
+                            {% endfor %}
+                                <tr>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td>Subtotal:</td>
+                                  <td>${{pieDeFactura.subtotal}}</td>
+                                </tr>
+                          </tbody>
+                        </table>
+                    </div>

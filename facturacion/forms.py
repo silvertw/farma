@@ -39,7 +39,7 @@ class RegistrarFactura(FacturaGenerico):
     helper.form_id = 'my-form'
     helper.form_action = 'Factura_add'
     helper.layout = Layout(
-        Field('tipo', placeholder='Tipo'),
+        Field('tipo',placeholder='Tipo'),
         Field('identificador', placeholder='Identificador'),
         Field('fecha', placeholder='Fecha',css_class='datepicker'),
         Field('titular', placeholder='Titular'),
@@ -51,5 +51,70 @@ class RegistrarFactura(FacturaGenerico):
             #HTML("<p class=\"campos-obligatorios pull-right\"><span class=\"glyphicon glyphicon-info-sign\"></span> Estos campos son obligatorios (*)</p>")
         )
     )
+
+
+class formaDePagoGenerico(forms.ModelForm):
+    class Meta:
+        model = models.formaDePago
+        fields = ["formaPago"]
+        labels = {
+            'formaPago': _('Forma de Pago'),
+        }
+
+class formaDePago(formaDePagoGenerico):
+    helper = FormHelper()
+    helper.form_class = 'form'
+    helper.form_id = 'my-form'
+    helper.form_action = 'formaDePago_add'
+    helper.layout = Layout(
+        Field('formaPago',placeholder='Forma de Pago'),
+
+        FormActions(
+            StrictButton('Guardar', type="submit", name="_continuar", value="_continuar", id="btn-guardar-continuar",
+                        css_class="btn btn-primary"),
+            HTML("<p class=\"campos-obligatorios pull-right\"><span class=\"glyphicon glyphicon-info-sign\"></span> Estos campos son obligatorios (*)</p>")
+        )
+    )
+
+#=======================================================================================================================
+
+class PagoGenerico(forms.ModelForm):
+    class Meta:
+        model = models.Pago
+        fields = ["importe","observaciones","fecha","formaDePago"]
+        labels = {
+            'importe': _('Importe'),
+            'fecha': _('Fecha'),
+            'observaciones':_('Observaciones'),
+            'formaDePago': _('FormaDePago'),
+        }
+
+class Pago(PagoGenerico):
+    helper = FormHelper()
+    helper.form_class = 'form'
+    helper.form_id = 'my-form'
+    helper.form_action = 'formaDePago_add'
+    helper.layout = Layout(
+        Field('importe',placeholder='Importe'),
+        Field('fecha', placeholder='Fecha',css_class='datepicker'),
+        Field('observaciones', placeholder='Observaciones'),
+        Field('formaDePago', placeholder='Forma de Pago'),
+        FormActions(
+            #StrictButton('Registrar', type="submit", name="_registrar", value="_registrar", id="btn-registrar",
+            #            css_class="btn btn-primary"),
+            #HTML("<button type='submit' id='btnReg' class='btn btn-default'>Pagar</button>")
+            #HTML("<p class=\"campos-obligatorios pull-right\"><span class=\"glyphicon glyphicon-info-sign\"></span> Estos campos son obligatorios (*)</p>")
+        )
+    )
+
+
+
+
+
+
+
+
+
+
 
 

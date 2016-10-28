@@ -1,0 +1,55 @@
+                    <button type="button" class="close" id="cerrarM" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+
+                    <h3 class="modal-title" id="lineModalLabelR">FACTURA DE LABORATORIO</h3>
+                    <h3 style="color:red;" class="modal-title" id="mensajeDePago"></h3>
+                    <h3 style="color:blue;" class="modal-title" id="mensajeDePago2"></h3>
+
+                    <a data-toggle="modal" data-target="#modalEstadoDelPago" class="btn btn-primary center-block" id="pago" name="pago">Realizar Pago</a>
+                    <a data-toggle="modal" data-target="#modalVerPago" class="btn btn-primary center-block" id="verPago" name="verPago">Ver pago</a>
+                    <a class="btn btn-primary center-block" id="cancelarPago" name="cancelarPago">Cancelar pago</a>
+
+                    <script>
+
+                        pago={{pago}}
+                        if(pago.toString() == "false") {
+                          $('#mensajeDePago').text("FACTURA IMPAGA");
+                          $('#mensajeDePago2').text("");
+                          $('#cancelarPago').hide();
+                          $('#verPago').hide()
+                        }else{
+                          $('#mensajeDePago2').text("LA FACTURA ESTA PAGADA");
+                          $('#mensajeDePago').text("");
+                          $('#pago').hide();
+
+                        }
+
+                        $("[name='cancelarPago']").on("click", function(e){
+                            nroPedido='{{nroPedidoAlab}}'
+                            confirmar = confirm("Realmente desea cancelar el pago?");
+
+                            if (confirmar){
+                                url={% url 'cancelarPago' %};
+                                data={'idRowVer':nroPedido};
+                                cancelarPedido(url,data);
+                            }
+
+                        });
+
+                        function cancelarPedido(url,data){
+                            $.ajax({
+                                contentType:'json',
+                                data: data,
+                                type: 'get',
+                                url: url,
+                                success:function(response){
+                                    alert(response);
+                                    $('#mensajeDePago').text("FACTURA IMPAGA");
+                                    $('#mensajeDePago2').text("");
+                                    $('#pago').show();
+                                    $('#cancelarPago').hide();
+                                    $('#verPago').hide()
+                                }
+                            });
+                        }
+
+                    </script>

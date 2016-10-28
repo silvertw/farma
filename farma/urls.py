@@ -168,7 +168,6 @@ urlpatterns = [
     url(r'^devolucionMedicamentosVencidos/detalles/(?P<id_laboratorio>\d+)/registar/$', pviews.devolucionMedicamentosVencidos_registrar, name="devolucionMedicamentosVencidos_registrar"),
     url(r'^devolucionMedicamentosVencidos/remitoDevolucion/(?P<id_remito>\d+)/$', pviews.remitoDevolucion.as_view(), name="remitoDevolucion"),
 
-
     #******************************************Mobile**************************************************
     url(r'^mobileVerMedicamentos/$', moviews.VerMedicamentos, name="VerMedicamentos"),
     url(r'^mobileVerOrganizaciones/$', moviews.VerOrganizaciones, name="VerOrganizaciones"),
@@ -177,6 +176,15 @@ urlpatterns = [
     #******************************************Facturacion**************************************************
     url(r'^facturacionVentas/$', fviews.facturacionVentas, name="facturacionVentas"),
     url(r'^facturacionCompras/$', fviews.facturacionCompras, name="facturacionCompras"),
+    url(r'^facturasRegistradasDeCompras/$', fviews.facturasRegistradasCompras, name="facturasRegistradasCompras"),
+    url(r'^formaDePagos/add/$', fviews.formaDePago_add, name="formaDePago_add"),
 
+    url(r'^factProveedEncabezadoModal/$', fviews.factProveedEncabezadoModal, name="factProveedEncabezadoModal"),
+    url(r'^factProveedDetalleModal/$', fviews.factProveedDetalleModal, name="factProveedDetalleModal"),
+    url(r'^factProveedFooterModal/$', fviews.factProveedFooterModal, name="factProveedFooterModal"),
+    url(r'^formularioDePago/$', fviews.formularioDePago, name="formularioDePago"),
+    url(r'^mostrarPago/$', fviews.mostrarPago, name="mostrarPago"),
+
+    url(r'^cancelarPago/$', fviews.cancelarPago, name="cancelarPago"),
 
 ]

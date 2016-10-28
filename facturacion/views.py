@@ -4,10 +4,12 @@ import models, forms
 from django.contrib.auth.decorators import login_required
 from jsonview.decorators import json_view
 from django.contrib.auth.decorators import permission_required
+from organizaciones.views import hubo_alta
 from pedidos import models as pmodels
 from django.db import transaction
 from medicamentos import models as medmodels
 import models as factmodels
+import forms as factforms
 from pedidos.views import get_filtros as get_filtros_pedidos
 from pedidos import utils as putils
 from django.http import HttpResponse
@@ -38,10 +40,13 @@ def facturacionCompras(request):
             pedido = pmodels.PedidoAlaboratorio.objects.get(pk=nroPedido)
             detallesPedido = pmodels.DetallePedidoAlaboratorio.objects.filter(pedido=pedido)
 
+            factura.pedidoRel=pedido#Se setea el pedido asocioado a esta factura
+
             subtotal=0
 
             for detP in detallesPedido:
-                lote=medmodels.Lote.objects.get(medicamento__pk=detP.medicamento.pk)
+                lotes=medmodels.Lote.objects.filter(medicamento__pk=detP.medicamento.pk)
+                lote=lotes[0]
                 detF=factmodels.DetalleFactura(
                     factura = factura,
                     cantidad = detP.cantidad,
@@ -56,7 +61,7 @@ def facturacionCompras(request):
             pieFactura.factura = factura
             pieFactura.subtotal = subtotal
             pieFactura.iva = 21
-            pieFactura.total = subtotal + 21
+            pieFactura.total = subtotal + (subtotal*(21/100))
 
             #================esto debe hacerse de forma atomica===================
             form.save()#Guarda el encabezado.
@@ -118,7 +123,215 @@ def facturacionCompras(request):
 
 
 
+def facturasRegistradasCompras(request):
 
 
+    if request.method == "POST":
+        form = forms.Pago(request.POST)
+        print "ES VALIDO??-->",form.is_valid()
+        formEstadoDelPago=form.save(commit=False)
+        nroPedidoAlab=request.session['nroPedidoAlab']
+        pedido = pmodels.PedidoAlaboratorio.objects.get(pk=nroPedidoAlab)
+
+        encabezadoFactura = factmodels.Factura.objects.get(pedidoRel=pedido)
+        encabezadoFactura.pagada=True
+        encabezadoFactura.save()
+        encabezadoFactura = factmodels.Factura.objects.get(pedidoRel=pedido)
+
+        formEstadoDelPago.factura=encabezadoFactura
+        formEstadoDelPago.save()
+    else:
+        formEstadoDelPago = forms.Pago()
+        data=request.GET.items()#SE OBTIENEN LOS ITEMS DEL GET
+        if data:#SI VINIERON DATOS
+            claveValor=data[0]#SE OBTIENE LA CLAVE
+            if claveValor[0]=='idRowVer':
+                nroPedidoAlab=claveValor[1]
+                #==========SE OBTIENE LA FACTURA DEL PEDIDO CON FACTURA REGISTRADA=================
+                pedido = pmodels.PedidoAlaboratorio.objects.get(pk=nroPedidoAlab)
+                encabezadoFactura = factmodels.Factura.objects.get(pedidoRel=pedido)
+                detalleFactura = factmodels.DetalleFactura.objects.filter(factura=encabezadoFactura)
+                pieDeFactura = factmodels.pieDeFactura.objects.get(factura=encabezadoFactura)
+                request.session['nroPedidoAlab'] = nroPedidoAlab
+            else:
+                encabezadoFactura=None
+                detalleFactura=None
+                pieDeFactura=None
+                formEstadoDelPago=None
+                nroPedidoAlab=None
+
+    filters = get_filtros_pedidos(request.GET, pmodels.PedidoAlaboratorio)
+    filters2 = get_filtros_pedidos(request.GET, factmodels.Factura)
+
+    print "FILTROS2-->",filters2
+
+    claves = filters.keys()#Se obtiene las claves que vienen en el diccionario filtro
+
+    if (len(claves)>1)and((claves[0]=="fecha__lte")or(claves[1]=="fecha__lte")):#Se verifica si vino un filtro y ademas si vienen fechas
+            #El formato de facha dd/mm/yyyy hace que el render falle
+            fecha1 = putils.formatearFecha(filters["fecha__lte"])#Esta funcion convierte de dd/mm/yyyy a yyyy-mm-dd
+            fecha2 = putils.formatearFecha(filters["fecha__gte"])#para que funcione bien
+            filters={'fecha__lte': fecha1, 'fecha__gte': fecha2}#Hay que reconstruir el diccionario con el formato nuevo
+
+    listPedidos = pmodels.PedidoAlaboratorio.objects.filter(**filters).filter(estado="Completo",facturaAsociada=True)
+
+    listLaboConPedCompleto=[]
+    for laboConPedCompleto in listPedidos:
+        listLaboConPedCompleto.append(laboConPedCompleto.laboratorio)
+
+    estadisticas = {
+        'total': listPedidos.count(),
+        'filtrados': listPedidos.count()
+    }
+
+    if request.GET.items():#Si get tiene valores se debe devolver la factura
+        return render(request,"Proveedores/facturasRegistradasDeCompras.html",{
+            "listPedidos": listPedidos,
+            "encabezadoFactura":encabezadoFactura,
+            "detalleFactura":detalleFactura,
+            "pieDeFactura":pieDeFactura,
+            "formEstadoDelPago":formEstadoDelPago,
+            "nroPedidoAlab":nroPedidoAlab,
+        })
+    else:
+        encabezadoFactura=None
+        detalleFactura=None
+        pieDeFactura=None
+        formEstadoDelPago=None
+        nroPedidoAlab=None
+        return render(request,"Proveedores/facturasRegistradasDeCompras.html",{
+            "listPedidos": listPedidos,
+            "encabezadoFactura":encabezadoFactura,
+            "detalleFactura":detalleFactura,
+            "pieDeFactura":pieDeFactura,
+            "formEstadoDelPago":formEstadoDelPago,
+            "nroPedidoAlab":nroPedidoAlab,
+        })
 
 
+def factProveedEncabezadoModal(request):
+
+    data=request.GET.items()
+    claveValor=data[0]
+    nroPedidoAlab=claveValor[1]
+    #==========SE OBTIENE LA FACTURA DEL PEDIDO CON FACTURA REGISTRADA=================
+    pedido = pmodels.PedidoAlaboratorio.objects.get(pk=nroPedidoAlab)
+    encabezadoFactura = factmodels.Factura.objects.get(pedidoRel=pedido)
+    pago="false"
+    request.session['nroPedidoAlab'] = nroPedidoAlab
+
+    if encabezadoFactura.pagada:
+        pago="true"
+    return render(request, "Proveedores/_factProveedEncabezadoModal.html", {
+        "encabezadoFactura":encabezadoFactura,
+        "nroPedidoAlab":nroPedidoAlab,
+        "pago":pago,
+    })
+
+def factProveedDetalleModal(request):
+
+    data=request.GET.items()
+    claveValor=data[0]
+    nroPedidoAlab=claveValor[1]
+
+    #==========SE OBTIENE LA FACTURA DEL PEDIDO CON FACTURA REGISTRADA=================
+    pedido = pmodels.PedidoAlaboratorio.objects.get(pk=nroPedidoAlab)
+    encabezadoFactura = factmodels.Factura.objects.get(pedidoRel=pedido)
+    detalleFactura = factmodels.DetalleFactura.objects.filter(factura=encabezadoFactura)
+    pieDeFactura = factmodels.pieDeFactura.objects.get(factura=encabezadoFactura)
+    request.session['nroPedidoAlab'] = nroPedidoAlab
+
+    return render(request, "Proveedores/_factProveedDetalleModal.html", {
+        "encabezadoFactura":encabezadoFactura,
+        "detalleFactura":detalleFactura,
+        "nroPedidoAlab":nroPedidoAlab,
+        "pieDeFactura":pieDeFactura,
+    })
+
+def factProveedFooterModal(request):
+
+    data=request.GET.items()
+    claveValor=data[0]
+    nroPedidoAlab=claveValor[1]
+    #==========SE OBTIENE LA FACTURA DEL PEDIDO CON FACTURA REGISTRADA=================
+    pedido = pmodels.PedidoAlaboratorio.objects.get(pk=nroPedidoAlab)
+    encabezadoFactura = factmodels.Factura.objects.get(pedidoRel=pedido)
+    pieDeFactura = factmodels.pieDeFactura.objects.get(factura=encabezadoFactura)
+    request.session['nroPedidoAlab'] = nroPedidoAlab
+
+    return render(request, "Proveedores/_factProveedFooterModal.html",{
+        "pieDeFactura":pieDeFactura,
+        "nroPedidoAlab":nroPedidoAlab,
+    })
+
+def formularioDePago(request):
+    #no hay forma que no entre por get y con datos
+    formEstadoDelPago = forms.Pago()
+    data=request.GET.items()
+    claveValor=data[0]
+    nroPedidoAlab=claveValor[1]
+    pedido = pmodels.PedidoAlaboratorio.objects.get(pk=nroPedidoAlab)
+    encabezadoFactura = factmodels.Factura.objects.get(pedidoRel=pedido)
+    pieDeFactura = factmodels.pieDeFactura.objects.get(factura=encabezadoFactura)
+    request.session['nroPedidoAlab'] = nroPedidoAlab
+
+    return render(request, "Proveedores/_formularioDePago.html", {
+        "formEstadoDelPago":formEstadoDelPago,
+        "pieDeFactura":pieDeFactura,
+        "encabezadoFactura":encabezadoFactura,
+    })
+
+
+def mostrarPago(request):
+
+    data=request.GET.items()
+    if data:
+        claveValor=data[0]
+        nroPedidoAlab=claveValor[1]
+        #==========SE OBTIENE LA FACTURA DEL PEDIDO CON FACTURA REGISTRADA=================
+        pedido = pmodels.PedidoAlaboratorio.objects.get(pk=nroPedidoAlab)
+        encabezadoFactura = factmodels.Factura.objects.get(pedidoRel=pedido)
+        request.session['nroPedidoAlab'] = nroPedidoAlab
+        if encabezadoFactura.pagada:
+            listaDePagos=factmodels.Pago.objects.filter(factura=encabezadoFactura)#recupera datos sobre el pago de factura
+            ultimo=len(listaDePagos)#Se deja un historial de pagos que fueron cancelados para rehacer
+                                    #o dejar cancelados indefinidamente.
+            pagoRec=listaDePagos[ultimo-1]
+            if (ultimo>1):
+                listaCancelados=listaDePagos
+            else:
+                listaCancelados=None
+
+        else:
+            pagoRec=None
+    return render(request, "Proveedores/_mostrarPago.html", {"pagoRec":pagoRec,"listaCancelados":listaCancelados,"ultimo":ultimo})
+
+
+def formaDePago_add(request):
+    if request.method == "POST":
+        form = forms.formaDePago(request.POST)
+        if form.is_valid():
+            form.save()
+            if '_volver' in request.POST:
+                return redirect('formaDePago_add')
+            else:
+                request.session['successAdd'] = True
+                return redirect('formaDePago_add')
+    else:
+        form = forms.formaDePago()
+    successAdd = hubo_alta(request.session)
+    return render(request, "FormasDePago/FormasDePago_add.html", {"form": form, 'successAdd': successAdd})
+
+def cancelarPago(request):
+    data=request.GET.items()
+    claveValor=data[0]
+    nroPedidoAlab=claveValor[1]
+    pedido = pmodels.PedidoAlaboratorio.objects.get(pk=nroPedidoAlab)
+    encabezadoFactura = factmodels.Factura.objects.get(pedidoRel=pedido)
+    encabezadoFactura.pagada=False
+    encabezadoFactura.save()
+
+    msj="El pago ha sido cancelado"
+    response = HttpResponse(msj)
+
+    return response
