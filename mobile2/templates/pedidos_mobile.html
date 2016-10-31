@@ -1,0 +1,66 @@
+{% load staticfiles %}
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Farma Movil</title>
+    <link rel="stylesheet" href="{% static 'mobile/jquery.mobile-1.4.5.min.css' %}" />
+	<link rel="stylesheet" href="{% static 'mobile/FarmaPlus.css' %}" />
+	<link rel="stylesheet" href="{% static 'mobile/jquery.mobile.icons.min.css' %}" />
+
+	<script src="{% static 'mobile/jquery.js' %}"></script>
+	<script src="{% static 'mobile/jquery.mobile-1.4.5.min.js' %}"></script>
+
+    <style type="text/css">
+		.ui-page {
+	    	background:#4d66ea;
+		}
+		.ui-icon-myicon:after {
+			background-image: url("pastilla.png");
+			background-size: 20px 20px;
+		}
+		.ui-icon-twitter:after {
+			background-image: url("twitter.png");
+			background-size: 36px 36px;
+		}
+		.ui-icon-facebook:after {
+			background-image: url("facebook.ico");
+			background-size: 36px 36px;
+		}
+	</style>
+
+</head>
+<body>
+
+    <div data-role="page" data-theme="a"><!-- dialog-->
+
+			<!--Nav-->
+			<div class="ui-header ui-bar-a" data-swatch="a" data-theme="a" data-form="ui-bar-a" data-role="header" role="banner">
+
+				<!--Boton Home-->
+				<a role="button" data-role="button" class="ui-btn-left ui-btn-corner-all ui-btn ui-icon-home ui-btn-icon-notext ui-shadow" title=" Home " data-form="ui-icon"> Home </a>
+
+				<h1 class="ui-title" tabindex="0" role="heading" aria-level="1">PEDIDOS</h1>
+
+				<!--Boton Menu-->
+				<a role="button" data-role="button" class="ui-btn-right ui-btn-corner-all ui-btn ui-icon-grid ui-btn-icon-notext ui-shadow" title=" Navigation " data-form="ui-icon"> Navigation </a>
+
+			</div>
+
+			<div data-role="content" data-theme="a">
+
+
+
+
+			</div>
+
+			<div data-role="footer" data-theme="a" class="ui-nodisc-icon ui-btn-icon-right">
+
+					<a href="" class="ui-btn ui-shadow ui-corner-all ui-icon-twitter ui-btn-icon-notext">Delete</a>
+					<a href="" class="ui-btn ui-shadow ui-corner-all ui-icon-facebook ui-btn-icon-notext">Delete</a>
+					<p class="text-muted" align="center"><span class=" glyphicon glyphicon-copyright-mark"></span>  Copyright 2016 UNPSJB - Todos los derechos reservados</p>
+			</div>
+	</div>
+</body>
+</html>

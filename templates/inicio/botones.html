@@ -1,0 +1,43 @@
+{% load staticfiles %}
+
+<div id="wrapper">
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="icon-file-text"></span> Pedidos <span class="caret"></span></a>
+                <ul class="dropdown-menu submenu">
+                    <li><a href="{% url 'pedidosDeFarmacia' %}">Pedidos de Farmacia</a></li>
+                    <li><a href="{% url 'pedidosDeClinica' %}">Pedidos de Clinica</a></li>
+                    <li><a href="{% url 'pedidosAlaboratorio' %}">Pedidos a Laboratorio</a></li>
+                    <li><a href="{% url 'recepcionPedidoAlaboratorio' %}">Recepcion de Pedido de Laboratorio</a></li>
+                    <li><a href="{% url 'devolucionMedicamentosVencidos' %}">Registrar Devolución de Medicamentos Vencidos</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="icon-office icon-menu"></span> Organizaciones <span class="caret"></span></a>
+                <ul class="dropdown-menu submenu text-center">
+                    <li><a href="{% url 'farmacias' %}"><span class="icon-circle"></span> Farmacias</a></li>
+                    <li><a href="{% url 'clinicas' %}">Clinicas</a></li>
+                    <li><a href="{% url 'laboratorios' %}">Laboratorios</a></li>
+                    <li><a href="{% url 'ObrasSociales' %}">Obras Sociales</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="icon-aid-kit icon-menu"></span> Medicamentos <span class="caret"></span></a>
+                <ul class="dropdown-menu submenu text-center">
+                    <li><a href="{% url 'medicamentos' %}">Medicamentos </a></li>
+                    <li><a href="{% url 'monodrogas' %}">Monodrogas</a></li>
+                    <li><a href="{% url 'presentaciones' %}">Presentaciones</a></li>
+                    <li><a href="{% url 'nombresFantasia' %}">Nombres Fantasia </a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="icon-file-text"></span> Facturación <span class="caret"></span></a>
+                <ul class="dropdown-menu submenu text-center">
+                    <li><a href="{% url 'facturacionVentas' %}">Ventas</a></li>
+                    <li><a href="{% url 'facturacionCompras' %}">Compras</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -32,65 +32,34 @@
 			font-size:10px;
 		}
 	</style>
-
 </head>
-<body>
+<ul>
+    <div data-role="page" data-theme="a">
+		<!--Nav-->
+		<div class="ui-header ui-bar-a" data-swatch="a" data-theme="a" data-form="ui-bar-a" data-role="header" role="banner">
+			<!--Boton Home-->
+			<a href="{% url 'inicio' %}" data-transition="slide" role="button" data-role="button" class="ui-btn-left ui-btn-corner-all ui-btn ui-icon-home ui-btn-icon-notext ui-shadow" title=" Home " data-form="ui-icon"> Home </a>
+			<h1 class="ui-title" tabindex="0" role="heading" aria-level="1">MEDICAMENTOS</h1>
+			<!--Boton Menu-->
+			<a role="button" data-role="button" class="ui-btn-right ui-btn-corner-all ui-btn ui-icon-grid ui-btn-icon-notext ui-shadow" title=" Navigation " data-form="ui-icon"> Navigation </a>
+			<!--BUSCAR-->
+        </div>
 
-    <div data-role="page" data-theme="a"><!-- dialog-->
+        <ul data-role="listview" data-inset="true" class="ui-li ui-li-divider ui-bar-b ui-first-child ui-listview" data-filter="true">
+            <tbody>
+            {% for medicamento in medicamentos %}
+                <tr data-id="{{ medicamento.id }}">
+				    <li><a href="{% url 'MostrarMedicamento' medicamento.pk %}" data-ajax="false">{{medicamento.nombreFantasia}}</a></li>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </ul>
 
-			<!--Nav-->
-			<div class="ui-header ui-bar-a" data-swatch="a" data-theme="a" data-form="ui-bar-a" data-role="header" role="banner">
-
-				<!--Boton Home-->
-				<a role="button" data-role="button" class="ui-btn-left ui-btn-corner-all ui-btn ui-icon-home ui-btn-icon-notext ui-shadow" title=" Home " data-form="ui-icon"> Home </a>
-
-				<h1 class="ui-title" tabindex="0" role="heading" aria-level="1">MEDICAMENTOS</h1>
-
-				<!--Boton Menu-->
-				<a role="button" data-role="button" class="ui-btn-right ui-btn-corner-all ui-btn ui-icon-grid ui-btn-icon-notext ui-shadow" title=" Navigation " data-form="ui-icon"> Navigation </a>
-
-
-				<!--BUSCAR-->
-				<div data-role="content">
-					<input class="form-control form-field form-field-simple" id="nombreFantasia" name="nombreFantasia" value="{{ filtros.nombreFantasia }}" placeholder="Nombre Fantasia" type="text">
-				</div>
-
-			</div>
-
-			<diV data-role="content" data-theme="a">
-				<table data-role="table" id="table-column" class="ui-responsive table-stroke">
-
-					<thead>
-						<tr>
-							<th>Nombre de Fantasia</th>
-							<th>Presentacion</th>
-						</tr>
-    				</thead>
-
-					<tbody>
-						{% for medicamento in medicamentos %}
-							<tr class="clickeable" data-id="{{ medicamento.id }}">
-
-								<td>{{medicamento.nombreFantasia}}</td>
-								<td>{{medicamento.presentacion}}</td>
-
-							</tr>
-
-						{% endfor %}
-
-					</tbody>
-
-				</table>
-			</diV>
-
-			<div data-role="footer" data-theme="a" class="ui-nodisc-icon ui-btn-icon-right">
-
-					<a href="" class="ui-btn ui-shadow ui-corner-all ui-icon-twitter ui-btn-icon-notext">Delete</a>
-					<a href="" class="ui-btn ui-shadow ui-corner-all ui-icon-facebook ui-btn-icon-notext">Delete</a>
-					<p class="text-muted" align="center"><span class=" glyphicon glyphicon-copyright-mark"></span>  Copyright 2016 UNPSJB - Todos los derechos reservados</p>
-			</div>
-
+		<div data-role="footer" data-theme="a" class="ui-nodisc-icon ui-btn-icon-right">
+			<a href="" class="ui-btn ui-shadow ui-corner-all ui-icon-twitter ui-btn-icon-notext">Delete</a>
+			<a href="" class="ui-btn ui-shadow ui-corner-all ui-icon-facebook ui-btn-icon-notext">Delete</a>
+			<p class="text-muted" align="center"><span class=" glyphicon glyphicon-copyright-mark"></span>  <img src="{% static 'mobile/images/logouniCC.png' %}"> Copyright 2016 UNPSJB - Todos los derechos reservados</p>
+		</div>
 	</div>
-
 </body>
 </html>

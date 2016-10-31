@@ -1,33 +1,21 @@
 {% load staticfiles %}
+
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
       <li data-target="#myCarousel" data-slide-to="1"></li>
       <li data-target="#myCarousel" data-slide-to="2"></li>
-      <li data-target="#myCarousel" data-slide-to="3"></li>
-      <li data-target="#myCarousel" data-slide-to="4"></li>
     </ol>
     <div class="carousel-inner" role="listbox">
       <div class="item active">
         <img class="img-responsive" src="{% static 'images/farmacia1.jpg'%}" style="width: 100%;" alt="First slide">
       </div>
-
       <div class="item">
         <img class="img-responsive" src="{% static 'images/farmacia2.jpg'%}" style="width: 100%;" alt="Second slide" >
       </div>
-
       <div class="item">
         <img class="img-responsive" src="{% static 'images/farmacia3.jpg'%}" style="width: 100%;" alt="Third slide" >
       </div>
-
-      <div class="item active">
-        <img class="img-responsive" src="{% static 'images/farmacia4.jpg'%}" style="width: 100%;" alt="First slide">
-      </div>
-
-      <div class="item active">
-        <img class="img-responsive" src="{% static 'images/farmacia5.jpg'%}" style="width: 100%;" alt="First slide">
-      </div>
-
     </div>
     <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
       <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
