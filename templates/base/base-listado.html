@@ -22,6 +22,10 @@
 	                    <button type="submit" class="btn-form-simple"><span class="glyphicon glyphicon-search"></span></button>
 						{% block form-field-simple %} {% endblock %}
 	                </div>
+					<div>
+						{% block form-cliente %} {% endblock %}
+					</div>
+
 
 	                {% block form-sin-busqueda-avanzada %}
 	                	<div class="form-avanzado">
@@ -36,16 +40,18 @@
                         </div>
 	                {% endblock %}
 	            </form>
+
 	        </aside>
 	        <section id="section-table" class="col-md-9 section-table">
-	            <div class="header-tabla">
 
+	            <div class="header-tabla">
 					{% block sin-botones-header-tabla %}
 						<div class="header-tabla-botones right">
 							{% block botones-header-tabla %} {% endblock %}
 						</div>
 					{% endblock %}
 	            </div>
+
 	            <div id="table-responsive" class="table-responsive">
 	            	<table class="table table-striped" id="tblP">
 	            		{% block tabla %}

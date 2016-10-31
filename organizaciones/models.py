@@ -26,7 +26,7 @@ class ObraSocial(Organizacion):
     nombreGerente = models.CharField(max_length=80, blank=True)
 
     def __str__(self):
-        return self.razonSocial
+        return self.razonSocial + ' ' + self.direccion
 
 class Clinica(Organizacion):
     FILTROS = ["razonSocial__icontains", "localidad__icontains", "obraSocial__icontains"]

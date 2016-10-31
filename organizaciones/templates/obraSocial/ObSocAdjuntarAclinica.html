@@ -118,7 +118,6 @@
 
 
         $(document).on("click",function(e){
-
             identificadorDeID = e.target.id; /*obtiene el id del elemento del DOM que fue clickeado*/
             identificadorDeNombre = e.target.name; /*obtiene el name del elemento del DOM que fue clickeado*/
             var identificador = new Array();
@@ -164,19 +163,13 @@
             var paqueteJson = JSON.stringify(paquete);
 
             $.ajax({
-
                 contentType: 'json',
                 processData: false,
                 data: paqueteJson,
                 type: 'get',
-
                 url: {% url 'ObSocAdjuntarAclinicaR' %},
 
-                beforeSend:function(){
-
-                },
                 success:function(response){
-
                     alert(response);
                     /*$('#tbl').html(response);*/
                     window.location.assign("{% url 'ObSocAdjuntarAclinica' clinica.pk %}");

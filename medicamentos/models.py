@@ -92,7 +92,7 @@ class Lote(models.Model):
     numero = models.PositiveIntegerField(unique=True, error_messages={'unique': "Este numero de lote ya esta cargado"})
     fechaVencimiento= models.DateField()
     stock = models.PositiveIntegerField()
-    precio = models.FloatField()
+    precio = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     medicamento = models.ForeignKey('Medicamento', on_delete=models.CASCADE)
 
     def __str__(self):

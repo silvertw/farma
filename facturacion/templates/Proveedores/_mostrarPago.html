@@ -1,0 +1,51 @@
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+                <h1 class="modal-title">DETALLE DE PAGO</h1>
+                <a data-toggle="modal" id="cancelados" name="ver" data-target="#pagosCancelados" class="btn btn-primary center-block">Hay pagos anteriores que fueron cancelados</a>
+            </div>
+            <div class="modal-body">
+            <!--CONTENIDO MODAL-->
+                <p>FACTURA: {{pagoRec.factura}}</p>
+                <p>SE PAGO EL: {{pagoRec.fecha}}</p>
+                <p>IMPORTE: ${{pagoRec.importe}}</p>
+                <p>OBSERVACIONES: {{pagoRec.observaciones}}</p>
+                <p>FORMA DE PAGO: {{pagoRec.formaDePago}}</p>
+            <!--FIN CONTENIDO MODAL-->
+            </div>
+        </div>
+
+        <div class="modal fade" id="pagosCancelados" tabindex="-2" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+		    <div class="modal-dialog" id="verPagoModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title">PAGOS DE ESTA FACTURA QUE FUERON CANCELADOS</h1>
+                    </div>
+                    <div class="modal-body">
+                    <!--CONTENIDO MODAL-->
+                        <table class="table table-bordered">
+                              <thead></thead>
+                           <tbody class="">
+                               {% for pago in listaCancelados %}
+                                    <tr>
+                                      <td>{{pago}}</td>
+                                    </tr>
+                               {% endfor %}
+                           </tbody>
+                        </table>
+                    <!--FIN CONTENIDO MODAL-->
+                    </div>
+                </div>
+		    </div>
+        </div>
+
+        <script type="text/javascript">
+                cantidad={{ultimo}};
+                if (cantidad > 1){
+                    $('#cancelados').show();
+                }else{
+                    $('#cancelados').hide();
+                }
+        </script>
+

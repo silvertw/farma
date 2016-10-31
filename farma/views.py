@@ -10,10 +10,10 @@ def get_order(get):
 @login_required(login_url='login')
 def inicio(request):
     if request.mobile:
-        print "SOY MOVIL"
+        #vista movil
         return render(request, "mobile/inicio_mobile.html")
     else:
-        print "SOY PC"
+        #vista pc
         return render(request, "inicio/inicio.html")
 
 

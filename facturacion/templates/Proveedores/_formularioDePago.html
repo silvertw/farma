@@ -1,0 +1,195 @@
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+<div class="modal-content" >
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+        <h1 class="modal-title">PAGO DE FACTURA</h1>
+    </div>
+    <div class="modal-body">
+    <!--CONTENIDO MODAL-->
+
+        <form action= "" method="" id="formPagar">
+            {% csrf_token %}
+            {% crispy formEstadoDelPago %}
+            <p style="color:red;" class="modal-title" id="mensajeError5"></p>
+            <p style="color:red;" class="modal-title" id="mensajeError1"></p>
+            <p style="color:red;" class="modal-title" id="mensajeError2"></p>
+            <p style="color:red;" class="modal-title" id="mensajeError3"></p>
+            <p style="color:red;" class="modal-title" id="mensajeError4"></p>
+            <butto name="pagar" id='btnReg' class='btn btn-default'>Pagar</butto>
+
+        </form>
+    <!--FIN CONTENIDO MODAL-->
+    </div>
+</div>
+
+<script type="text/javascript">
+
+        $("[name='pagar']").on("click", function(e){
+
+           formImporte=true;
+           formFecha=true;
+           formPago=true
+           diferenciaFechas=true;
+           formPagar = document.getElementById("formPagar");
+
+           importe = formPagar[2].value;
+           fecha = formPagar[3].value;
+           observaciones = formPagar[4].value;
+           formaDePago = formPagar[5];
+
+           importeS=importe.toString();
+           fechaS=fecha.toString();
+           fechaDiv=fechaS.split('/');
+
+           var fechaF='{{encabezadoFactura.fecha}}';
+           var fechaFactura=convertirFecha(fechaF);
+           diferencia=difEntreFechas(fechaS,fechaFactura);
+
+           if ((observaciones.length)==0){
+                formPagar[4].value="sin observaciones";
+           }
+
+           if (diferencia < 0){
+                $('#mensajeError5').text("*DEBE INGRESAR UNA FECHA IGUAL O SUPERIOR A LA FECHA DE FACTURA");
+                diferenciaFechas=false;
+           }else{
+                $('#mensajeError5').text("");
+                diferenciaFechas=true;
+           }
+
+           if ((importeS.length)==0) {
+                $('#mensajeError1').text("*EL IMPORTE DEBE SER UN NUMERO");
+                formImporte=false;
+           }else{
+                $('#mensajeError1').text("");
+                formImporte=true;
+           }
+
+           if ((importeS.length)>0) {
+                importeTrunc='{{pieDeFactura.total}}'
+                total=('{{pieDeFactura.total}}').split(',');
+                if((total[1])=='00'){
+                   importeTrunc=total[0];
+                }
+                if(importeTrunc==importeS){
+                    $('#mensajeError1').text("");
+                    formImporte=true;
+                }else{
+                    $('#mensajeError1').text("*EL IMPORTE DEBE SER IGUAL AL TOTAL DE LA FACTURA");
+                    formImporte=false;
+                }
+           }
+
+           if ((fechaS.length)==0){
+                $('#mensajeError2').text("*DEBE INGRESAR UNA FECHA");
+                formFecha=false;
+           }
+           else{
+
+               if( ((fechaDiv[0].length)>2) || ((fechaDiv[1].length)>2) || ((fechaDiv[2].length)>4) ){
+                    $('#mensajeError2').text("*LA FECHA DEBE TENER FORMATO XX/XX/XXXX");
+                    formFecha=false;
+               }else{
+                    $('#mensajeError2').text("");
+                    formFecha=true;
+               }
+           }
+
+           indice = formaDePago.selectedIndex;
+           if( indice == null || indice == 0 ) {
+                $('#mensajeError3').text("*DEBE SELECCIONAR UNA FORMA DE PAGO");
+                formPago=false;
+           }else{
+                $('#mensajeError3').text("");
+                formPago=true;
+           }
+
+           if((diferenciaFechas)&&(formImporte)&&(formFecha)&&(formPago)){
+             url={% url 'facturasRegistradasCompras' %};
+             formData = new FormData(formPagar);
+             envioFormP(url,formData);
+
+           }
+
+          // window.location.assign("{% url 'facturasRegistradasCompras' %}");//Limpia formularios
+
+        });
+
+        function envioFormP(url, data){
+
+            $.ajax({
+              url: url,
+              type: "POST",
+              data: data,
+              processData: false,  // tell jQuery not to process the data
+              contentType: false   // tell jQuery not to set contentType
+
+            });
+
+            alert("EL PAGO SE REGISTRO CORRECTAMENTE");
+            $('#mensajeDePago').text("");
+            $('#mensajeDePago2').text("LA FACTURA ESTA PAGADA");
+            window.location.assign("{% url 'facturasRegistradasCompras' %}");//Limpia formularios
+        }
+
+        function difEntreFechas(f2,f1){
+            var aFecha1 = f1.split('/');
+            var aFecha2 = f2.split('/');
+            var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]);
+            var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]);
+            var dif = fFecha2 - fFecha1;
+            var dias = Math.floor(dif / (1000 * 60 * 60 * 24));
+            return dias;
+        }
+
+        function convertirFecha(fechaFactura){
+           //25 Oct. 2016
+           fecha=fechaFactura.split(' ');
+           dia=fecha[0];
+           mes=fecha[1];
+           anio=fecha[2];
+           var mesConvertido;
+           switch (mes) {
+                case "Jan.":
+                    mesConvertido = "1";
+                    break;
+                case "Feb.":
+                    mesConvertido = "2";
+                    break;
+                case "Mar.":
+                    mesConvertido = "3";
+                    break;
+                case "Apr.":
+                    mesConvertido = "4";
+                    break;
+                case "May.":
+                    mesConvertido = "5";
+                    break;
+                case "Jun.":
+                    mesConvertido = "6";
+                    break;
+                case "Jul.":
+                    mesConvertido = "7";
+                    break;
+                case "Aug.":
+                    mesConvertido = "8";
+                    break;
+                case "Sep.":
+                    mesConvertido = "9";
+                    break;
+                case "Oct.":
+                    mesConvertido = "10";
+                    break;
+                case "Nov.":
+                    mesConvertido = "11";
+                    break;
+                case "Dec.":
+                    mesConvertido = "12";
+                    break;
+           }
+           return fecha[0] + "/" + mesConvertido + "/" + fecha[2];
+        }
+
+</script>

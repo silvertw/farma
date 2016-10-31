@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from medicamentos import models as Mmodels
 from organizaciones import models as Omodels
 from pedidos import models as Pmodels
-from pedidos.views import get_filtros as get_filtros_pedidos, get_filtros
+
+from medicamentos.views import get_filtros as get_filtros_medicamentos
 
 
 def VerMedicamentos(request):
