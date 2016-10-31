@@ -173,6 +173,12 @@ urlpatterns = [
     url(r'^mobileVerOrganizaciones/$', moviews.VerOrganizaciones, name="VerOrganizaciones"),
     url(r'^mobileVerPedidos/$', moviews.VerPedidos, name="VerPedidos"),
 
+    url(r'^mobileMostrarMedicamento/(?P<id_medicamento>\d+)$', moviews.MostrarMedicamento, name="MostrarMedicamento"),
+
+    url(r'^mobileMostrarPedido/(?P<id_pedido>\d+)$', moviews.MostrarPedido, name="MostrarPedido"),
+
+    url(r'^mobileMostrarOrganizacion/(?P<id_organizacion>\d+)$', moviews.MostrarOrganizacion, name="MostrarOrganizacion"),
+
     #******************************************Facturacion**************************************************
     url(r'^facturacionVentas/$', fviews.facturacionVentas, name="facturacionVentas"),
     url(r'^facturacionCompras/$', fviews.facturacionCompras, name="facturacionCompras"),

@@ -5,99 +5,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Farma Movil</title>
-    <link rel="stylesheet" href="{% static 'mobile/jquery.mobile-1.4.5.min.css' %}" />
-	<link rel="stylesheet" href="{% static 'mobile/FarmaPlus.css' %}" />
-	<link rel="stylesheet" href="{% static 'mobile/jquery.mobile.icons.min.css' %}" />
 
-	<script src="{% static 'mobile/jquery.js' %}"></script>
-	<script src="{% static 'mobile/jquery.mobile-1.4.5.min.js' %}"></script>
+     <link rel="stylesheet" href="{% static 'mobile/jquery.mobile-1.4.5.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'mobile/FarmaPlus.css' %}" />
+    <link rel="stylesheet" href="{% static 'mobile/jquery.mobile.icons.min.css' %}" />
 
-    <!--style-- type="text/css">
-		.ui-page {
-	    	background:#4d66ea;
-		}
-
-		.logo{
-			width: auto;
-			height: auto;
-			background-image: url("{% static 'mobile/images/pills.svg' %}");
-			background-size: 30px 30px;
-		}
-
-		img {
-    		max-width: 100%;
-    		height: auto;
-    		width: auto/9; /* Bug de ie8 */
-		}
-
-		.ui-icon-myiconPastilla:after {
-			background-image: url("{% static 'mobile/images/pills.svg' %}");
-			background-size: 25px 25px;
-		}
-
-		.ui-icon-myiconOrganizaciones:after {
-			background-image: url("{% static 'mobile/images/hospital.svg' %}");
-			background-size: 25px 25px;
-		}
-
-		.ui-icon-myiconPedidos:after {
-			background-image: url("{% static 'mobile/images/report.svg' %}");
-			background-size: 25px 25px;
-		}
-
-		.ui-icon-twitter:after {
-			background-image: url("{% static 'mobile/images/twitter.png' %}");
-			background-size: 25px 25px;
-		}
-		.ui-icon-facebook:after {
-			background-image: url("{% static 'mobile/images/facebook.ico' %}");
-			background-size: 25px 25px;
-		}
-
-		th,td{
-			font-size:10px;
-		}
-	</style-->
-
+    <script src="{% static 'mobile/jquery.js' %}"></script>
+    <script src="{% static 'mobile/jquery.mobile-1.4.5.min.js' %}"></script>
 </head>
 <body>
+   <div data-role="page" data-theme="a">
+            <div class="ui-header ui-bar-a" data-swatch="a" data-theme="a" data-form="ui-bar-a" data-role="header" role="banner">
+                <!--Boton Home-->
+                <a href="{% url 'inicio' %}" data-transition="slide" role="button" data-role="button" class="ui-btn-left ui-btn-corner-all ui-btn ui-icon-home ui-btn-icon-notext ui-shadow" title=" Home " data-form="ui-icon"> Home </a>
+                <h1 class="ui-title" tabindex="0" role="heading" aria-level="1">FARMA MOBILE</h1>
+                <!--Boton Menu-->
+                <a role="button" data-role="button" class="ui-btn-right ui-btn-corner-all ui-btn ui-icon-grid ui-btn-icon-notext ui-shadow" title=" Navigation " data-form="ui-icon"> Navigation </a>
 
-    <div data-role="page" data-theme="a"><!-- dialog-->
+                <div data-role="content" class="logo" data-theme="a">
+                    <img src="{% static 'mobile/images/logo.png' %}">
+                </div>
 
+            </div>
 
-			<!--Nav-->
-			<div class="ui-header ui-bar-a" data-swatch="a" data-theme="a" data-form="ui-bar-a" data-role="header" role="banner">
+            <div data-role="content" data-theme="a">
 
-				<!--Boton Home-->
-				<a role="button" data-role="button" class="ui-btn-left ui-btn-corner-all ui-btn ui-icon-home ui-btn-icon-notext ui-shadow" title=" Home " data-form="ui-icon"> Home </a>
+                <a href="{% url 'VerMedicamentos' %}" data-transition="slide" data-role="button" data-theme="a" data-icon="myiconPastilla ui-nodisc-icon">MEDICAMENTOS</a>
+                <a href="{% url 'VerOrganizaciones' %}" data-transition="slide" data-role="button" data-theme="a" data-icon="myiconOrganizaciones ui-nodisc-icon">ORGANIZACIONES</a>
+                <a href="{% url 'VerPedidos' %}" data-transition="slide" data-role="button" data-theme="a" data-icon="myiconPedidos ui-nodisc-icon">PEDIDOS</a>
+            </div>
 
-				<h1 class="ui-title" tabindex="0" role="heading" aria-level="1">FARMA MOBILE</h1>
-
-				<!--Boton Menu-->
-				<a role="button" data-role="button" class="ui-btn-right ui-btn-corner-all ui-btn ui-icon-grid ui-btn-icon-notext ui-shadow" title=" Navigation " data-form="ui-icon"> Navigation </a>
-
-				<div data-role="content" class="logo" data-theme="a">
-					<img src="{% static 'mobile/images/logo.png' %}">
-				</div>
-
-			</div>
-
-			<div data-role="content" data-theme="a">
-
-				<a href="{% url 'VerMedicamentos' %}" data-transition="slide" data-role="button" data-theme="a" data-icon="myiconPastilla ui-nodisc-icon">MEDICAMENTOS</a>
-				<a href="{% url 'VerOrganizaciones' %}" data-transition="slide" data-role="button" data-theme="a" data-icon="myiconOrganizaciones ui-nodisc-icon">ORGANIZACIONES</a>
-				<a href="{% url 'VerPedidos' %}" data-transition="slide" data-role="button" data-theme="a" data-icon="myiconPedidos ui-nodisc-icon">PEDIDOS</a>
-				<!--button class="ui-nodisc-icon ui-btn ui-btn-icon-left ui-icon-myicon">myicon</button-->
-
-			</div>
-
-			<div data-role="footer" data-theme="a" class="ui-nodisc-icon ui-btn-icon-right">
-					<a href="http://www.twitter.com" class=" ui-btn ui-shadow ui-corner-all ui-icon-twitter ui-btn-icon-notext">Delete</a>
-					<a href="http://www.facebook.com" class=" ui-btn ui-shadow ui-corner-all ui-icon-facebook ui-btn-icon-notext">Delete</a>
-					<p class="text-muted" align="center"><span class=" glyphicon glyphicon-copyright-mark"></span>  Copyright 2016 UNPSJB - Todos los derechos reservados</p>
-			</div>
-
-	</div>
-
-</body>
+            <div data-role="footer" data-theme="a" class="ui-nodisc-icon ui-btn-icon-right">
+                    <a href="http://www.twitter.com" class=" ui-btn ui-shadow ui-corner-all ui-icon-twitter ui-btn-icon-notext">Delete</a>
+                    <a href="http://www.facebook.com" class=" ui-btn ui-shadow ui-corner-all ui-icon-facebook ui-btn-icon-notext">Delete</a>
+                    <p class="text-muted" align="center"><span class=" glyphicon glyphicon-copyright-mark"></span>  <img src="{% static 'mobile/images/logouniCC.png' %}"> Copyright 2016 UNPSJB - Todos los derechos reservados</p>
+            </div>
+    </div>
+    </body>
 </html>

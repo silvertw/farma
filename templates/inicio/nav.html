@@ -2,76 +2,31 @@
 
 <nav id="navbar-principal" class="navbar navbar-default navbar-principal">
     <div class="container-fluid">
-        <div class="navbar-header" >
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{% url 'inicio' %}">
-                <img alt="Brand" src="{% static 'images/logopequeno2.png' %}" style="width: 95%; height: 95%;">
-            </a>
-        </div>
-
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul id="navbar-left" class="nav navbar-nav navbar-left">
-                <li><a href="{% url 'inicio' %}"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="icon-file-text"></span> Pedidos <span class="caret"></span></a>
-                    <ul class="dropdown-menu submenu">
-                        <li><a href="{% url 'pedidosDeFarmacia' %}">Pedidos de Farmacia</a></li>
-                        <li><a href="{% url 'pedidosDeClinica' %}">Pedidos de Clinica</a></li>
-                        <li><a href="{% url 'pedidosAlaboratorio' %}">Pedidos a Laboratorio</a></li>
-                        {% if perms.usuarios.encargado_stock %}
-                            <li><a href="{% url 'recepcionPedidoAlaboratorio' %}">Recepcion de Pedido de Laboratorio</a></li>
-                        {% endif %}
-                        {% if perms.usuarios.encargado_medicamentos_vencidos %} 
-                            <li><a href="{% url 'devolucionMedicamentosVencidos' %}">Registrar Devolución de Medicamentos Vencidos</a></li>
-                        {% endif %}
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="icon-office icon-menu"></span> Organizaciones <span class="caret"></span></a>
-                    <ul class="dropdown-menu submenu text-center">
-                        <li><a href="{% url 'farmacias' %}"><span class="icon-circle"></span> Farmacias</a></li>
-                        <li><a href="{% url 'clinicas' %}">Clinicas</a></li>
-                        <li><a href="{% url 'laboratorios' %}">Laboratorios</a></li>
-                        <li><a href="{% url 'ObrasSociales' %}">Obras Sociales</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="icon-aid-kit icon-menu"></span> Medicamentos <span class="caret"></span></a>
-                    <ul class="dropdown-menu submenu text-center">
-                        <li><a href="{% url 'medicamentos' %}">Medicamentos </a></li>
-                        <li><a href="{% url 'monodrogas' %}">Monodrogas</a></li>
-                        <li><a href="{% url 'presentaciones' %}">Presentaciones</a></li>
-                        <li><a href="{% url 'nombresFantasia' %}">Nombres Fantasia </a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="icon-file-text"></span> Facturación <span class="caret"></span></a>
-                    <ul class="dropdown-menu submenu text-center">
-                        <li><a href="{% url 'facturacionVentas' %}">Ventas</a></li>
-                        <li><a href="{% url 'facturacionCompras' %}">Compras</a></li>
-                        <li><a href="{% url 'formaDePago_add' %}">Formas de Pago</a></li>
-                    </ul>
-                </li>
-            </ul>
+      <div class="navbar-header">
             <ul id="navbar-right" class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="{% static 'documentacion/build/html/index.html' %}" target="_blank"> <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a>
+                    <a href="#menu-toggle" target="_blank" class="btn btn-default glyphicon glyphicon flash" id="menu-toggle">
+                        <span class="glyphicon glyphicon-align-justify"></span>
+                    </a>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span style="top:2px;" class="glyphicon glyphicon-user"></span> {{ user.get_username }} <span class="caret"></span></a>
-                    <ul class="dropdown-menu submenu text-center">
-                        {% if perms.usuarios.encargado_general %}
-                            <li><a href="{% url 'usuario_add' %}">Agregar Usuario</a></li>
-                        {% endif %}
-                        <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
-                    </ul>
-                </li>
+                <a class="navbar-brand" href="{% url 'inicio' %}">
+                    <img alt="Brand" src="{% static 'images/logopequeno222.png' %}" style="width: 110%; height: 110%;">
+                </a>
             </ul>
-        </div>
+      </div>
+      <ul id="navbar-right2" class="nav navbar-nav navbar-right">
+        <li>
+            <a href="{% static 'documentacion/build/html/index.html' %}" target="_blank"> <span class="glyphicon glyphicon-question-sign"></span> Ayuda</a>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span style="top:2px;" class="glyphicon glyphicon-user"></span> {{ user.get_username }} <span class="caret"></span></a>
+                <ul class="dropdown-menu submenu text-center">
+                    {% if perms.usuarios.encargado_general %}
+                        <li><a href="{% url 'usuario_add' %}">Agregar Usuario</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+                </ul>
+            </li>
+      </ul>
     </div>
 </nav>

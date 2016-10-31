@@ -39,21 +39,46 @@
 		<div class="ui-header ui-bar-a" data-swatch="a" data-theme="a" data-form="ui-bar-a" data-role="header" role="banner">
 			<!--Boton Home-->
 			<a href="{% url 'inicio' %}" data-transition="slide" role="button" data-role="button" class="ui-btn-left ui-btn-corner-all ui-btn ui-icon-home ui-btn-icon-notext ui-shadow" title=" Home " data-form="ui-icon"> Home </a>
-			<h1 class="ui-title" tabindex="0" role="heading" aria-level="1">MEDICAMENTOS</h1>
+			<h1 class="ui-title" tabindex="0" role="heading" aria-level="1"><img src="{% static 'mobile/images/logo.png' %}"></h1>
 			<!--Boton Menu-->
 			<a role="button" data-role="button" class="ui-btn-right ui-btn-corner-all ui-btn ui-icon-grid ui-btn-icon-notext ui-shadow" title=" Navigation " data-form="ui-icon"> Navigation </a>
 			<!--BUSCAR-->
         </div>
 
-        <ul data-role="listview" data-inset="true" class="ui-li ui-li-divider ui-bar-b ui-first-child ui-listview" data-filter="true">
-            <tbody>
-            {% for medicamento in medicamentos %}
-                <tr data-id="{{ medicamento.id }}">
-				    <li><a href="{% url 'MostrarMedicamento' medicamento.pk %}" data-ajax="false">{{medicamento.nombreFantasia}}</a></li>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </ul>
+		<div data-role="content"data-theme="a">
+    		<ul id="nav" data-role="listview" data-inset="true">
+        		<h2>Nombre</h2>
+				<li><a href="#">{{medicamento.nombreFantasia}}®</a></li>
+    		</ul>
+
+			<ul id="nav" data-role="listview" data-inset="true">
+        		<h2>Laboratorio</h2>
+				<li><a href="#">{{ medicamento.laboratorio }}</a></li>
+    		</ul>
+
+			<ul id="nav" data-role="listview" data-inset="true">
+        		<h2>Presentacion</h2>
+				<li><a href="#">{{  medicamento.presentacion  }}</a></li>
+    		</ul>
+
+			<ul id="nav" data-role="listview" data-inset="true">
+        		<h2>Formula</h2>
+				{% for monodroga in medicamento.formulas.all %}
+					<li><a href="#">Monodroga-{{ monodroga.nombre }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+
+
+		<li class="ui-body ui-body-b ui-li ui-li-static ui-btn-up-c ui-last-child">
+			<div class="ui-block">
+				<div aria-disabled="false" class="ui-submit ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all" data-disabled="false" data-theme="d" data-wrapperels="span" data-iconshadow="true" data-shadow="true" data-corners="true">
+					<h2>Añadir a pedido</h2>
+					<input class="form-control form-field form-field-simple" id="nroPedido" name="nroPedido" value="{{ filtros.nroPedido }}" placeholder="Cantidad" type="text">
+					<button data-disabled="false" class="ui-btn-hidden" type="submit" data-theme="d">Aceptar</button>
+				</div>
+			</div>
+		</li>
 
 		<div data-role="footer" data-theme="a" class="ui-nodisc-icon ui-btn-icon-right">
 			<a href="" class="ui-btn ui-shadow ui-corner-all ui-icon-twitter ui-btn-icon-notext">Delete</a>
@@ -61,5 +86,5 @@
 			<p class="text-muted" align="center"><span class=" glyphicon glyphicon-copyright-mark"></span>  <img src="{% static 'mobile/images/logouniCC.png' %}"> Copyright 2016 UNPSJB - Todos los derechos reservados</p>
 		</div>
 	</div>
-</body>
+</ul>
 </html>
