@@ -6,6 +6,8 @@ from .models import Presentacion
 from .models import NombreFantasia
 from .models import Formula
 from .models import Lote
+from .models import StockFarmayFarmacias
+from .models import StockDistribuidoEnFarmacias
 from django.contrib.auth import models as auth_models
 
 
@@ -24,3 +26,6 @@ admin.site.register(Presentacion)
 admin.site.register(NombreFantasia)
 admin.site.register(Lote)
 admin.site.register(auth_models.Permission)
+
+admin.site.register(StockFarmayFarmacias)
+admin.site.register(StockDistribuidoEnFarmacias)

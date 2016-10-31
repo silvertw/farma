@@ -67,9 +67,12 @@ def procesar_pedido_de_farmacia(pedido):
 # FUNCIONES INTERNAS PEDIDO DE FARMACIA
 
 def procesar_detalle_de_farmacia(detalle, remito):
-    stockTotal = detalle.medicamento.get_stock()
+    stockTotal = detalle.medicamento.get_stock()#El stock total sera el que se ecuentra en farma y el distribuido en
+                                                #todas las farmacias.
+
     lotes = mmodels.Lote.objects.filter(medicamento__id=detalle.medicamento.id).order_by('fechaVencimiento')
-    if stockTotal < detalle.cantidad:
+
+    if stockTotal < detalle.cantidad:#No alcanza ni siquiera sumando drogueria
         for lote in lotes:
             if lote.stock:  # Solo uso lotes que no esten vacios
                 cantidadTomadaDeLote = lote.stock
@@ -83,7 +86,6 @@ def procesar_detalle_de_farmacia(detalle, remito):
                 detalleRemito.lote = lote
                 detalleRemito.save()
                 lote.save()
-
         detalle.cantidadPendiente = detalle.cantidad-stockTotal
         detalle.save()
         return False
@@ -91,8 +93,16 @@ def procesar_detalle_de_farmacia(detalle, remito):
         detalle.cantidadPendiente = 0  # porque hay stock suficiente para el medicamento del detalle
         detalle.save()  # actualizo cantidad pendiente antes calculada
         cantidadNecesaria = detalle.cantidad
+
+        #==================================CAPA NUEVA===========================================
+
+
+
+        #=======================================================================================
+
         i = 0
         while cantidadNecesaria > 0:
+
             lote = lotes[i]
             if lote.stock:  # Solo uso lotes que no esten vacios
                 cantidadTomadaDeLote = 0
@@ -113,6 +123,7 @@ def procesar_detalle_de_farmacia(detalle, remito):
                 detalleRemito.save()
                 lote.save()  # actualizo el stock del lote
             i += 1
+
         return True
 
 
@@ -360,6 +371,26 @@ def guardar_recepcion_detalle_con_nuevo_lote(session, detalle, infoRecepcionDeta
 
 
 def crear_nuevos_lotes(nuevosLotes):
+
+    claves=nuevosLotes.keys()#Llega un diccionario con varios lotes con determinadas claves asi que se obtienen.
+
+    if claves:#Se toma esta precaucion por que puede ser que no vengan nuevos lotes sino que se actualiza uno
+              #antiguo.
+        primerClave=claves[0]#Se obtiene la primer clave de estos nuevos lotes.
+        lote=nuevosLotes[primerClave]#Se obtiene uno de los lotes (el primero) en realidad no importa cual
+                                     #por que el objetivo es obtener el medicamento.
+
+        idMedicamento=lote['medicamento']#De ese lote se obtiene el id del medicamento
+        medicamento=mmodels.Medicamento.objects.get(pk=idMedicamento)#Finalmente se recupera el medicamento
+
+        if not medicamento.tiene_lotes():
+            stockFyF = mmodels.StockFarmayFarmacias()
+            stockFyF.save()
+        else:
+            #stockFyF=lote.stockFarmaYfarmacias
+            lotes=medicamento.get_lotes_activos()
+            stockFyF = lotes[0].stockFarmaYfarmacias
+
     for numeroLote, info in nuevosLotes.items():
         lote = mmodels.Lote()
         lote.numero = numeroLote
@@ -367,16 +398,38 @@ def crear_nuevos_lotes(nuevosLotes):
         lote.precio = info['precio']
         lote.stock = info['stock']
         lote.medicamento = mmodels.Medicamento.objects.get(pk=info['medicamento'])
-        lote.save()        
+        stockFyF.stockFarma = stockFyF.stockFarma+info['stock']
+        lote.stockFarmaYfarmacias=stockFyF
+        lote.save()
+
+    if claves:
+        stockFyF.save()
+
+
+    #raise Exception
 
 
 def actualizar_lotes(lotes):
+
+    claves=lotes.keys()
+
+    if claves:
+        primerClave=claves[0]
+        listLotes=mmodels.Lote.objects.filter(numero=primerClave)
+        lote=listLotes[0]
+        stockFyF=lote.stockFarmaYfarmacias
+
     for numeroLote, cantidadRecibida in lotes.items():
         if cantidadRecibida > 0:
             lote = mmodels.Lote.objects.get(numero=numeroLote)
             lote.stock += cantidadRecibida
+            stockFyF.stockFarma=stockFyF.stockFarma + cantidadRecibida
+            lote.stockFarmaYfarmacias=stockFyF
             lote.save()
+    if claves:
+        stockFyF.save()
 
+    #raise Exception
 
 def actualizar_pedido(pedido, detalles):
     recepcionDelPedidoCompleta = True

@@ -17,6 +17,7 @@ from .models import RemitoLaboratorio
 from .models import DetalleRemitoLaboratorio
 
 
+
 # =======================FIN DESDE M 1=======================
 
 from .models import PedidoAlaboratorio
@@ -39,6 +40,7 @@ admin.site.register(PedidoDeFarmacia)
 admin.site.register(DetallePedidoDeFarmacia)
 admin.site.register(RemitoDeFarmacia)
 admin.site.register(DetalleRemitoDeFarmacia)
+
 
 # ********PEDIDO Y REMITO DE CLINICA******** #
 

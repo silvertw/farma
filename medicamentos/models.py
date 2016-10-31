@@ -1,6 +1,7 @@
 # - encode: utf-8 -
 from django.db import models
 from organizaciones.models import Laboratorio
+from organizaciones.models import Farmacia
 from django.core.validators import MaxValueValidator, MinValueValidator
 from pedidos import config as pconfig
 from . import config
@@ -32,7 +33,13 @@ class Medicamento(models.Model):
     def get_lotes_con_stock(self):
         lotes = self.get_lotes_activos()
         return lotes.filter(stock__gt=0)
-        
+
+    def tiene_lotes(self):
+        if self.get_lotes_activos():
+            return True
+        else:
+            return False
+
     def get_lotes_activos(self):
         if self.id:
             lim = datetime.date.today() + datetime.timedelta(weeks=pconfig.SEMANAS_LIMITE_VENCIDOS)
@@ -91,9 +98,10 @@ class Lote(models.Model):
     FILTROS = ["numero__icontains"]
     numero = models.PositiveIntegerField(unique=True, error_messages={'unique': "Este numero de lote ya esta cargado"})
     fechaVencimiento= models.DateField()
-    stock = models.PositiveIntegerField()
+    stock = models.PositiveIntegerField()#esto es igual a stockFarma + stockFarmacias
     precio = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     medicamento = models.ForeignKey('Medicamento', on_delete=models.CASCADE)
+    stockFarmaYfarmacias = models.ForeignKey('StockFarmayFarmacias',null=True)
 
     def __str__(self):
         return "%s" % self.numero
@@ -105,3 +113,16 @@ class Lote(models.Model):
                 'fechaVencimiento': self.fechaVencimiento.strftime("%d/%m/%y"),
                 'stock': self.stock
             }
+
+class StockFarmayFarmacias(models.Model):
+    stockFarma=models.PositiveIntegerField(default=0)
+    stockFarmacias=models.PositiveIntegerField(default=0)
+
+class StockDistribuidoEnFarmacias(models.Model):
+    lote=models.ForeignKey('Lote',null=True)
+    cantidad=models.PositiveIntegerField
+    farmacia=models.ForeignKey(Farmacia,null=True)
+
+
+
+
