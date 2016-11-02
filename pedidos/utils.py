@@ -71,6 +71,7 @@ def procesar_detalle_de_farmacia(detalle, remito, pedido):
             if lote.stock:  # Solo uso lotes que no esten vacios
 
                 #===========SALIR A BUSCAR EN LAS FARMACIAS==============
+
                 #========================================================
 
                 cantidadTomadaDeLote = lote.stock
@@ -103,7 +104,7 @@ def procesar_detalle_de_farmacia(detalle, remito, pedido):
                     cantidadNecesaria -= lote.stock
                     cantidadTomadaDeLote = lote.stock
 
-                    #===========ACA VA LA LOGICA DE REPOSICION PARA QUITAR MED. A UNA FARMACIA Y DARLE A OTRA
+                    #=======================================================================
                     stockEnFarma = stockEnFarma - cantidadTomadaDeLote# Se resta lo que se quito del lote en cuestion (en este caso se quita toda).
                     stockFyF.stockFarma=stockEnFarma
                     stockFyF.stockFarmacias = stockFyF.stockFarmacias + cantidadTomadaDeLote
@@ -483,7 +484,7 @@ def actualizar_pedido(pedido, detalles):
     pedido.save()
 
 
-def actualizar_pedidos_farmacia(remitoLab):#ENTRADA FARMACIA
+def actualizar_pedidos_farmacia(remitoLab):
 
     detalles = models.DetalleRemitoLaboratorio.objects.filter(remito=remitoLab)
     # todos los pedidos de farmacia a los que se les realiza el remito y que luego deben actualizar su estado
@@ -554,7 +555,7 @@ def procesar_recepcion(sesion, pedido):
         detalleRemito.detallePedidoLaboratorio = models.DetallePedidoAlaboratorio.objects.get(pk=detalle['detallePedidoLaboratorio'])
         detalleRemito.save()
 
-    actualizar_pedidos_farmacia(remito)#ENTRADA FARMACIA
+    actualizar_pedidos_farmacia(remito)
 
 
 # ************************
