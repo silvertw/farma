@@ -104,7 +104,7 @@ class Lote(models.Model):
     stockFarmaYfarmacias = models.ForeignKey('StockFarmayFarmacias',null=True)
 
     def __str__(self):
-        return "%s" % self.numero
+        return "%s - %s" % (self.numero, self.stockFarmaYfarmacias)
 
     def to_json(self):
         if self.numero:
@@ -117,12 +117,16 @@ class Lote(models.Model):
 class StockFarmayFarmacias(models.Model):
     stockFarma=models.PositiveIntegerField(default=0)
     stockFarmacias=models.PositiveIntegerField(default=0)
+    def __str__(self):
+        return "Stock total en drogueria: %s" % (self.stockFarma)
+
 
 class StockDistribuidoEnFarmacias(models.Model):
     lote=models.ForeignKey('Lote',null=True)
-    cantidad=models.PositiveIntegerField
+    cantidad=models.PositiveIntegerField(default=0)
     farmacia=models.ForeignKey(Farmacia,null=True)
-
+    def __str__(self):
+        return "nro. lote:%s - Cantidad en: %s - %s" % (self.lote, self.farmacia, self.cantidad)
 
 
 

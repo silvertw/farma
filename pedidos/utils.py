@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 from django.db.models import Q
 import datetime
+from organizaciones import models as Omodels
 from medicamentos import models as mmodels
 from pedidos import models, config
 from collections import OrderedDict
 from django.db.models import Sum
 import itertools
 import re
-
 
 # **********************
 # FUNCIONES COMPARTIDAS
@@ -19,7 +19,6 @@ def crear_pedido_para_sesion(m, pedido):
     p['nroPedido'] = get_next_nro_pedido(m)
     return p
 
-
 def get_next_nro_pedido(m):
     nro = 1
     try:
@@ -28,32 +27,29 @@ def get_next_nro_pedido(m):
         pass
     return nro
 
-
 def existe_medicamento_en_pedido(detalles, id_med):
     for detalle in detalles:
         if detalle['medicamento']['id'] == id_med:  # no puede haber dos detalles con el mismo medicamento
             return True
     return False
 
-
 def crear_detalle_json(detalle, renglon):
     d = detalle.to_json()
     d['renglon'] = renglon
     return d
 
-
 # **********************
 # PEDIDO DE FARMACIA
 # **********************
 
-def procesar_pedido_de_farmacia(pedido):
+def procesar_pedido_de_farmacia(pedido):#ENTRADA FARMACIA
     detalles = models.DetallePedidoDeFarmacia.objects.filter(pedidoDeFarmacia=pedido.nroPedido)  # obtengo todos los detalles del pedido
     if not es_pendiente(pedido):
         remito = models.RemitoDeFarmacia(pedidoFarmacia=pedido, fecha=pedido.fecha)
         remito.save()
         esEnviado = True
         for detalle in detalles:
-            esEnviado = esEnviado and procesar_detalle_de_farmacia(detalle, remito)
+            esEnviado = esEnviado and procesar_detalle_de_farmacia(detalle, remito, pedido)
 
         pedido.estado = "Enviado" if esEnviado else "Parcialmente Enviado"
     else:
@@ -66,15 +62,17 @@ def procesar_pedido_de_farmacia(pedido):
 
 # FUNCIONES INTERNAS PEDIDO DE FARMACIA
 
-def procesar_detalle_de_farmacia(detalle, remito):
-    stockTotal = detalle.medicamento.get_stock()#El stock total sera el que se ecuentra en farma y el distribuido en
-                                                #todas las farmacias.
-
+def procesar_detalle_de_farmacia(detalle, remito, pedido):
+    stockTotal = detalle.medicamento.get_stock()#Este es el stock que esta en drogueria
     lotes = mmodels.Lote.objects.filter(medicamento__id=detalle.medicamento.id).order_by('fechaVencimiento')
 
-    if stockTotal < detalle.cantidad:#No alcanza ni siquiera sumando drogueria
+    if stockTotal < detalle.cantidad:
         for lote in lotes:
             if lote.stock:  # Solo uso lotes que no esten vacios
+
+                #===========SALIR A BUSCAR EN LAS FARMACIAS==============
+                #========================================================
+
                 cantidadTomadaDeLote = lote.stock
                 lote.stock = 0
                 detalleRemito = models.DetalleRemitoDeFarmacia()
@@ -93,25 +91,53 @@ def procesar_detalle_de_farmacia(detalle, remito):
         detalle.cantidadPendiente = 0  # porque hay stock suficiente para el medicamento del detalle
         detalle.save()  # actualizo cantidad pendiente antes calculada
         cantidadNecesaria = detalle.cantidad
-
-        #==================================CAPA NUEVA===========================================
-
-
-
-        #=======================================================================================
-
         i = 0
         while cantidadNecesaria > 0:
 
             lote = lotes[i]
             if lote.stock:  # Solo uso lotes que no esten vacios
+                stockFyF = lote.stockFarmaYfarmacias
+                stockEnFarma = stockFyF.stockFarma# Obtengo la cantidad total que suman los lotes o que suma el lote en farma
                 cantidadTomadaDeLote = 0
                 if lote.stock < cantidadNecesaria:  # el lote no tiene toda la cantidad que necesito
                     cantidadNecesaria -= lote.stock
                     cantidadTomadaDeLote = lote.stock
+
+                    #===========ACA VA LA LOGICA DE REPOSICION PARA QUITAR MED. A UNA FARMACIA Y DARLE A OTRA
+                    stockEnFarma = stockEnFarma - cantidadTomadaDeLote# Se resta lo que se quito del lote en cuestion (en este caso se quita toda).
+                    stockFyF.stockFarma=stockEnFarma
+                    stockFyF.stockFarmacias = stockFyF.stockFarmacias + cantidadTomadaDeLote
+                    #========================================================================
+
                     lote.stock = 0
                 else:
                     lote.stock = lote.stock - cantidadNecesaria
+
+                    #===================INSERCIONES PARA STOCK DISTRIBUIDO===================
+                    stockEnFarma = stockEnFarma - cantidadNecesaria
+                    stockFyF.stockFarma=stockEnFarma
+                    stockFyF.stockFarmacias = stockFyF.stockFarmacias + cantidadNecesaria
+                    idFarmacia=pedido.farmacia.pk
+                    farmacia=Omodels.Farmacia.objects.get(pk=idFarmacia)
+                    idLote=lote.pk
+
+                    #Se obtiene el stock distribuido (que es una lista):
+                    listStocDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__pk=idLote)
+                    stocDist=listStocDist[0]#Se obtiene el primer elemento de la lista, (siempre va a existir).
+
+                    if stocDist.cantidad == 0:
+                        stocDist.cantidad = stocDist.cantidad + cantidadNecesaria
+                        stocDist.lote=lote
+                        stocDist.farmacia=farmacia
+                    else:
+                        stocDist=mmodels.StockDistribuidoEnFarmacias()#Nuevo renglon
+                        stocDist.cantidad = stocDist.cantidad + cantidadNecesaria
+                        stocDist.lote=lote
+                        stocDist.farmacia=farmacia
+
+                    stocDist.save()
+                    #========================================================================
+
                     cantidadTomadaDeLote = cantidadNecesaria
                     cantidadNecesaria = 0
 
@@ -122,6 +148,7 @@ def procesar_detalle_de_farmacia(detalle, remito):
                 detalleRemito.cantidad = cantidadTomadaDeLote
                 detalleRemito.save()
                 lote.save()  # actualizo el stock del lote
+                stockFyF.save()
             i += 1
 
         return True
@@ -387,7 +414,7 @@ def crear_nuevos_lotes(nuevosLotes):
             stockFyF = mmodels.StockFarmayFarmacias()
             stockFyF.save()
         else:
-            #stockFyF=lote.stockFarmaYfarmacias
+            #stockFyF=lote.stockFarmaYfarmacias-->verificar para mejorar
             lotes=medicamento.get_lotes_activos()
             stockFyF = lotes[0].stockFarmaYfarmacias
 
@@ -401,7 +428,13 @@ def crear_nuevos_lotes(nuevosLotes):
         stockFyF.stockFarma = stockFyF.stockFarma+info['stock']
         lote.stockFarmaYfarmacias=stockFyF
         lote.save()
+        #=======================================INSERCION STOCK DISTRIBUIDO=================================
+        stockDist = mmodels.StockDistribuidoEnFarmacias()
+        stockDist.lote=lote
+        stockDist.cantidad=0
+        #===================================================================================================
 
+        stockDist.save()
     if claves:
         stockFyF.save()
 
@@ -450,7 +483,7 @@ def actualizar_pedido(pedido, detalles):
     pedido.save()
 
 
-def actualizar_pedidos_farmacia(remitoLab):
+def actualizar_pedidos_farmacia(remitoLab):#ENTRADA FARMACIA
 
     detalles = models.DetalleRemitoLaboratorio.objects.filter(remito=remitoLab)
     # todos los pedidos de farmacia a los que se les realiza el remito y que luego deben actualizar su estado
@@ -521,7 +554,7 @@ def procesar_recepcion(sesion, pedido):
         detalleRemito.detallePedidoLaboratorio = models.DetallePedidoAlaboratorio.objects.get(pk=detalle['detallePedidoLaboratorio'])
         detalleRemito.save()
 
-    actualizar_pedidos_farmacia(remito)
+    actualizar_pedidos_farmacia(remito)#ENTRADA FARMACIA
 
 
 # ************************

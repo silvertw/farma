@@ -114,19 +114,24 @@ def pedidoDeFarmacia_verRemitos(request, id_pedido):
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def pedidoDeFarmacia_registrar(request):
+    print "ENTRE1"
     pedido = request.session['pedidoDeFarmacia']
     detalles = request.session['detallesPedidoDeFarmacia']
+    print "ENTRE2"
     mensaje_error = None
     if detalles:
         farmacia = omodels.Farmacia.objects.get(pk=pedido['farmacia']['id'])
         fecha = datetime.datetime.strptime(pedido['fecha'], '%d/%m/%Y').date()
+        print "ENTRE3"
         if not(models.PedidoDeFarmacia.objects.filter(pk=pedido["nroPedido"]).exists()):
             p = models.PedidoDeFarmacia(farmacia=farmacia, fecha=fecha)
             p.save()
+            print "ENTRE4"
             for detalle in detalles:
                 medicamento = mmodels.Medicamento.objects.get(pk=detalle['medicamento']['id'])
                 d = models.DetallePedidoDeFarmacia(pedidoDeFarmacia=p, medicamento=medicamento, cantidad=detalle['cantidad'])
                 d.save()
+            print "ENTRE5"
             utils.procesar_pedido_de_farmacia(p)
             existeRemito = p.estado != "Pendiente"
             if existeRemito:
