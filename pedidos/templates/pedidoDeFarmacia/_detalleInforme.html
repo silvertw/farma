@@ -1,0 +1,31 @@
+                    <div class="table-responsive">
+
+                            <h1>Para cubrir la cantidad solicitada se puede hacer lo siguiente:</h1>
+
+                          <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Cantidad a Quitar</th>
+                              <th>Farmacia</th>
+                              <th>Lote</th>
+                            </tr>
+                          </thead>
+                          <tbody class="listadoFact">
+                            {% for renglon in renglones %}
+                                <tr>
+                                  <td>{{ renglon.totalq }}</td>
+                                  <td>{{ renglon.farmacia }}</td>
+                                  <td>{{ renglon.lote }}</td>
+                                </tr>
+                            {% endfor %}
+                          </tbody>
+
+                        </table>
+                    </div>
+
+<!--scrip type="text/javascript">
+
+
+
+
+</scrip-->

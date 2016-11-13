@@ -70,9 +70,6 @@ def procesar_detalle_de_farmacia(detalle, remito, pedido):
         for lote in lotes:
             if lote.stock:  # Solo uso lotes que no esten vacios
 
-                #===========SALIR A BUSCAR EN LAS FARMACIAS==============
-
-                #========================================================
 
                 cantidadTomadaDeLote = lote.stock
                 lote.stock = 0
@@ -426,6 +423,7 @@ def crear_nuevos_lotes(nuevosLotes):
         lote.precio = info['precio']
         lote.stock = info['stock']
         lote.medicamento = mmodels.Medicamento.objects.get(pk=info['medicamento'])
+
         stockFyF.stockFarma = stockFyF.stockFarma+info['stock']
         lote.stockFarmaYfarmacias=stockFyF
         lote.save()
@@ -438,10 +436,6 @@ def crear_nuevos_lotes(nuevosLotes):
         stockDist.save()
     if claves:
         stockFyF.save()
-
-
-    #raise Exception
-
 
 def actualizar_lotes(lotes):
 
@@ -463,9 +457,10 @@ def actualizar_lotes(lotes):
     if claves:
         stockFyF.save()
 
-    #raise Exception
+
 
 def actualizar_pedido(pedido, detalles):
+
     recepcionDelPedidoCompleta = True
     for detalle in detalles:
         if detalle['actualizado']:
@@ -507,8 +502,38 @@ def actualizar_pedidos_farmacia(remitoLab):
         for detalle in detallesRemitoLaboratorio:
             # actualiza la cantidad pendiente del detalle pedido farmacia
             detallePedidoFarmacia = models.DetallePedidoDeFarmacia.objects.get(pk=detalle.detallePedidoLaboratorio.detallePedidoFarmacia.pk)
-           
+
+            #========================INSERCION PARA STOCK DISTRIBUIDO===========================
+
+            stockFyF = detalle.lote.stockFarmaYfarmacias
+            #stockDist = mmodels.StockDistribuidoEnFarmacias.objects.get(lote=detalle.lote)
+
+            listStockDist = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote=detalle.lote)
+            #Se obtiene la lista de stockdistribuido correspondiente al lote, si es un lote nuevo
+            #el primer elemento no tendra farmacia asignada, este es el elemento que se crea por
+            #defecto al momento de crear un lote por lo tanto debo usarlo, de lo contrario aparecera
+            #en la lista como un elemento vacio, luego cuando se verifica si ese elemeto fue usado
+            #paso a crear o instanciar nuevos elemento para stock distribuido.
+            if listStockDist[0].farmacia is None:
+                stockDist=listStockDist[0]#Uso el creado por defecto
+            else:
+                stockDist = mmodels.StockDistribuidoEnFarmacias()#Creo nuevos elementos si es necesario
+
+            #======================FIN INSERCION PARA STOCK DISTRIBUIDO=========================
+
             detallePedidoFarmacia.cantidadPendiente -= detalle.cantidad
+
+            #========================INSERCION PARA STOCK DISTRIBUIDO===========================
+
+
+            stockDist.lote = detalle.lote
+            stockDist.cantidad += detalle.cantidad
+            stockDist.farmacia=pedidoDeFarmacia.farmacia
+            stockFyF.stockFarmacias += detalle.cantidad
+            stockDist.save()
+            stockFyF.save()
+            #=======================FIN INSERCION PARA STOCK DISTRIBUIDO========================
+
             detallePedidoFarmacia.save()
 
             detalleRemitoFarmacia = models.DetalleRemitoDeFarmacia()
@@ -868,6 +893,167 @@ def formatearFecha(fecha):
      return fechaConv
 
 
+#=========================================STOCK DISTRIBUIDO=====================================================
+class parametros():
+    MAX_A_QUITAR=15 #El maximo a quitar de farmacias.
+    MIN_A_DEJAR=0 #El minimo que se debe dejar por lote en una farmacia.
+    MARGEN=0#Margen para que existan altas probabilidades de no dejar lotes en cero.
 
+def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
+
+    list_informe=[]
+    for detalle in detalles:#Se recorrern los detalles del pedido
+        medicamento = detalle.medicamento
+
+        cantidadAobtener=detalle.cantidadPendiente#centinela
+        detalleCantidadPendiente=detalle.cantidadPendiente#Para comparar
+
+        #Obtengo todos los lotes distribuidos de ese medicamento.
+        listStockDist = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__medicamento__pk=medicamento.pk).order_by('lote__pk')
+
+        #Se obtienen los lotes activos del medicamento del renglon (detalle)
+        lotesActivos=detalle.medicamento.get_lotes_activos()
+
+        nuevoStockDist=mmodels.StockDistribuidoEnFarmacias()
+
+        #Recorro los lotes activos del medicamento
+        for loteActivo in lotesActivos:
+            seguirSacandoAlote=True
+            i=0
+            #El lote activo puede tener cierta cantidad distribuida en farmacias
+            cantidadDistribuida=cantDeLoteActivoDist(loteActivo,listStockDist)#Esta es la porcion (cantidad total)
+                                                                              #distribuida del lote activo.
+            cantidadDistribuidaC=cantidadDistribuida
+            #Recorro el stock distribuido:
+
+        #========PARA EL INFORME A PRESENTAR==========
+            informe_cantidadQuitada=0
+            informe_listFarmacias=[]
+            informe_listFarmacias_count=[]
+
+            while cantidadAobtener > 0 and seguirSacandoAlote:
+                if(cantidadDistribuidaC==parametros.MIN_A_DEJAR):
+                    seguirSacandoAlote=False#Esto permite pasar de un stockDist a otro si estos se agotan y lo
+                                            #solicitado no se completa.
+                    nuevoStockDist=mmodels.StockDistribuidoEnFarmacias()
+                    nuevoStockDist.farmacia=farmacia
+                if len(listStockDist)==i:
+                    i=0 #Reinicia para dar mas vueltas.
+
+                dist = listStockDist[i]#Obtengo cada elemento del stock distribuido.
+
+                informe_farmaciaRs=dist.farmacia.razonSocial#**********
+
+                if ((loteActivo.pk == dist.lote.pk) and (farmacia.razonSocial != dist.farmacia.razonSocial)):#Si el lote activo es el mismo que esta distribuido.
+
+                    if dist.cantidad > 0:#Esta condicion es necesaria porque el total del stock distribuido
+                                         #puede ser 10 unidades pero estar sidtribuido asi:
+                                         #lote 2500-->querol-->cantidad:0
+                                         #lote 2500-->25 mayo-->cantidad:0
+                                         #lote 2500-->Plaza-->cantidad:10
+                                         #por lo que lo correcto es descontarle solo a Farmacia Plaza.
+
+                        dist.cantidad -= 1#Descuenta de a uno
+
+                        informe_cantidadQuitada += 1#**********
+                        informe_lote=dist.lote.numero#**********
+
+                        if not informe_farmaciaRs in informe_listFarmacias:#Para no meter en lista la misma farmacia varias veces
+                            informe_listFarmacias.append(informe_farmaciaRs)#*********
+                        #En esta lista si se meten varias veces por que es una lista que ayuda a contar cantidades
+                        informe_listFarmacias_count.append( informe_farmaciaRs + '_' + str(informe_lote) )#*********
+
+
+                        detalle.cantidadPendiente -= 1
+                        cantidadAobtener -= 1#Esta es la cantidad total que se necesita para la farmacia solicitante.
+
+                        nuevoStockDist.cantidad += 1
+                        nuevoStockDist.farmacia=farmacia
+                        nuevoStockDist.lote=dist.lote
+
+                        cantidadDistribuidaC -= 1#Esta es la suma del stock distribuido de un lote determinado
+                                                 #si esta suma de stock distribuido no alcanza se debe buscar
+                                                 #en otro stock distribuido (lote) y asi hasta completar lo solicitado,
+                                                 #hay que tener en cuenta que cada vez que se pasa a buscar a
+                                                 #otro hay que crear un nuevo stockDist asociado a la farmacia
+                                                 #solicitante y trasladarle la porcion que corresponde.
+                        if not verificar:
+                            dist.save()
+                            detalle.save()
+                            nuevoStockDist.save()
+
+                i += 1
+
+            listPares=[]
+            listPares.append(informe_listFarmacias)
+            listPares.append(informe_listFarmacias_count)
+            list_informe.append(listPares)
+
+    renglones=[]
+
+    for data in list_informe:
+        farmacias = data[0]#Se obtiene la primer lista de todas las farmacia a las que se les quito medicamentos.
+        countAndLotes = data[1]#Se obtiene la segunda lista que ayuda a contar la cantidad que se quito , la info de lote
+                               #y el resto que queda en farmacia.
+
+        farmAndloteDeList=countAndLotes[0].split('_')#Se separa farmacia y el numero de lote; en toda la
+                                                     #lista el numero de lote es siempre el mismo.
+        loteDeList=farmAndloteDeList[1]#Del split obtengo el numero de lote
+
+
+        for farmacia in farmacias:#Se recorren todas las farmacias a las que se le va a quitar medicamentos
+
+            renglon={}#Se cre un renglon del informe a presentar
+            farmaciaAquitar = farmacia + '_' + loteDeList #A cada farmacia se le concatena el numero de lote esto es asi
+                                                          #porque en la lista 'farmacias' solo tenemos:
+                                                          #[u'25 de Mayo', u'Plaza']
+                                                          #y en la lista 'countAndLotes' tenemos:
+                                                          #[u'25 de Mayo_3001_2', u'Plaza_3001_2']
+            total=countAndLotes.count(farmaciaAquitar)#Gracias a la concatenacion se puede contar la cantidad quitada a la
+                                                      #farmacia con el metodo count de python.
+            renglon["farmacia"]=farmacia
+            renglon["totalq"]=total
+            renglon["lote"]=loteDeList
+
+            renglones.append(renglon)#Informe final a presentarse al usuario.
+
+        if not verificar:#si se quita if correr a la izquierda un tab
+            pedido.estado="Enviado"
+            pedido.save()
+        return renglones
+
+def cantDeLoteActivoDist(loteActivo,listStockDist):
+    cantidad=0
+    for list in listStockDist:
+        if loteActivo.pk==list.lote.pk:
+            cantidad += list.cantidad
+    return cantidad
+
+
+def verificarCantidad(cantidadAobtener,detalle):
+
+     medicamento = detalle.medicamento
+     stockTotalDist = 0
+     nroLote = 0
+     cantidadLotes = 0
+
+     #Se obtienen todos los lotes con stock distribuido del medicamento
+     listStockDist = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__medicamento__pk=medicamento.pk).order_by('lote__pk')
+
+     #Se busca el total de stock que suman los lotes del medicamento ditribuido en todas las farmacias
+     for dist in listStockDist:
+        stockTotalDist += dist.cantidad
+        if nroLote != dist.lote.pk:#Se cuenta la cantidad de lotes (cada vez que aparece un nuevo lote debe contarse)
+                                   #esto es por que los lotes pueden tener la siguiente conformacion.
+                                   #lote nro:2345
+                                   #lote nro:2345
+                                   #lote nro:6547...
+            nroLote=dist.lote.pk
+            cantidadLotes += 1
+
+     if ( (stockTotalDist >= cantidadAobtener + parametros.MARGEN) and (cantidadAobtener <= parametros.MAX_A_QUITAR) ):
+        return True
+     else:
+        return False
 
 

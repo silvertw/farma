@@ -15,6 +15,8 @@ from medicamentos import models as mmodels
 from organizaciones import models as omodels
 from pedidos import forms, models, utils
 from django.http import HttpResponse
+from pedidos import models as pmodels
+from medicamentos import  models as mmodels
 import json
 from xlsxwriter import Workbook
 import io
@@ -56,13 +58,17 @@ def update_csrf(r):
 
 @login_required(login_url='login')
 def pedidosDeFarmacia(request):
+
     mfilters = get_filtros(request.GET, models.PedidoDeFarmacia)
     pedidos = models.PedidoDeFarmacia.objects.filter(**mfilters)
+    max = utils.parametros.MAX_A_QUITAR
+    haySuficiente=False#Para que trabaje correctamente la busqueda en farmacias
+
     estadisticas = {
         'total': models.PedidoDeFarmacia.objects.all().count(),
         'filtrados': pedidos.count()
     }
-    return render(request, "pedidoDeFarmacia/pedidos.html", {"pedidos": pedidos, "filtros": request.GET, 'estadisticas': estadisticas})
+    return render(request, "pedidoDeFarmacia/pedidos.html", {"pedidos": pedidos, "filtros": request.GET, 'estadisticas': estadisticas, 'haySuficiente':haySuficiente,'max':max})
 
 
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
@@ -97,16 +103,16 @@ def pedidoDeFarmacia_verDetalles(request, id_pedido):
         detalles_json.append(detalle.to_json())
     return {'detalles': detalles_json}
 
-
+#===================================LOGICA PARA EL PDF==============================================
 @json_view
 @login_required(login_url='login')
 def pedidoDeFarmacia_verRemitos(request, id_pedido):
-    remitos_json = []
-    remitos = models.RemitoDeFarmacia.objects.filter(pedidoFarmacia__pk=id_pedido)
-    for remito in remitos:
-        json = remito.to_json()
-        json['urlPdf'] = reverse('remitoDeFarmacia', args=[remito.pk])
-        remitos_json.append(json)
+    remitos_json = []#Prepara una lista para agregar remitos.
+    remitos = models.RemitoDeFarmacia.objects.filter(pedidoFarmacia__pk=id_pedido)#Obtiene todos los remitos de una farmacia
+    for remito in remitos:#Recorre todos los remitos
+        json = remito.to_json()#Convierte el remito a json con un metodo del models RemitoDeFarmacia
+        json['urlPdf'] = reverse('remitoDeFarmacia', args=[remito.pk])#Obtiene la url para saber donde esta el pdf
+        remitos_json.append(json)#Agrga el remito json a la lista
     return {'remitos': remitos_json}
 
 
@@ -114,24 +120,19 @@ def pedidoDeFarmacia_verRemitos(request, id_pedido):
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def pedidoDeFarmacia_registrar(request):
-    print "ENTRE1"
     pedido = request.session['pedidoDeFarmacia']
     detalles = request.session['detallesPedidoDeFarmacia']
-    print "ENTRE2"
     mensaje_error = None
     if detalles:
         farmacia = omodels.Farmacia.objects.get(pk=pedido['farmacia']['id'])
         fecha = datetime.datetime.strptime(pedido['fecha'], '%d/%m/%Y').date()
-        print "ENTRE3"
         if not(models.PedidoDeFarmacia.objects.filter(pk=pedido["nroPedido"]).exists()):
             p = models.PedidoDeFarmacia(farmacia=farmacia, fecha=fecha)
             p.save()
-            print "ENTRE4"
             for detalle in detalles:
                 medicamento = mmodels.Medicamento.objects.get(pk=detalle['medicamento']['id'])
                 d = models.DetallePedidoDeFarmacia(pedidoDeFarmacia=p, medicamento=medicamento, cantidad=detalle['cantidad'])
                 d.save()
-            print "ENTRE5"
             utils.procesar_pedido_de_farmacia(p)
             existeRemito = p.estado != "Pendiente"
             if existeRemito:
@@ -223,6 +224,39 @@ class remitoDeFarmacia(PDFTemplateView):
             remito=remito,
             detallesRemito=detallesRemito
         )
+
+#==============================================BUSCAR EN FARMACIAS======================================================
+
+def buscarEnFarmacias(request):
+
+     verificar=False
+     if 'accion' in request.GET:
+        if request.GET['accion'] == 'verificar':
+            verificar=True
+
+        nroPedido = request.GET['nroPedido']
+        farmaciaPk = request.GET['farmacia']
+
+        pedido = pmodels.PedidoDeFarmacia.objects.get(pk=nroPedido)
+        detalles = pmodels.DetallePedidoDeFarmacia.objects.filter(pedidoDeFarmacia__nroPedido=nroPedido)
+        farmacia = omodels.Farmacia.objects.get(pk=farmaciaPk)
+        fecha = pedido.fecha
+        cantidadAobtener=0
+
+        for detalle in detalles:
+            cantidadAobtener += detalle.cantidadPendiente
+
+        haySuficientePedido = utils.verificarCantidad(cantidadAobtener,detalle)
+
+        if not haySuficientePedido:
+            renglones=[{'totalq': 0, 'farmacia': 'No se puede cubrir pedido', 'lote': 'No se puede cubrir pedido'}]
+        else:
+            renglones=utils.buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar)
+
+     if verificar:
+        return render(request, "pedidoDeFarmacia/_detalleInforme.html", {"renglones": renglones})
+     else:
+        return render(request, "pedidoDeFarmacia/_detalleInforme.html", {})
 
 
 # ******************************* PEDIDOS DE CLINICA ******************************* #

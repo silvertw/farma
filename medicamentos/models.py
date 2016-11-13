@@ -113,6 +113,16 @@ class Lote(models.Model):
                 'fechaVencimiento': self.fechaVencimiento.strftime("%d/%m/%y"),
                 'stock': self.stock
             }
+    #===============IMPORTANTE================================================================
+    #def enviarAFarmacia(self, farmacia, cantidad):
+    #    if self.stock < cantidad:
+    #        raise "No puedo descontar %d" % cantidad
+    #    self.stock -= cantidad
+    #    st = StockDistribuidoEnFarmacias(lote=self, cantidad=cantidad, farmacia=farmacia)
+    #    st.save()
+    #    self.stock_en_farmacias.add(st)
+    #    self.save()
+    #    return st
 
 class StockFarmayFarmacias(models.Model):
     stockFarma=models.PositiveIntegerField(default=0)
@@ -122,9 +132,10 @@ class StockFarmayFarmacias(models.Model):
 
 
 class StockDistribuidoEnFarmacias(models.Model):
-    lote=models.ForeignKey('Lote',null=True)
+    lote=models.ForeignKey('Lote', null=True, related_name="stock_en_farmacias")
     cantidad=models.PositiveIntegerField(default=0)
     farmacia=models.ForeignKey(Farmacia,null=True)
+
     def __str__(self):
         return "nro. lote:%s - Cantidad en: %s - %s" % (self.lote, self.farmacia, self.cantidad)
 

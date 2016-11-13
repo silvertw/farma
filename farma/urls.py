@@ -193,4 +193,7 @@ urlpatterns = [
 
     url(r'^cancelarPago/$', fviews.cancelarPago, name="cancelarPago"),
 
+
+     url(r'^buscarEnFarm/$', pviews.buscarEnFarmacias, name="buscarEnFarm"),
+
 ]

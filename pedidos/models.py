@@ -185,6 +185,14 @@ class PedidoDeFarmacia(PedidoVenta):
             response = DetallePedidoDeFarmacia.objects.filter(pedidoDeFarmacia=self)
         return response
 
+    def get_pendiente_total(self):
+        detalles = DetallePedidoDeFarmacia.objects.filter(pedidoDeFarmacia=self)
+        total=0
+        for detalle in detalles:
+            total += detalle.cantidadPendiente
+        return total
+
+
 
 class DetallePedidoDeFarmacia(DetallePedidoVenta):
     pedidoDeFarmacia = models.ForeignKey('PedidoDeFarmacia', on_delete=models.CASCADE)

@@ -211,8 +211,6 @@ class PedidoLaboratorioForm(forms.ModelForm):
 
     laboratorio = forms.ModelChoiceField(queryset=omodels.Laboratorio.objects.none())
 
-    print("LOS LABO SON: ", laboratorio)
-
     class Meta:
         model = models.PedidoAlaboratorio
         fields = ["laboratorio"]
