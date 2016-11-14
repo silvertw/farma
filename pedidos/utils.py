@@ -507,17 +507,25 @@ def actualizar_pedidos_farmacia(remitoLab):
 
             stockFyF = detalle.lote.stockFarmaYfarmacias
             #stockDist = mmodels.StockDistribuidoEnFarmacias.objects.get(lote=detalle.lote)
-
             listStockDist = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote=detalle.lote)
             #Se obtiene la lista de stockdistribuido correspondiente al lote, si es un lote nuevo
             #el primer elemento no tendra farmacia asignada, este es el elemento que se crea por
             #defecto al momento de crear un lote por lo tanto debo usarlo, de lo contrario aparecera
             #en la lista como un elemento vacio, luego cuando se verifica si ese elemeto fue usado
             #paso a crear o instanciar nuevos elemento para stock distribuido.
-            if listStockDist[0].farmacia is None:
-                stockDist=listStockDist[0]#Uso el creado por defecto
+
+            stockDistExistente = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote=detalle.lote,farmacia=pedidoDeFarmacia.farmacia)
+
+            #Se debe verificar que el stockDist no exista previamente si es asi se obtiene y se actualiza sin crear uno nuevo
+            if stockDistExistente:
+                stockDist=stockDistExistente[0]
             else:
-                stockDist = mmodels.StockDistribuidoEnFarmacias()#Creo nuevos elementos si es necesario
+                if listStockDist[0].farmacia is None:
+                    stockDist=listStockDist[0]#Uso el creado por defecto
+                else:
+                    stockDist = mmodels.StockDistribuidoEnFarmacias()#Creo nuevos elementos si es necesario
+
+
 
             #======================FIN INSERCION PARA STOCK DISTRIBUIDO=========================
 
@@ -916,7 +924,13 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
         #Se obtienen los lotes activos del medicamento del renglon (detalle)
         lotesActivos=detalle.medicamento.get_lotes_activos()
 
-        nuevoStockDist=mmodels.StockDistribuidoEnFarmacias()
+
+        #=================================PRUEBA======================================
+        #print "DETALLE-->",detalle.lote.pk
+        #stockDistl = mmodels.StockDistribuidoEnFarmacias.objects.all()
+        #nuevoStockDist = mmodels.StockDistribuidoEnFarmacias()#--->ESTE ESTABA
+        #=============================================================================
+
 
         #Recorro los lotes activos del medicamento
         for loteActivo in lotesActivos:
@@ -928,6 +942,15 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
             cantidadDistribuidaC=cantidadDistribuida
             #Recorro el stock distribuido:
 
+            #=================================PRUEBA======================================
+            #stockDistl = mmodels.StockDistribuidoEnFarmacias.objects.filter(farmacia=farmacia,lote=loteActivo)
+            #if stockDistl:
+            #    nuevoStockDist=stockDistl[0]
+            #else:
+            nuevoStockDist = mmodels.StockDistribuidoEnFarmacias()
+            #=============================================================================
+
+
         #========PARA EL INFORME A PRESENTAR==========
             informe_cantidadQuitada=0
             informe_listFarmacias=[]
@@ -937,6 +960,7 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
                 if(cantidadDistribuidaC==parametros.MIN_A_DEJAR):
                     seguirSacandoAlote=False#Esto permite pasar de un stockDist a otro si estos se agotan y lo
                                             #solicitado no se completa.
+
                     nuevoStockDist=mmodels.StockDistribuidoEnFarmacias()
                     nuevoStockDist.farmacia=farmacia
 
@@ -973,6 +997,7 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
                         nuevoStockDist.cantidad += 1
                         nuevoStockDist.farmacia=farmacia
                         nuevoStockDist.lote=dist.lote
+
 
                         cantidadDistribuidaC -= 1#Esta es la suma del stock distribuido de un lote determinado
                                                  #si esta suma de stock distribuido no alcanza se debe buscar

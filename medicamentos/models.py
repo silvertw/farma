@@ -132,7 +132,7 @@ class StockFarmayFarmacias(models.Model):
 
 
 class StockDistribuidoEnFarmacias(models.Model):
-    FILTROS = ["lote__medicamento__nombreFantasia__icontains"]
+    FILTROS = ["farmacia__razonSocial__icontains"]
     lote=models.ForeignKey('Lote', null=True, related_name="stock_en_farmacias")
     cantidad=models.PositiveIntegerField(default=0)
     farmacia=models.ForeignKey(Farmacia,null=True)

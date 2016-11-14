@@ -3,16 +3,25 @@ from stockDistFarmacias import models as distmodels
 from pedidos import models as pmodels
 from medicamentos import models as mmodels
 
+def get_filtros(get, modelo):
+    mfilter = {}
+    for filtro in modelo.FILTROS:
+        attr = filtro.split("__")[0]
+        if attr in get and get[attr]:
+            mfilter[filtro] = get[attr]
+            mfilter[attr] = get[attr]
+    return mfilter
+
 def stockDistribuido(request):
 
-    #mfilters = get_filtros(request.GET, models.PedidoDeFarmacia)
-    #pedidos = models.PedidoDeFarmacia.objects.filter(**mfilters)
+    filters = get_filtros(request.GET, mmodels.StockDistribuidoEnFarmacias)
+    mfilters = dict(filter(lambda v: v[0] in mmodels.StockDistribuidoEnFarmacias.FILTROS, filters.items()))
+    distribuidos = mmodels.StockDistribuidoEnFarmacias.objects.filter(**mfilters)
 
-    distribuidos = mmodels.StockDistribuidoEnFarmacias.objects.all()
+    estadisticas = {
+        'total': mmodels.StockDistribuidoEnFarmacias.objects.all().count(),
+        'filtrados': distribuidos.count()
+    }
 
-    #estadisticas = {
-    #    'total': models.PedidoDeFarmacia.objects.all().count(),
-    #    'filtrados': pedidos.count()
-    #}
-    return render(request, "stockDist.html", {"distribuidos": distribuidos})
+    return render(request, "stockDist.html", {"distribuidos": distribuidos,"filtros": filters})
 
