@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'facturacion',
     'stockDistFarmacias',
     'minidetector',
+    'files',
 )
 
 MIDDLEWARE_CLASSES = (

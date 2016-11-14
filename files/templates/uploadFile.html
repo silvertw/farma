@@ -1,0 +1,38 @@
+{% extends "base/base-add-update-2.html" %}
+{% load staticfiles %}
+
+{% block title %}Subir Archivo de Ventas{% endblock %}
+
+{% block breadcrumb-items %}
+    <li><a href="{% url 'inicio' %}">Inicio</a></li>
+    <li><a href="{% url 'farmacias' %}">Farmacias</a></li>
+    <li class="active">Alta</li>
+{% endblock %}
+
+{% block url-volver %}{% url 'farmacias' %}{% endblock %}
+
+{% block header-title %} Subir Archivo de Ventas Realizadas{% endblock %}
+
+{% block title-header-form %}Subir Archivo de Ventas Realizadas{% endblock %}
+
+{% block icon-header-form %}
+    <span class="glyphicon glyphicon-plus page-header-icon"></span>
+{% endblock%}
+
+{% block sub-header-form %}Complete el siguiente campo{% endblock %}
+
+{% block msg-success %}
+    La Forma de pago fue agregada exitosamente al sistema.
+{% endblock %}
+
+{% block more-scripts %}
+    <script>
+        $(document).on("keyup", function(e){
+            if(e.keyCode == 112){
+                var url = "{% static 'documentacion/build/html/farmacias.html' %}";
+                url += "#alta-farmacia";
+                window.open(url);
+            }
+        });
+    </script>
+{% endblock %}

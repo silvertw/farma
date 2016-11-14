@@ -8,6 +8,7 @@ from usuarios import views as uviews
 from mobile import views as moviews
 from facturacion import views as fviews
 from stockDistFarmacias import views as distviews
+from files import views as fileviews
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -195,5 +196,8 @@ urlpatterns = [
     url(r'^cancelarPago/$', fviews.cancelarPago, name="cancelarPago"),
     url(r'^buscarEnFarm/$', pviews.buscarEnFarmacias, name="buscarEnFarm"),
     url(r'^stockDistribuido/$', distviews.stockDistribuido, name="stockDistribuido"),
+
+
+    url(r'^uploads/', fileviews.uploadFile, name="uploads"),
 
 ]
