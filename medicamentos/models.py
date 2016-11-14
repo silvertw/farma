@@ -98,7 +98,7 @@ class Lote(models.Model):
     FILTROS = ["numero__icontains"]
     numero = models.PositiveIntegerField(unique=True, error_messages={'unique': "Este numero de lote ya esta cargado"})
     fechaVencimiento= models.DateField()
-    stock = models.PositiveIntegerField()#esto es igual a stockFarma + stockFarmacias
+    stock = models.PositiveIntegerField()
     precio = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     medicamento = models.ForeignKey('Medicamento', on_delete=models.CASCADE)
     stockFarmaYfarmacias = models.ForeignKey('StockFarmayFarmacias',null=True)
@@ -113,7 +113,7 @@ class Lote(models.Model):
                 'fechaVencimiento': self.fechaVencimiento.strftime("%d/%m/%y"),
                 'stock': self.stock
             }
-    #===============IMPORTANTE================================================================
+    #===============IMPORTANTE-DIEGO-FORMA CORRECTA-LOGICA DE NEGOCIO===========================
     #def enviarAFarmacia(self, farmacia, cantidad):
     #    if self.stock < cantidad:
     #        raise "No puedo descontar %d" % cantidad
@@ -132,6 +132,7 @@ class StockFarmayFarmacias(models.Model):
 
 
 class StockDistribuidoEnFarmacias(models.Model):
+    FILTROS = ["lote__medicamento__nombreFantasia__icontains"]
     lote=models.ForeignKey('Lote', null=True, related_name="stock_en_farmacias")
     cantidad=models.PositiveIntegerField(default=0)
     farmacia=models.ForeignKey(Farmacia,null=True)

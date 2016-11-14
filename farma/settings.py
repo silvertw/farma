@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'usuarios',
     'mobile',
     'facturacion',
-
+    'stockDistFarmacias',
     'minidetector',
 )
 

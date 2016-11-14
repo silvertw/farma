@@ -894,6 +894,7 @@ def formatearFecha(fecha):
 
 
 #=========================================STOCK DISTRIBUIDO=====================================================
+
 class parametros():
     MAX_A_QUITAR=15 #El maximo a quitar de farmacias.
     MIN_A_DEJAR=0 #El minimo que se debe dejar por lote en una farmacia.
@@ -902,11 +903,12 @@ class parametros():
 def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
 
     list_informe=[]
+    cantFarmacias = Omodels.Farmacia.objects.count()
+
     for detalle in detalles:#Se recorrern los detalles del pedido
         medicamento = detalle.medicamento
 
         cantidadAobtener=detalle.cantidadPendiente#centinela
-        detalleCantidadPendiente=detalle.cantidadPendiente#Para comparar
 
         #Obtengo todos los lotes distribuidos de ese medicamento.
         listStockDist = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__medicamento__pk=medicamento.pk).order_by('lote__pk')
@@ -937,6 +939,7 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
                                             #solicitado no se completa.
                     nuevoStockDist=mmodels.StockDistribuidoEnFarmacias()
                     nuevoStockDist.farmacia=farmacia
+
                 if len(listStockDist)==i:
                     i=0 #Reinicia para dar mas vueltas.
 
@@ -953,7 +956,7 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
                                          #lote 2500-->Plaza-->cantidad:10
                                          #por lo que lo correcto es descontarle solo a Farmacia Plaza.
 
-                        dist.cantidad -= 1#Descuenta de a uno
+                        dist.cantidad -= 1
 
                         informe_cantidadQuitada += 1#**********
                         informe_lote=dist.lote.numero#**********
@@ -977,6 +980,7 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
                                                  #hay que tener en cuenta que cada vez que se pasa a buscar a
                                                  #otro hay que crear un nuevo stockDist asociado a la farmacia
                                                  #solicitante y trasladarle la porcion que corresponde.
+
                         if not verificar:
                             dist.save()
                             detalle.save()
@@ -988,6 +992,7 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
             listPares.append(informe_listFarmacias)
             listPares.append(informe_listFarmacias_count)
             list_informe.append(listPares)
+
 
     renglones=[]
 
@@ -1009,15 +1014,15 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
                                                           #[u'25 de Mayo', u'Plaza']
                                                           #y en la lista 'countAndLotes' tenemos:
                                                           #[u'25 de Mayo_3001_2', u'Plaza_3001_2']
-            total=countAndLotes.count(farmaciaAquitar)#Gracias a la concatenacion se puede contar la cantidad quitada a la
-                                                      #farmacia con el metodo count de python.
+            total=countAndLotes.count(farmaciaAquitar)
+
             renglon["farmacia"]=farmacia
             renglon["totalq"]=total
             renglon["lote"]=loteDeList
 
             renglones.append(renglon)#Informe final a presentarse al usuario.
 
-        if not verificar:#si se quita if correr a la izquierda un tab
+        if not verificar:
             pedido.estado="Enviado"
             pedido.save()
         return renglones
