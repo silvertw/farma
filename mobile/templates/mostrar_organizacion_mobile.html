@@ -39,26 +39,46 @@
 		<div class="ui-header ui-bar-a" data-swatch="a" data-theme="a" data-form="ui-bar-a" data-role="header" role="banner">
 			<!--Boton Home-->
 			<a href="{% url 'inicio' %}" data-transition="slide" role="button" data-role="button" class="ui-btn-left ui-btn-corner-all ui-btn ui-icon-home ui-btn-icon-notext ui-shadow" title=" Home " data-form="ui-icon"> Home </a>
-			<h1 class="ui-title" tabindex="0" role="heading" aria-level="1">MEDICAMENTOS</h1>
+			<h1 class="ui-title" tabindex="0" role="heading" aria-level="1">ORGANIZACION</h1>
 			<!--Boton Menu-->
 			<a href="{% url 'informacionMobile' %}" data-transition="slide" role="button" data-role="button" class="ui-btn-right ui-btn-corner-all ui-btn ui-icon-grid ui-btn-icon-notext ui-shadow" title=" Navigation " data-form="ui-icon"> Navigation </a>
 			<!--BUSCAR-->
         </div>
+		<div data-role="content"data-theme="a">
+    		<ul id="nav" data-role="listview" data-inset="true">
+        		<h2>Nombre</h2>
+				<li><a href="#">{{organizacion.razonSocial}}®</a></li>
+    		</ul>
 
-        <ul data-role="listview" data-inset="true" class="ui-li ui-li-divider ui-bar-b ui-first-child ui-listview" data-filter="true">
-            <tbody>
-            {% for medicamento in medicamentos %}
-                <tr data-id="{{ medicamento.id }}">
-				    <li><a href="{% url 'MostrarMedicamento' medicamento.pk %}" data-ajax="false">{{medicamento.nombreFantasia}}</a></li>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </ul>
+			<ul id="nav" data-role="listview" data-inset="true">
+        		<h2>Cuit</h2>
+				<li><a href="#">{{organizacion.cuit}}</a></li>
+    		</ul>
 
+			<ul id="nav" data-role="listview" data-inset="true">
+        		<h2>localidad</h2>
+				<li><a href="#">{{organizacion.localidad}}</a></li>
+    		</ul>
+
+			<ul id="nav" data-role="listview" data-inset="true">
+        		<h2>direccion</h2>
+				<li><a href="#">{{organizacion.direccion}}</a></li>
+    		</ul>
+
+			<ul id="nav" data-role="listview" data-inset="true">
+        		<h2>email</h2>
+				<li><a href="#">{{organizacion.email}}</a></li>
+    		</ul>
+
+			<ul id="nav" data-role="listview" data-inset="true">
+        		<h2>telefono</h2>
+				<li><a href="#">{{organizacion.telefono}}</a></li>
+    		</ul>
+		</div>
 		<div data-role="footer" data-theme="a" class="ui-nodisc-icon ui-btn-icon-right">
 			<p class="text-muted" align="center"><span class=" glyphicon glyphicon-copyright-mark"></span>Copyright 2016 UNPSJB - Todos los derechos reservados</p>
 			<p><img src="{% static 'mobile/images/d-logo.png' %}" style="width: 15%; height: 10%;"> <img src="{% static 'mobile/images/u-logo.png' %}"style="width: 55%; height: 13%;"> <img src="{% static 'mobile/images/b-logo.png' %}" style="width: 13%; height: 10%;"><img src="{% static 'mobile/images/jq-logo.png' %}" style="width: 13%; height: 10%;"></p>
 		</div>
 	</div>
-</body>
+</ul>
 </html>

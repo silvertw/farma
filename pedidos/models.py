@@ -7,6 +7,21 @@ from pedidos import config
 # ******************CLASES ABSTRACTAS******************#
 
 class PedidoVenta(models.Model):
+    CREADO = "CR"
+    ENVIADO = "EN"
+    PENDIENTE =  "Pendiente"
+    CANCELADO = "CA"
+    PARCIALMENTE_RECIBIDO = "PR"
+    COMPLETO = "CO"
+
+    ESTADOS = [
+        (CREADO, "Creado"),
+        (ENVIADO, "Enviado"),
+        (PENDIENTE, "Pendiente"),
+        (CANCELADO, "Cancelado"),
+        (PARCIALMENTE_RECIBIDO, "Parcialmente Recibido"),
+        (COMPLETO, "Completo"),
+    ]
     FILTROS = "farmacia__razonSocial__icontains"
     nroPedido = models.AutoField(primary_key=True)
     fecha = models.DateField()
@@ -163,7 +178,7 @@ class PedidoDeFarmacia(PedidoVenta):
         'estado': "estado__istartswith"
     }
     farmacia = models.ForeignKey('organizaciones.Farmacia', on_delete=models.CASCADE)
-    estado = models.CharField(max_length=25, blank=True)
+    estado = models.CharField(max_length=25, blank=True, choices=PedidoVenta.ESTADOS)
 
     class Meta(PedidoVenta.Meta):
         verbose_name_plural = "Pedidos de Farmacia"
@@ -283,7 +298,7 @@ class PedidoAlaboratorio(models.Model):
     fecha = models.DateField(auto_now_add=True)
     laboratorio = models.ForeignKey('organizaciones.Laboratorio', on_delete=models.CASCADE)
 
-    estado = models.CharField(max_length=25, blank=True, default="Pendiente")# cancelado, parcialmente recibido, pendiente, completo
+    estado = models.CharField(max_length=25, blank=True, default=PedidoVenta.PENDIENTE)# cancelado, parcialmente recibido, pendiente, completo
     facturaAsociada = models.BooleanField(default=False)
 
     def __str__(self):

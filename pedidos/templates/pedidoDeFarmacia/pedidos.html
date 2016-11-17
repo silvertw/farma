@@ -16,10 +16,10 @@
 
 {% block form-fields-avanzados %}
     <div>
-     <input class="datepicker form-control form-field" type="text" id="desde" name="desde" value="{{filtros.desde}}" placeholder="Fecha Desde">   
+        <input class="datepicker form-control form-field" type="text" id="desde" name="desde" value="{{filtros.desde}}" placeholder="Fecha Desde">
     </div> 
     <div>
-        <input class="datepicker form-control form-field" type="text" id="hasta" name="hasta" value="{{filtros.hasta}}" placeholder="FechaHasta"> 
+        <input class="datepicker form-control form-field" type="text" id="hasta" name="hasta" value="{{filtros.hasta}}" placeholder="FechaHasta">
     </div>
     <select id="selectEstado" class="form-control form-field" name="estado">
         <option value = "">-----</option>
@@ -61,7 +61,7 @@
                 <td>{{ pedido.nroPedido }}</td>
                 <td>{{ pedido.farmacia }}</td>
                 <td>{{ pedido.fecha }}</td>
-                <td>{{ pedido.estado }}</td>
+                <td>{{ pedido.get_estado_display }}</td>
                 <td class="action">
                     <div class="dropdown">
                         <button class="btn btn-default button-hover dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

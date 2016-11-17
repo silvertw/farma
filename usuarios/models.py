@@ -1,10 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from . import choices
+from organizaciones import models as orgmodels
 
 
 class Usuario(AbstractUser):
     cargo = models.CharField(max_length=50, choices=choices.CARGO_CHOICES)
+    farmacia = models.ForeignKey(orgmodels.Farmacia, null=True)
 
     class Meta:
         permissions = (
