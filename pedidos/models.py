@@ -2,7 +2,7 @@ from django.db import models
 import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
 from pedidos import config
-
+from django import utils
 
 # ******************CLASES ABSTRACTAS******************#
 
@@ -164,6 +164,7 @@ class PedidoDeFarmacia(PedidoVenta):
     }
     farmacia = models.ForeignKey('organizaciones.Farmacia', on_delete=models.CASCADE)
     estado = models.CharField(max_length=25, blank=True)
+    tieneMovimientos = models.BooleanField(default=False)
 
     class Meta(PedidoVenta.Meta):
         verbose_name_plural = "Pedidos de Farmacia"
@@ -354,3 +355,33 @@ class DetallePedidoAlaboratorio(models.Model):
         response['cantidad'] = self.cantidad
         response['cantidadPendiente'] = self.cantidadPendiente
         return response
+
+class movimientosDeStockDistribuido(models.Model):
+    movimiento=models.TextField()
+    farmaciaDeDestino = models.CharField(max_length=50)
+    fecha=models.DateField(default=utils.timezone.now)
+    pedidoMov=models.ForeignKey('PedidoDeFarmacia')
+
+    def ultimoPk(self):
+        ultimo = len(self)
+        return ultimo
+
+    def __str__(self):
+        return 'Farmacia de Destino: %s' % (self.farmaciaDeDestino)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

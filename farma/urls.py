@@ -116,6 +116,7 @@ urlpatterns = [
     url(r'^pedidosDeFarmacia/estadisticas/topPorCantidadPedidos/$', pviews.pedidosDeFarmacia_topFarmaciasConMasPedidos, name="pedidosDeFarmacia_topFarmaciasConMasPedidos"),
     url(r'^pedidosDeFarmacia/estadisticas/topPorCantidadPedidos/downloadExcel/$', pviews.pedidosDeFarmacia_topFarmaciasConMasPedidosExcel, name="pedidosDeFarmacia_topFarmaciasConMasPedidosExcel"),
 
+    url(r'^pedidosDeFarmacia/remitoOptimizarStock/(?P<id>\d+)/$', pviews.remitoOptimizarStock.as_view(), name="remitoOptimizarStock"),
 
     # ************************************** Pedido de Clinica ***************************************
     url(r'^pedidosDeClinica/$', pviews.pedidosDeClinica, name="pedidosDeClinica"),

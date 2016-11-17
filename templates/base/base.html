@@ -1,15 +1,15 @@
-{% load staticfiles %}
+{% load staticfiles  %}
 {% load staticfiles bootstrap3 %}
+
 
 <html lang="es">
 <head>
     <meta charset="UTF-8"/>
     <link rel="shortcut icon" href="{% static 'images/FPIcono.png' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap2.min.css' %}" />
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap2.min.css' %}" /><!--ATENTO-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/simple-sidebar2.css' %}" /><!--ATENTO-->
 
-    <link rel="stylesheet" type="text/css" href="{% static 'css/simple-sidebar2.css' %}" />
     <link rel="stylesheet" href="{%  static 'css/base.css' %}">
     {% block no-header-css %}
         <link rel="stylesheet" href="{%  static 'css/header.css' %}">
@@ -40,11 +40,13 @@
     {% endblock %}
     {% include 'inicio/footer.html' %}
     {% block no-jquery %}
+        <script src="{% static 'js/jquery.min.js' %}"></script><!--AGREGADO-->
+        <script src="{% static 'js/jquery-ui.min.js' %}"></script><!--AGREGADO-->
     {% endblock %}
-    <script src="{% static 'js/jquery2.js' %}"></script>
+    <!--script src="{% static 'js/jquery2.js' %}"></script-->
     <script src="{% static 'js/bootstrap2.min.js' %}"></script>
     <script src="{% static 'js/menu-especial.js' %}"></script>
-    {% block scripts %}
-    {% endblock %}
+    <!--script-- src="{% static 'js/bootstrap.min.js' %}"></script--><!--AGREGADO-->
+    {% block scripts %}{% endblock %}
 </body>
 </html>

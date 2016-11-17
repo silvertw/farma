@@ -17,7 +17,6 @@ class UploadFormGenerico(forms.ModelForm):
         }
 
 
-
 class UploadForm(UploadFormGenerico):
     helper = FormHelper()
     helper.form_class = 'form'

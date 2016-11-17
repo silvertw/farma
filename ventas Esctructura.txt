@@ -1,0 +1,12 @@
+razonSocial de farmacia_fecha
+lote1_cantidad1
+lote2_cantidad2
+lote3_cantidad3
+lote5_cantidad4
+lote5_cantidad5
+lote6_cantidad6
+lote7_cantidad7
+lote8_cantidad8
+lote9_cantidad9
+lote10_cantidad10
+lote11_cantidad11

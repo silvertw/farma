@@ -59,7 +59,6 @@ def procesar_pedido_de_farmacia(pedido):#ENTRADA FARMACIA
             detalle.save()
     pedido.save()
 
-
 # FUNCIONES INTERNAS PEDIDO DE FARMACIA
 
 def procesar_detalle_de_farmacia(detalle, remito, pedido):
@@ -69,8 +68,6 @@ def procesar_detalle_de_farmacia(detalle, remito, pedido):
     if stockTotal < detalle.cantidad:
         for lote in lotes:
             if lote.stock:  # Solo uso lotes que no esten vacios
-
-
                 cantidadTomadaDeLote = lote.stock
                 lote.stock = 0
                 detalleRemito = models.DetalleRemitoDeFarmacia()
@@ -119,16 +116,32 @@ def procesar_detalle_de_farmacia(detalle, remito, pedido):
                     farmacia=Omodels.Farmacia.objects.get(pk=idFarmacia)
                     idLote=lote.pk
 
-                    #Se obtiene el stock distribuido (que es una lista):
-                    listStocDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__pk=idLote)
-                    stocDist=listStocDist[0]#Se obtiene el primer elemento de la lista, (siempre va a existir).
+                    #si la farmacia y lote ya estan en la lista de distribuidos debe recuperarse:
+                    farmaciaYLoteEnStockDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote=lote,farmacia=pedido.farmacia)
 
-                    if stocDist.cantidad == 0:
+                    if farmaciaYLoteEnStockDist:
+                        existeStockDist=True
+                    else:
+                        existeStockDist=False
+
+                    if existeStockDist:
+                        stocDist=farmaciaYLoteEnStockDist[0]#Se recupera farmacia con lote en la lista de stock distribuido
+                    else:
+                        #Se obtiene el stock distribuido predeterminado al crearse, que es una lista de un solo elemento:
+                        #Esto pasa por que se esta por usar un lote nuevo recien recibido.
+                        listStocDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__pk=idLote)
+                        stocDist=listStocDist[0]#Se obtiene el primer elemento de la lista,(siempre va a existir se crea de forma
+                                                #predeterminada).
+
+                    if stocDist.cantidad == 0:#Si en la cantidad figura cero quiere decir que hay que setear el elemento
+                                              #predeterminado.
                         stocDist.cantidad = stocDist.cantidad + cantidadNecesaria
                         stocDist.lote=lote
                         stocDist.farmacia=farmacia
                     else:
-                        stocDist=mmodels.StockDistribuidoEnFarmacias()#Nuevo renglon
+                        if not existeStockDist:#Si no hay que crear un nuevo renglon SI ES NECESARIO y luego setear
+                            stocDist=mmodels.StockDistribuidoEnFarmacias()#Nuevo renglon
+
                         stocDist.cantidad = stocDist.cantidad + cantidadNecesaria
                         stocDist.lote=lote
                         stocDist.farmacia=farmacia
@@ -484,14 +497,15 @@ def actualizar_pedidos_farmacia(remitoLab):
     detalles = models.DetalleRemitoLaboratorio.objects.filter(remito=remitoLab)
     # todos los pedidos de farmacia a los que se les realiza el remito y que luego deben actualizar su estado
     listaPedidosDeFarmacia = []
-
     remitosDeFarmacia = {}
     for detalle in detalles:
         detallePedidoFarmacia = detalle.detallePedidoLaboratorio.detallePedidoFarmacia
+
         if detallePedidoFarmacia:
             detallesRemito = remitosDeFarmacia.setdefault(detallePedidoFarmacia.pedidoDeFarmacia.nroPedido, [])
             detallesRemito.append(detalle)
             # detallesRemito[detallePedidoFarmacia.pedidoDeFarmacia.nroPedido] = detallesRemito
+
     for pkPedido, detallesRemitoLaboratorio in remitosDeFarmacia.items():
         pedidoDeFarmacia = models.PedidoDeFarmacia.objects.get(pk=pkPedido)
         listaPedidosDeFarmacia.append(pedidoDeFarmacia)
@@ -499,6 +513,7 @@ def actualizar_pedidos_farmacia(remitoLab):
         remitoFarmacia.pedidoFarmacia = pedidoDeFarmacia
         remitoFarmacia.fecha = remitoLab.fecha
         remitoFarmacia.save()
+
         for detalle in detallesRemitoLaboratorio:
             # actualiza la cantidad pendiente del detalle pedido farmacia
             detallePedidoFarmacia = models.DetallePedidoDeFarmacia.objects.get(pk=detalle.detallePedidoLaboratorio.detallePedidoFarmacia.pk)
@@ -515,7 +530,6 @@ def actualizar_pedidos_farmacia(remitoLab):
             #paso a crear o instanciar nuevos elemento para stock distribuido.
 
             stockDistExistente = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote=detalle.lote,farmacia=pedidoDeFarmacia.farmacia)
-
             #Se debe verificar que el stockDist no exista previamente si es asi se obtiene y se actualiza sin crear uno nuevo
             if stockDistExistente:
                 stockDist=stockDistExistente[0]
@@ -525,14 +539,11 @@ def actualizar_pedidos_farmacia(remitoLab):
                 else:
                     stockDist = mmodels.StockDistribuidoEnFarmacias()#Creo nuevos elementos si es necesario
 
-
-
             #======================FIN INSERCION PARA STOCK DISTRIBUIDO=========================
 
             detallePedidoFarmacia.cantidadPendiente -= detalle.cantidad
 
             #========================INSERCION PARA STOCK DISTRIBUIDO===========================
-
 
             stockDist.lote = detalle.lote
             stockDist.cantidad += detalle.cantidad

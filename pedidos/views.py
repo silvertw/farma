@@ -217,6 +217,7 @@ class remitoDeFarmacia(PDFTemplateView):
     template_name = "pedidoDeFarmacia/remitoDeFarmacia.html"
 
     def get_context_data(self, id_remito):
+
         remito = models.RemitoDeFarmacia.objects.get(id=id_remito)
         detallesRemito = models.DetalleRemitoDeFarmacia.objects.filter(remito=remito)
         return super(remitoDeFarmacia, self).get_context_data(
@@ -256,7 +257,62 @@ def buscarEnFarmacias(request):
      if verificar:
         return render(request, "pedidoDeFarmacia/_detalleInforme.html", {"renglones": renglones})
      else:
+        dataMovimiento=""
+        for renglon in renglones:
+            dataMovimiento = dataMovimiento +'_'+ str(renglon)
+
+        movimiento = pmodels.movimientosDeStockDistribuido(
+            movimiento=dataMovimiento,
+            farmaciaDeDestino=farmacia.razonSocial,
+            pedidoMov=pedido,
+        )
+        movimiento.save()
+        pedido.tieneMovimientos=True
+        pedido.save()
+
         return render(request, "pedidoDeFarmacia/_detalleInforme.html", {})
+
+
+
+class remitoOptimizarStock(PDFTemplateView):
+    template_name = "pedidoDeFarmacia/remitoOptimizarStock.html"
+
+    def get_context_data(self, id):
+
+
+        movimiento=models.movimientosDeStockDistribuido.objects.get(pedidoMov__pk=id)
+        pedido=models.PedidoDeFarmacia.objects.get(pk=id)
+        actividadMovimiento=movimiento.movimiento
+        #===============LOGICA COMPLEJA POR PROBLEMAS DE CONVERSION DE STRING A JSON===========
+        renglones=[]
+        filtro1=str(actividadMovimiento)
+        filtro2=filtro1.replace("}_{","} {")
+        filtro3=filtro2.replace("_","")
+        filtro4=filtro3.replace("} {","}_{")
+        filtro5=filtro4.replace("u","")
+        filtro6=filtro5.replace("{","")
+        actividadMovimiento=filtro6.replace("}","")
+        jsones=actividadMovimiento.split("_")
+        for json in jsones:
+            renglon={}
+            dataClaveValores = json.split(",")
+            for dataClaveValor in dataClaveValores:
+                claveValor=dataClaveValor.split(":")
+                if "'totalq'" in claveValor:
+                    renglon["totalq"]=claveValor[1]
+                elif " 'farmacia'" in claveValor:
+                    renglon["farmacia"]=claveValor[1]
+                elif " 'lote'" in claveValor:
+                    renglon["lote"]=claveValor[1]
+            renglones.append(renglon)
+        #====================================FIN CONVERSION==================================
+
+        return super(remitoOptimizarStock, self).get_context_data(
+            pagesize="A4",
+            remito=pedido,
+            detallesRemito=renglones
+        )
+
 
 
 # ******************************* PEDIDOS DE CLINICA ******************************* #

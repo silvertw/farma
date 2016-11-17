@@ -15,6 +15,7 @@ from .models import RemitoDeClinica
 from .models import DetalleRemitoDeClinica
 from .models import RemitoLaboratorio
 from .models import DetalleRemitoLaboratorio
+from .models import movimientosDeStockDistribuido
 
 
 
@@ -50,3 +51,6 @@ admin.site.register(RemitoDeClinica)
 admin.site.register(DetalleRemitoDeClinica)
 admin.site.register(RemitoLaboratorio)
 admin.site.register(DetalleRemitoLaboratorio)
+
+
+admin.site.register(movimientosDeStockDistribuido)
