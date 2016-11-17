@@ -19,7 +19,21 @@ import json
 
 def facturacionVentas(request):
 
-    return render(request,"ClinicasYobrasSociales/facturacionVentas.html",{})
+    return render(request,"obSocialesYclinicas/facturacionVentas.html",{})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @transaction.atomic
 def facturacionCompras(request):
@@ -120,15 +134,16 @@ def facturacionCompras(request):
 
 
 
+def facturasEmitidas(request):
+
+    return render(request,"obSocialesYclinicas/facturasEmitidas.html",{})
 
 
 
 def facturasRegistradasCompras(request):
 
-
     if request.method == "POST":
         form = forms.Pago(request.POST)
-        print "ES VALIDO??-->",form.is_valid()
         formEstadoDelPago=form.save(commit=False)
         nroPedidoAlab=request.session['nroPedidoAlab']
         pedido = pmodels.PedidoAlaboratorio.objects.get(pk=nroPedidoAlab)
@@ -162,8 +177,6 @@ def facturasRegistradasCompras(request):
 
     filters = get_filtros_pedidos(request.GET, pmodels.PedidoAlaboratorio)
     filters2 = get_filtros_pedidos(request.GET, factmodels.Factura)
-
-    print "FILTROS2-->",filters2
 
     claves = filters.keys()#Se obtiene las claves que vienen en el diccionario filtro
 

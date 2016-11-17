@@ -1,0 +1,277 @@
+{% extends "base/base-listado.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{%  static 'css/jquery-ui.custom.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/base-listado.css' %}">
+
+    <style type="text/css">
+      .modal-content > td{
+        color: #f07fff;
+      }
+      a{
+        color: #f07a14;
+      }
+      p{
+        color: #4d66ea;
+        font-style: italic;
+        font-size:15px;
+      }
+      .header-title,tr,td{
+        color: #4d66ea;
+      }
+    </style>
+
+{% endblock %}
+
+{% block title %} Registro Facturas Emitidas {% endblock %}
+
+{% block breadcrumb-items %}
+    <li><a href="{% url 'inicio' %}">Inicio</a></li>
+    <li class="active" id="m">Facturas Emitidas Registradas</li>
+{% endblock %}
+
+{% block header-title %} Facturas Emitidas Registradas {% endblock %}
+
+{% block form-field-simple %}
+    <input class="form-control form-field form-field-simple" id="laboratorio" name="laboratorio" value="{{filtros.laboratorio}}" placeholder="Proveedor" type="text" />
+{% endblock %}
+
+{% block form-fields-avanzados %}
+
+    <!--div>
+        <input class="form-control form-field form-field-simple" id="facturaLab" name="facturaLab" value="{{filtros.laboratorio}}" placeholder="Numero Factura" type="text" />
+    </div-->
+
+    <div>
+        <input class="datepicker form-control form-field"  id="desde" name="desde" value="{{filtros.desde}}" placeholder="Desde" type="text" />
+    </div>
+
+    <div>
+        <input class="datepicker form-control form-field" id="hasta" name="hasta" value="{{filtros.hasta}}" placeholder="Hasta" type="text" />
+    </div>
+
+{% endblock %}
+
+{% block botones-header-tabla %}
+    {% if perms.usuarios.encargado_pedido %}
+
+        <div style="display:inline-block;" class="dropdown dropdown-reportes">
+          <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span class="glyphicon glyphicon-signal"></span>Reportes
+            <span class="caret"></span>
+          </a>
+        </div>
+
+    {% endif %}
+{% endblock %}
+
+
+{% block tabla %}
+    <thead>
+        <tr>
+            <th>Nº Pedido Facturado</th>
+            <th>Laboratorio</th>
+            <th>Fecha</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for listPedido in listPedidos %}
+            <tr class="clickeable" data-id="{{ listPedido.nroPedido }}">
+                <td>{{ listPedido.nroPedido }}</td>
+                <td>{{ listPedido.laboratorio }}</td>
+                <td>{{ listPedido.fecha }}</td>
+                <td class="action">
+                    <div class="dropdown">
+                        <button id="{{ listPedido.nroPedido }}" class="btn btn-default button-hover"  type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" name="rowVerFact">
+                            Acción
+                            <span class="caret"></span>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                            <li>
+                                <a data-toggle="modal"  name="ver" data-target="#squarespaceModal" class="btn btn-primary center-block" >Ver Factura</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+{% endblock %}
+
+{% block modal-eliminar-titulo %} Cancelar Pedido a Laboratorio {% endblock %}
+
+{% block modal-eliminar-mensaje %}
+    El pedido a laboratorio seleccionado se cancelará ¿Está seguro?
+{% endblock %}
+
+
+{% block more-content %}
+    <!-- line modal -->
+
+
+
+		<div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+			<div class="modal-content" id="contenedorModal">
+                <!--INICIO CONTENIDO MODAL-->
+                <div class="modal-header" id="modalHeader">
+                    <!--inicio header-->
+
+                    <!--fin header-->
+                </div>
+
+                <div class="modal-body" id="modalBody">
+                   <!--inicio body-->
+
+                    <!--fin body-->
+				</div>
+
+                <div class="modal-footer" id="modalFooter">
+                  <!--inicio footer-->
+
+                  <!--fin footer-->
+				</div>
+
+                <!--FIN CONTENIDO MODAL-->
+			</div>
+		  </div>
+
+		</div>
+
+
+<!-- MODAL DEL ESTADO -->
+
+        <div class="modal fade" id="modalEstadoDelPago" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog" id="modalFormDePago">
+
+
+
+		    </div>
+        </div>
+
+        <!-- FIN DEL MODAL DE ESTADO-->
+
+
+
+<!-- ================================================================================================================== -->
+
+
+        <!-- MODAL VER PAGO -->
+        <div class="modal fade" id="modalVerPago" tabindex="-2" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+		    <div class="modal-dialog modal-lg" id="verPagoModal">
+
+		    </div>
+        </div>
+        <!-- FIN DEL MODAL VER PAGO -->
+
+<!-- ================================================================================================================== -->
+
+
+{% endblock %}
+
+
+{% block more-scripts %}
+    <script>
+
+        $("[name='rowVerFact']").on("click", function(e){
+
+            var id = $(e.target).parents("tr").data()["id"];
+
+            url={% url 'factProveedEncabezadoModal' %};
+            data={'idRowVer':id};
+            incrustaModalHeader(url,data);
+
+            url={% url 'factProveedDetalleModal' %};
+            data={'idRowVer':id};
+            incrustaModalBody(url,data);
+
+            url={% url 'factProveedFooterModal' %};
+            data={'idRowVer':id};
+            incrustaModalFooter(url,data);
+
+            /*mostrar modal formulario de pago*/
+            url={% url 'formularioDePago' %};
+            data={'idRowVer':id};
+            formularioDePago(url,data);
+
+            /*mostrar modal con datos del pago realizado*/
+            url={% url 'mostrarPago' %};
+            data={'idRowVer':id};
+            modalVerPago(url, data);
+
+        });
+
+        function incrustaModalHeader(url,data){
+            $.ajax({
+                /*data: $("#formFactura").serialize(),*/
+                /*data: identificador,*/
+                contentType:'json',
+                data: data,
+                type: 'get',
+                url: url,
+                success:function(response){
+                    $('#modalHeader').html(response);
+                }
+            });
+        }
+
+        function incrustaModalBody(url,data){
+            $.ajax({
+
+                contentType:'json',
+                data: data,
+                type: 'get',
+                url: url,
+                success:function(response){
+                    $('#modalBody').html(response);
+                }
+            });
+        }
+
+        function incrustaModalFooter(url,data){
+            $.ajax({
+
+                contentType:'json',
+                data: data,
+                type: 'get',
+                url: url,
+                success:function(response){
+                    $('#modalFooter').html(response);
+                }
+            });
+        }
+
+        function formularioDePago(url,data){
+            $.ajax({
+
+                contentType:'json',
+                data: data,
+                type: 'get',
+                url: url,
+                success:function(response){
+                    $('#modalFormDePago').html(response);
+                }
+            });
+        }
+
+        function modalVerPago(url,data){
+            $.ajax({
+
+                contentType:'json',
+                data: data,
+                type: 'get',
+                url: url,
+                success:function(response){
+                    $('#verPagoModal').html(response);
+                }
+            });
+        }
+
+    </script>
+
+{% endblock %}

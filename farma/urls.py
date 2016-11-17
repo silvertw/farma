@@ -186,6 +186,7 @@ urlpatterns = [
     url(r'^facturacionVentas/$', fviews.facturacionVentas, name="facturacionVentas"),
     url(r'^facturacionCompras/$', fviews.facturacionCompras, name="facturacionCompras"),
     url(r'^facturasRegistradasDeCompras/$', fviews.facturasRegistradasCompras, name="facturasRegistradasCompras"),
+    url(r'^facturasEmitidas/$', fviews.facturasEmitidas, name="facturasEmitidas"),
     url(r'^formaDePagos/add/$', fviews.formaDePago_add, name="formaDePago_add"),
 
     url(r'^factProveedEncabezadoModal/$', fviews.factProveedEncabezadoModal, name="factProveedEncabezadoModal"),
