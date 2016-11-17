@@ -10,4 +10,8 @@ $( "#sidebar-wrapper" )
    $("#wrapper").toggleClass("toggled");
 });
 
-//EVENTO POR DEFECTO
+//EVENTO POR DEFECTO PARA QUE EL MENU APAREZCA Y SE VALLA
+$("#sidebar-wrapper").trigger("mouseleave", function(){
+   e.preventDefault();
+   $("#wrapper").toggleClass("toggled");
+});

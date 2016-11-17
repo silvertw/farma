@@ -101,7 +101,7 @@ urlpatterns = [
 
     # ************************************** Pedido de Farmacia ***************************************
     url(r'^pedidosDeFarmacia/$', pviews.pedidosDeFarmacia, name="pedidosDeFarmacia"),
-    url(r'^pedidosDeFarmacia/add/$', pviews.pedidoDeFarmacia_add, name="pedidoDeFarmacia_add"),  
+    url(r'^pedidosDeFarmacia/add/$', pviews.pedidoDeFarmacia_add, name="pedidoDeFarmacia_add"),
     url(r'^pedidosDeFarmacia/add/registrar-pedido/$', pviews.pedidoDeFarmacia_registrar, name="pedidoDeFarmacia_registrar"),
     url(r'^pedidosDeFarmacia/ver/(?P<id_pedido>\d+)/$', pviews.pedidoDeFarmacia_ver, name="pedidoDeFarmacia_ver"),
     url(r'^pedidosDeFarmacia/verDetalles/(?P<id_pedido>\d+)/$', pviews.pedidoDeFarmacia_verDetalles, name="pedidoDeFarmacia_verDetalles"),
@@ -135,7 +135,7 @@ urlpatterns = [
     url(r'^pedidosDeClinica/estadisticas/topPorCantidadPedidos/$', pviews.pedidosDeClinica_topClinicasConMasPedidos, name="pedidosDeClinica_topClinicasConMasPedidos"),
     url(r'^pedidosDeClinica/estadisticas/topPorCantidadPedidos/downloadExcel/$', pviews.pedidosDeClinica_topClinicasConMasPedidosExcel, name="pedidosDeClinica_topClinicasConMasPedidosExcel"),
 
-    url(r'^getObrasSociales/(?P<id_clinica>\d+)/$', pviews.get_obrasSociales, name="get_obrasSociales"),    
+    url(r'^getObrasSociales/(?P<id_clinica>\d+)/$', pviews.get_obrasSociales, name="get_obrasSociales"),
 
     # ************************************** Pedido a Laboratorio ***************************************
     url(r'^pedidosAlaboratorio/$', pviews.pedidosAlaboratorio, name="pedidosAlaboratorio"),
@@ -145,8 +145,8 @@ urlpatterns = [
     url(r'^pedidosAlaboratorio/add/detalles/update/(?P<id_detalle>\d+)/$', pviews.detallePedidoAlaboratorio_update, name="detallePedidoAlaboratorio_update"),
     url(r'^pedidosAlaboratorio/add/detalles/delete/(?P<id_detalle>\d+)/$', pviews.detallePedidoAlaboratorio_delete, name="detallePedidoAlaboratorio_delete"),
     url(r'^pedidosAlaboratorio/add/registrar-pedido/$', pviews.pedidoAlaboratorio_registrar, name="pedidoAlaboratorio_registrar"),
-    url(r'^pedidosAlaboratorio/cancelar/(?P<id_pedido>\d+)/$', pviews.pedidoAlaboratorio_cancelar, name="pedidoAlaboratorio_cancelar"), 
-    url(r'^pedidosAlaboratorio/verDetalles/(?P<id_pedido>\d+)/$', pviews.pedidoAlaboratorio_verDetalles, name="pedidoAlaboratorio_verDetalles"), 
+    url(r'^pedidosAlaboratorio/cancelar/(?P<id_pedido>\d+)/$', pviews.pedidoAlaboratorio_cancelar, name="pedidoAlaboratorio_cancelar"),
+    url(r'^pedidosAlaboratorio/verDetalles/(?P<id_pedido>\d+)/$', pviews.pedidoAlaboratorio_verDetalles, name="pedidoAlaboratorio_verDetalles"),
     url(r'^pedidosAlaboratorio/verRemitos/(?P<id_pedido>\d+)/$', pviews.pedidoAlaboratorio_verRemitos, name="pedidoAlaboratorio_verRemitos"),
     url(r'^pedidosAlaboratorio/ver/(?P<id_pedido>\d+)/$', pviews.pedidoAlaboratorio_ver, name="pedidoAlaboratorio_ver"),
     url(r'^pedidosAlaboratorio/remitoDeLaboratorio/(?P<id_remito>\d+)/$', pviews.remitoDeLaboratorio.as_view(), name="remitoDeLaboratorio"),
@@ -179,8 +179,15 @@ urlpatterns = [
     url(r'^mobileMostrarMedicamento/(?P<id_medicamento>\d+)$', moviews.MostrarMedicamento, name="MostrarMedicamento"),
 
     url(r'^mobileMostrarPedido/(?P<id_pedido>\d+)$', moviews.MostrarPedido, name="MostrarPedido"),
+    url(r'^mobileMostrarOrganizacionFarmacia/(?P<id_organizacion>\d+)$', moviews.MostrarOrganizacionFarmacia, name='MostrarOrganizacionFarmacia'),
+    url(r'^mobileMostrarOrganizacionClinica/(?P<id_organizacion>\d+)$', moviews.MostrarOrganizacionClinica, name='MostrarOrganizacionClinica'),
+    url(r'^mobileMostrarOrganizacionObSoc/(?P<id_organizacion>\d+)$', moviews.MostrarOrganizacionObSoc, name='MostrarOrganizacionObSoc'),
+    url(r'^mobileMostrarOrganizacionLaboratorio/(?P<id_organizacion>\d+)$', moviews.MostrarOrganizacionLaboratorio, name='MostrarOrganizacionLaboratorio'),
 
-    url(r'^mobileMostrarOrganizacion/(?P<id_organizacion>\d+)$', moviews.MostrarOrganizacion, name="MostrarOrganizacion"),
+    url(r'^mobilePedirMedicamento/(?P<id_medicamento>\d+)$', moviews.PedirMedicamento, name="PedirMedicamento"),
+    url(r'^crearPedido/$', moviews.CrearPedido, name="crearPedido"),
+
+    url(r'^informacionMobile/$', moviews.informacionMobile, name="informacionMobile"),
 
     #******************************************Facturacion**************************************************
     url(r'^facturacionVentas/$', fviews.facturacionVentas, name="facturacionVentas"),

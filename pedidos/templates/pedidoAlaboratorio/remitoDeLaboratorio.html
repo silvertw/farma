@@ -1,28 +1,29 @@
 {% extends "base-remito.html" %}
+{% load staticfiles %}
 
-{% block header %} 
+{% block header %}
+    <p><img src="/home/martin/desarrollo2016/farmaplusBackUp31.10.16/estaticos/images/remito.png"></p>
     <p class="padding-40">
-        <strong>{{remito.pedidoLaboratorio.laboratorio}}</strong> <br />
+        <p class="bottom-10">
+        <img src="/home/martin/desarrollo2016/farmaplusBackUp31.10.16/estaticos/images/FPIcono.png">
+        <strong>Droguería </strong> <span class="client">Farma</span>
+    </p>
+{% endblock%}
+{% block cliente %}
+    <p class="bottom-10">
+        <td class="item-name"><strong>Remito Nº {{ remito.pk }}</strong></td><br/>
+        <td><strong>Fecha: {{ remito.fecha }}</strong></td>
+        <br/><br/>
+        Laboratorio <strong>{{remito.pedidoLaboratorio.laboratorio}}</strong> <br />
         {%if remito.pedidoLaboratorio.laboratorio.direccion %}
             {{ remito.pedidoLaboratorio.laboratorio.direccion }}<br />
         {% endif %}
         {%if remito.pedidoLaboratorio.laboratorio.localidad %}
             {{ remito.pedidoLaboratorio.laboratorio.localidad }} <br />
-        {% endif %}        
+        {% endif %}
         {%if remito.pedidoLaboratorio.laboratorio.telefono %}
             {{ remito.pedidoLaboratorio.laboratorio.telefono }}
         {% endif %}
-    </p>
-{% endblock%}
-
-{% block cliente %}
-    <p class="bottom-10">
-        <strong>Droguería </strong> <span class="client">"Farma"</span>
-    </p>
-    <p class="bottom-10">
-        Lezama 479 <br/>
-        Trelew, Chubut <br />
-        Tel (02965) 43-4159 <br>
     </p>
 {% endblock %}
 
@@ -40,8 +41,8 @@
 {% block remito-detalles %}
     <thead>
         <tr>
-            <th class="text-left">Medicamento</th>
-            <th class="text-right">Cantidad</th>
+            <th class="text-left">Medicamento </th>
+            <th class="text-right">Cantidad <img src="estaticos/images/im.jpg"> </th>
             <th class="text-right">Lote</th>
         </tr>
     </thead>

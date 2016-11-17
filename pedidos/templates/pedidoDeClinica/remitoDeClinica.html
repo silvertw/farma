@@ -1,15 +1,18 @@
 {% extends "base-remito.html" %}
 
 {% block header %} 
-    <p class="logo"><img width="100%" src="images/logo-farma.jpg" /></p>
-    <p>
-        Tel (02965) 43-4159 <br>
-        Lezama 479 <br/>
-        Trelew, Chubut
+    <p><img src="/home/martin/desarrollo2016/farmaplusBackUp31.10.16/estaticos/images/remito.png"></p>
+    <p class="padding-40">
+        <p class="bottom-10">
+        <img src="/home/martin/desarrollo2016/farmaplusBackUp31.10.16/estaticos/images/FPIcono.png">
+        <strong>Droguería </strong> <span class="client">Farma</span>
     </p>
 {% endblock%}
 
 {% block cliente %}
+    <td class="item-name"><strong>Remito Nº {{ remito.pk }}</strong></td></br>
+    <td><strong>Fecha: {{ remito.fecha }}</strong></td>
+
     <p class="bottom-10">
         <strong>Clínica </strong> <span class="client">"{{remito.pedidoDeClinica.clinica}}"</span>
     </p>
@@ -18,7 +21,7 @@
             {{ remito.pedidoDeClinica.clinica.direccion }}<br />
         {% endif %}
         {%if remito.pedidoDeClinica.clinica.localidad %}
-            {{ remito.pedidoDeClinica.clinica.localidad }}
+            {{ remito.pedidoDeClinica.clinica.localidad }}<br />
         {% endif %}        
         {%if remito.pedidoDeClinica.clinica.telefono %}
             {{ remito.pedidoDeClinica.clinica.telefono }}<br />

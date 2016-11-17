@@ -16,6 +16,8 @@
 
 {% block form-fields-avanzados %} 
     <div>
+        <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+        <script src="{% static 'js/datepicker.js' %}"></script>
         <input class="datepicker form-control form-field"  id="desde" name="desde" value="{{filtros.desde}}" placeholder="Desde" type="text" />
     </div>
     <div>
