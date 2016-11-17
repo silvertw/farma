@@ -1,0 +1,59 @@
+{% extends "base-remito.html" %}
+
+{% block header %}
+    <p class="logo"><img width="100%" src="images/logo-farma.jpg" /></p>
+    <p>
+        Fecha de Pedido: {{remito.fecha}}<br>
+        Tel (02965) 43-4159 <br>
+        Lezama 479 <br/>
+        Trelew, Chubut
+    </p>
+{% endblock%}
+
+{% block cliente %}
+    <p class="bottom-10">
+        <strong>Farmacia de Destino </strong> <span class="client">"{{remito.farmacia}}"</span>
+    </p>
+    <p class="bottom-10">
+        {%if remito.farmacia.direccion %}
+            Dir: {{ remito.farmacia.direccion }}<br />
+        {% endif %}
+        {%if remito.farmacia.localidad %}
+            Localidad: {{ remito.farmacia.localidad }}
+        {% endif %}
+        {%if remito.farmacia.telefono %}
+            Tel: {{ remito.farmacia.telefono }}<br />
+        {% endif %}
+    </p>
+{% endblock %}
+
+{% block tipo-remito %}
+    Remito Medicamentos a Solicitar Para Optimizar Stock
+{% endblock %}
+
+{% block remito-cabecera %}
+    <!--tr>
+        <td class="item-name"><strong>Remito Nº {{ remito.pk }}</strong></td>
+        <td><strong>{{ remito.fecha }}</strong></td>
+    </tr-->
+{% endblock %}
+
+{% block remito-detalles %}
+    <thead>
+        <tr>
+            <th class="text-left">Cantidad a Solicitar</th>
+            <th class="text-right">Farmacia</th>
+            <th class="text-right">Nro. Lote</th>
+        </tr>
+    </thead>
+    <tbody>
+       {% for json in detallesRemito %}
+        <tr>
+            <td class="text-left">{{ json.totalq}}</td>
+            <td class="text-right">{{ json.farmacia }}</td>
+            <td class="text-right">{{ json.lote }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+{% endblock %}

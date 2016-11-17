@@ -1,9 +1,10 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
-import models, forms
+import models, forms, time
 from django.contrib.auth.decorators import login_required
 from jsonview.decorators import json_view
 from django.contrib.auth.decorators import permission_required
+from easy_pdf.views import PDFTemplateView
 from organizaciones.views import hubo_alta
 from pedidos import models as pmodels
 from django.db import transaction
@@ -13,13 +14,120 @@ import forms as factforms
 from pedidos.views import get_filtros as get_filtros_pedidos
 from pedidos import utils as putils
 from django.http import HttpResponse
+from django import utils
 import json
 
 # Create your views here.
 
 def facturacionVentas(request):
 
-    return render(request,"obSocialesYclinicas/facturacionVentas.html",{})
+    #if request.method == "GET":
+
+    #    valores=request.GET.items()
+    #    if(valores):
+    #        claveValor= valores[0]
+    #        nroPedidoAlab=claveValor[1]
+    #        request.session['nroPedidoAlab'] = nroPedidoAlab #Se guarda el numero de pediod de laboratorio en sesion
+
+    filters = get_filtros_pedidos(request.GET, pmodels.PedidoDeClinica)
+    claves = filters.keys()#Se obtiene las claves que vienen en el diccionario filtro
+
+    if (len(claves)>1)and((claves[0]=="fecha__lte")or(claves[1]=="fecha__lte")):#Se verifica si vino un filtro y ademas si vienen fechas
+            #El formato de facha dd/mm/yyyy hace que el render falle
+            fecha1 = putils.formatearFecha(filters["fecha__lte"])#Esta funcion convierte de dd/mm/yyyy a yyyy-mm-dd
+            fecha2 = putils.formatearFecha(filters["fecha__gte"])#para que funcione bien
+            filters={'fecha__lte': fecha1, 'fecha__gte': fecha2}#Hay que reconstruir el diccionario con el formato nuevo
+
+    listPedidosClinicas = pmodels.PedidoDeClinica.objects.filter(**filters).filter(facturaAsociada=False)
+
+    estadisticas = {
+        'total': listPedidosClinicas.count(),
+        'filtrados': listPedidosClinicas.count()
+    }
+
+    return render(request,"obSocialesYclinicas/facturacionVentas.html",{"listPedidosClinicas":listPedidosClinicas})
+
+@transaction.atomic
+def emitirFactura(request):
+
+    valores=request.GET.items()
+    if(valores):
+        claveValor= valores[0]
+        nroPedidoPorGet=claveValor[1]
+
+        pedidoClinica=pmodels.PedidoDeClinica.objects.get(nroPedido=nroPedidoPorGet)#Obtengo el pedido de clinica
+        detallesPedidoClinica=pedidoClinica.get_detalles()#Obtengo el detalle del pedido
+
+        facturaAclinica=factmodels.FacturaAclinica(
+
+            tipo=1,
+            identificador="1",
+            fecha=time.strftime("%Y-%m-%d"),
+            titular="Cosme",
+            pedidoRel=pedidoClinica,
+        )
+
+        print "identi",facturaAclinica.identificador
+        print "fecha", facturaAclinica.fecha
+        print "titular", facturaAclinica.titular
+        print "pedido",facturaAclinica.pedidoRel
+
+        listaDetallesDeFacturaAclinica=[]
+        subtotal=0
+        for detP in detallesPedidoClinica:
+            lotes=medmodels.Lote.objects.filter(medicamento__pk=detP.medicamento.pk)
+            lote=lotes[0]
+
+            detF=factmodels.DetalleFacturaAclinica(
+                factura = facturaAclinica,
+                cantidad = detP.cantidad,
+                medicamento = detP.medicamento,
+                precioUnitario = lote.precio,
+                importe = detP.cantidad * lote.precio
+            )
+            subtotal = subtotal + (detP.cantidad * lote.precio)
+            listaDetallesDeFacturaAclinica.append(detF)
+
+        pieFactura = factmodels.pieDeFacturaAclinica()
+        pieFactura.factura = facturaAclinica
+        pieFactura.subtotal = subtotal
+        pieFactura.iva = 21
+        pieFactura.total = subtotal + (subtotal*(21/100))
+
+        facturaAclinica.save()
+        #================esto debe hacerse de forma atomica===================
+        @transaction.atomic
+        def guardarDetalle():
+            for renglon in listaDetallesDeFacturaAclinica:#Guarda los detalles (renglones).
+                factmodels.DetalleFacturaAclinica.save(renglon)
+        guardarDetalle()
+        pieFactura.save()#Guarda el pie de pagina.
+        pedido = pmodels.PedidoDeClinica.objects.get(pk=nroPedidoPorGet)
+        pedido.facturaAsociada = True
+        #======================================================================
+
+    msj="La Factura se Genero Correctamente"
+    response = HttpResponse(msj)
+
+    return response
+
+#================================================IMPRESION DE FACTURA================================================
+#class remitoOptimizarStock(PDFTemplateView):
+#    template_name = "obSocialesYclinicas/facturaCompras.html"
+
+#    def get_context_data(self, id):
+
+#        movimiento=models.movimientosDeStockDistribuido.objects.get(pedidoMov__pk=id)
+#        pedido=models.PedidoDeFarmacia.objects.get(pk=id)
+#        actividadMovimiento=movimiento.movimiento
+
+
+#        return super(remitoOptimizarStock, self).get_context_data(
+#            pagesize="A4",
+            #remito=pedido,
+            #detallesRemito=renglones
+#        )
+#================================================FIN IMPRESION DE FACTURA=============================================
 
 
 
@@ -30,6 +138,9 @@ def facturacionVentas(request):
 
 
 
+def facturasEmitidas(request):
+
+    return render(request,"obSocialesYclinicas/facturasEmitidas.html",{})
 
 
 
@@ -131,12 +242,6 @@ def facturacionCompras(request):
     }
 
     return render(request,"Proveedores/facturacionCompras.html",{"listPedidos": listPedidos,"formFactura": form,"erroresEnElForm":erroresEnElForm,"nroPedidoAlab":nroPedidoAlab})
-
-
-
-def facturasEmitidas(request):
-
-    return render(request,"obSocialesYclinicas/facturasEmitidas.html",{})
 
 
 

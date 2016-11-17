@@ -237,6 +237,7 @@ class PedidoDeClinica(PedidoVenta):
     clinica = models.ForeignKey('organizaciones.Clinica', on_delete=models.CASCADE)
     obraSocial = models.ForeignKey('organizaciones.ObraSocial', on_delete=models.CASCADE)
     medicoAuditor = models.CharField(max_length=80)
+    facturaAsociada = models.BooleanField(default=False)
 
     class Meta(PedidoVenta.Meta):
         verbose_name_plural = "Pedidos de Clinica"

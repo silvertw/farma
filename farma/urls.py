@@ -184,9 +184,11 @@ urlpatterns = [
 
     #******************************************Facturacion**************************************************
     url(r'^facturacionVentas/$', fviews.facturacionVentas, name="facturacionVentas"),
+    url(r'^facturasEmitidas/$', fviews.facturasEmitidas, name="facturasEmitidas"),
+    url(r'^emitirFactura/$', fviews.emitirFactura, name="emitirFactura"),
+
     url(r'^facturacionCompras/$', fviews.facturacionCompras, name="facturacionCompras"),
     url(r'^facturasRegistradasDeCompras/$', fviews.facturasRegistradasCompras, name="facturasRegistradasCompras"),
-    url(r'^facturasEmitidas/$', fviews.facturasEmitidas, name="facturasEmitidas"),
     url(r'^formaDePagos/add/$', fviews.formaDePago_add, name="formaDePago_add"),
 
     url(r'^factProveedEncabezadoModal/$', fviews.factProveedEncabezadoModal, name="factProveedEncabezadoModal"),
@@ -196,6 +198,9 @@ urlpatterns = [
     url(r'^mostrarPago/$', fviews.mostrarPago, name="mostrarPago"),
 
     url(r'^cancelarPago/$', fviews.cancelarPago, name="cancelarPago"),
+
+
+    #*****************************************Stock Distribuido********************************************
     url(r'^buscarEnFarm/$', pviews.buscarEnFarmacias, name="buscarEnFarm"),
     url(r'^stockDistribuido/$', distviews.stockDistribuido, name="stockDistribuido"),
 

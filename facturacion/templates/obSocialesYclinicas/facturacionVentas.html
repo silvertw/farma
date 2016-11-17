@@ -51,28 +51,36 @@
     <thead>
         <tr>
             <th>Nº Pedido</th>
-            <th>Laboratorio</th>
+            <th>Clinica</th>
             <th>Fecha</th>
+            <th>Obra social</th>
             <th>Acción</th>
         </tr>
     </thead>
     <tbody>
-        {% for listPedido in listPedidos %}
+        {% for listPedido in listPedidosClinicas %}
             <tr class="clickeable" data-id="{{ listPedido.nroPedido }}">
                 <td>{{ listPedido.nroPedido }}</td>
-                <td>{{ listPedido.laboratorio }}</td>
+                <td>{{ listPedido.clinica }}</td>
                 <td>{{ listPedido.fecha }}</td>
+                <td>{{ listPedido.obraSocial}}</td>
                 <td class="action">
                     <div class="dropdown">
-                        <button class="btn btn-default button-hover dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <button class="btn btn-default button-hover"  type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             Acción
                             <span class="caret"></span>
                         </button>
+
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
                             <li>
-                                <a data-toggle="modal" data-target="#squarespaceModal" id="{{ listPedido.nroPedido }}" class="btn btn-primary center-block" name="rowRegFact">Registrar Factura</a>
+                                <a name="generarFactura" class="btn btn-primary center-block" >Generar Factura</a>
+                            </li>
+
+                            <li>
+                                <a name="imprimir" class="btn btn-primary center-block" >Imprimir</a>
                             </li>
                         </ul>
+
                     </div>
                 </td>
             </tr>
@@ -122,6 +130,35 @@
 {% block more-scripts %}
     <script>
 
+        $("[name='generarFactura']").on("click", function(e){
+            var id = $(e.target).parents("tr").data()["id"];
+            url={% url 'emitirFactura' %};
+            data={'nroPedido':id};
+            enviarData(url,data);
+
+        });
+
+        $("[name='generarFactura']").on("click", function(e){
+            var id = $(e.target).parents("tr").data()["id"];
+            url={% url 'emitirFactura' %};
+            data={'nroPedido':id};
+            enviarData(url,data);
+
+        });
+
+        function enviarData(url,data){
+            $.ajax({
+                /*data: $("#formFactura").serialize(),*/
+                /*data: identificador,*/
+                contentType:'json',
+                data: data,
+                type: 'get',
+                url: url,
+                success:function(response){
+                    alert(response);
+                }
+            });
+        }
 
         (function(){
             var modal = modalAjax();

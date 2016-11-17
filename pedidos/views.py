@@ -279,7 +279,6 @@ class remitoOptimizarStock(PDFTemplateView):
 
     def get_context_data(self, id):
 
-
         movimiento=models.movimientosDeStockDistribuido.objects.get(pedidoMov__pk=id)
         pedido=models.PedidoDeFarmacia.objects.get(pk=id)
         actividadMovimiento=movimiento.movimiento
@@ -312,8 +311,6 @@ class remitoOptimizarStock(PDFTemplateView):
             remito=pedido,
             detallesRemito=renglones
         )
-
-
 
 # ******************************* PEDIDOS DE CLINICA ******************************* #
 
