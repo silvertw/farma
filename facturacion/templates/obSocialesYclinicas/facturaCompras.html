@@ -36,7 +36,8 @@
     {% if factura.tipo == 1 %}
         Factura "A" <br>
     {% endif %}
-    Clinica: {{pedido.clinica.razonSocial}} Cuit:{{pedido.clinica.cuit}}
+    Clinica: {{pedido.clinica.razonSocial}} Cuit:{{pedido.clinica.cuit}}<br>
+    Obra Social Interviniente: {{pedido.obraSocial.razonSocial}}
 {% endblock %}
 
 {% block remito-cabecera %}
