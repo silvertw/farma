@@ -13,7 +13,7 @@
                           <tbody class="listadoFact">
                             {% for renglon in renglones %}
                                 <tr>
-                                  <td>{{ renglon.totalq }}</td>
+                                  <td id="totalq">{{ renglon.totalq }}</td>
                                   <td>{{ renglon.farmacia }}</td>
                                   <td>{{ renglon.lote }}</td>
                                 </tr>
@@ -21,6 +21,8 @@
                           </tbody>
 
                         </table>
+
+
                     </div>
 
 <!--scrip type="text/javascript">

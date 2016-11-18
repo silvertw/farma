@@ -3,7 +3,9 @@
 {% block header %}
     <p class="logo"><img width="100%" src="images/logo-farma.jpg" /></p>
     <p>
-        Fecha de Pedido: {{remito.fecha}}<br>
+        Fecha de Emision: {{factura.fecha}}<br>
+        Titular: {{factura.titular}}<br>
+        Factura: ABZX-000-0001234{{factura.identificador}}<br>
         Tel (02965) 43-4159 <br>
         Lezama 479 <br/>
         Trelew, Chubut
@@ -11,7 +13,7 @@
 {% endblock%}
 
 {% block cliente %}
-    <p class="bottom-10">
+    <!--p class="bottom-10">
         <strong>Farmacia de Destino </strong> <span class="client">"{{remito.farmacia}}"</span>
     </p>
     <p class="bottom-10">
@@ -24,11 +26,17 @@
         {%if remito.farmacia.telefono %}
             Tel: {{ remito.farmacia.telefono }}<br />
         {% endif %}
-    </p>
+    </p-->
 {% endblock %}
 
 {% block tipo-remito %}
-    Remito Medicamentos a Solicitar Para Optimizar Stock
+    <br/>
+    <br/>
+    <br/>
+    {% if factura.tipo == 1 %}
+        Factura "A" <br>
+    {% endif %}
+    Clinica: {{pedido.clinica.razonSocial}} Cuit:{{pedido.clinica.cuit}}
 {% endblock %}
 
 {% block remito-cabecera %}
@@ -36,24 +44,52 @@
         <td class="item-name"><strong>Remito Nº {{ remito.pk }}</strong></td>
         <td><strong>{{ remito.fecha }}</strong></td>
     </tr-->
+    <tr>
+        <td>{{factura.identificador}}</td>
+    </tr>
 {% endblock %}
 
 {% block remito-detalles %}
     <thead>
+        <br/>
         <tr>
-            <th class="text-left">Cantidad a Solicitar</th>
-            <th class="text-right">Farmacia</th>
-            <th class="text-right">Nro. Lote</th>
+            <!--th class="text-left">Nro.</th-->
+            <th class="text-right">Medicamento</th>
+            <th class="text-right">Cantidad</th>
+            <th class="text-right">Precio Unitario</th>
+            <th class="text-right">Importe</th>
         </tr>
     </thead>
     <tbody>
-       {% for json in detallesRemito %}
+       {% for detalle in detaLLeFactura %}
         <tr>
-            <td class="text-left">{{ json.totalq}}</td>
-            <td class="text-right">{{ json.farmacia }}</td>
-            <td class="text-right">{{ json.lote }}</td>
+            <!--td class="text-left">{{ detalle.renglon}}</td-->
+            <td class="text-right">{{detalle.medicamento }}</td>
+            <td class="text-right">{{ detalle.cantidad }}</td>
+            <td class="text-right">${{ detalle.precioUnitario }}</td>
+            <td class="text-right">${{ detalle.importe }}</td>
+            <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            </tr>
         </tr>
         {% endfor %}
+    </tbody>
+
+    <thead>
+
+    </thead>
+
+    <tbody>
+        <tr>
+            <!--td class="text-left"></td-->
+            <td class="text-right"></td>
+            <td class="text-right"><strong>Subtotal: ${{pieDeFactura.subtotal}}</strong></td>
+            <td class="text-right"><strong>IVA: {{pieDeFactura.iva}}</strong></td>
+            <td class="text-right"><strong>Total: ${{pieDeFactura.total}}</strong></td>
+        </tr>
     </tbody>
 
 {% endblock %}

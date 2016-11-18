@@ -63,7 +63,7 @@
                 <td>{{ listPedido.nroPedido }}</td>
                 <td>{{ listPedido.clinica }}</td>
                 <td>{{ listPedido.fecha }}</td>
-                <td>{{ listPedido.obraSocial}}</td>
+                <td>{{ listPedido.obraSocial}} uno</td>
                 <td class="action">
                     <div class="dropdown">
                         <button class="btn btn-default button-hover"  type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -74,10 +74,6 @@
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
                             <li>
                                 <a name="generarFactura" class="btn btn-primary center-block" >Generar Factura</a>
-                            </li>
-
-                            <li>
-                                <a name="imprimir" class="btn btn-primary center-block" >Imprimir</a>
                             </li>
                         </ul>
 
@@ -138,11 +134,9 @@
 
         });
 
-        $("[name='generarFactura']").on("click", function(e){
-            var id = $(e.target).parents("tr").data()["id"];
-            url={% url 'emitirFactura' %};
-            data={'nroPedido':id};
-            enviarData(url,data);
+        $("[name='imprimir']").on("click", function(e){
+            var nroPedido = $(e.target).parents("tr").data()["id"];
+            window.location.assign("/obSocialesYclinicas/" + nroPedido);
 
         });
 

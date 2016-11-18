@@ -92,10 +92,10 @@ class FacturaAclinica(models.Model):
         (4, "D")
     )
 
-    tipo = models.PositiveIntegerField(choices=TIPO)
-    identificador = models.CharField(max_length=45,primary_key=True)
+    tipo = models.PositiveIntegerField(choices=TIPO,default=1)
+    identificador=models.AutoField(primary_key=True)
     fecha = models.DateField()
-    titular = models.CharField(max_length=45)
+    titular = models.CharField(max_length=45,default="Propietario")
     pedidoRel = models.OneToOneField(PedidoDeClinica,null=True)
     pagada = models.BooleanField(default=False)
 

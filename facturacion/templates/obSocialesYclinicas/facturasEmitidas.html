@@ -70,30 +70,47 @@
 
 {% block tabla %}
     <thead>
-        <tr>
-            <th>Nº Pedido Facturado</th>
-            <th>Laboratorio</th>
+         <tr>
+            <th>Nº Pedido</th>
+            <th>Clinica</th>
             <th>Fecha</th>
+            <th>Obra social</th>
             <th>Acción</th>
         </tr>
     </thead>
     <tbody>
-        {% for listPedido in listPedidos %}
+        {% for listPedido in listPedidosClinicas %}
             <tr class="clickeable" data-id="{{ listPedido.nroPedido }}">
                 <td>{{ listPedido.nroPedido }}</td>
-                <td>{{ listPedido.laboratorio }}</td>
+                <td>{{ listPedido.clinica }}</td>
                 <td>{{ listPedido.fecha }}</td>
+                {% if listPedido.get_factura_estado  %}
+                    <td><font color="green">{{ listPedido.obraSocial }} Factura Pagada </font></td>
+                {% else %}
+                    <td><font color="red">{{ listPedido.obraSocial }} Factura Impaga </font></td>
+                {% endif %}
                 <td class="action">
                     <div class="dropdown">
-                        <button id="{{ listPedido.nroPedido }}" class="btn btn-default button-hover"  type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" name="rowVerFact">
+                        <button class="btn btn-default button-hover"  type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             Acción
                             <span class="caret"></span>
                         </button>
 
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
                             <li>
-                                <a data-toggle="modal"  name="ver" data-target="#squarespaceModal" class="btn btn-primary center-block" >Ver Factura</a>
+                                <a name="imprimir" class="btn btn-primary center-block" >Imprimir</a>
                             </li>
+
+                            {% if not listPedido.get_factura_estado  %}
+                                <li>
+                                    <a name="regPago" class="btn btn-primary center-block" >Registrar Pago</a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a name="verFecha" class="btn btn-primary center-block" >Ver Fecha de Pago</a>
+                                </li>
+                            {% endif %}
+
                         </ul>
 
                     </div>
@@ -111,116 +128,26 @@
 
 
 {% block more-content %}
-    <!-- line modal -->
-
-
-
-		<div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-			<div class="modal-content" id="contenedorModal">
-                <!--INICIO CONTENIDO MODAL-->
-                <div class="modal-header" id="modalHeader">
-                    <!--inicio header-->
-
-                    <!--fin header-->
-                </div>
-
-                <div class="modal-body" id="modalBody">
-                   <!--inicio body-->
-
-                    <!--fin body-->
-				</div>
-
-                <div class="modal-footer" id="modalFooter">
-                  <!--inicio footer-->
-
-                  <!--fin footer-->
-				</div>
-
-                <!--FIN CONTENIDO MODAL-->
-			</div>
-		  </div>
-
-		</div>
-
-
-<!-- MODAL DEL ESTADO -->
-
-        <div class="modal fade" id="modalEstadoDelPago" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-            <div class="modal-dialog" id="modalFormDePago">
-
-
-
-		    </div>
-        </div>
-
-        <!-- FIN DEL MODAL DE ESTADO-->
-
-
-
-<!-- ================================================================================================================== -->
-
-
-        <!-- MODAL VER PAGO -->
-        <div class="modal fade" id="modalVerPago" tabindex="-2" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-		    <div class="modal-dialog modal-lg" id="verPagoModal">
-
-		    </div>
-        </div>
-        <!-- FIN DEL MODAL VER PAGO -->
-
-<!-- ================================================================================================================== -->
-
 
 {% endblock %}
 
 
 {% block more-scripts %}
     <script>
+        $("[name='imprimir']").on("click", function(e){
+            var nroPedido = $(e.target).parents("tr").data()["id"];
+            window.location.assign("/obSocialesYclinicas/" + nroPedido);
+        });
 
-        $("[name='rowVerFact']").on("click", function(e){
-
+        $("[name='regPago']").on("click", function(e){
             var id = $(e.target).parents("tr").data()["id"];
-
-            url={% url 'factProveedEncabezadoModal' %};
-            data={'idRowVer':id};
-            incrustaModalHeader(url,data);
-
-            url={% url 'factProveedDetalleModal' %};
-            data={'idRowVer':id};
-            incrustaModalBody(url,data);
-
-            url={% url 'factProveedFooterModal' %};
-            data={'idRowVer':id};
-            incrustaModalFooter(url,data);
-
-            /*mostrar modal formulario de pago*/
-            url={% url 'formularioDePago' %};
-            data={'idRowVer':id};
-            formularioDePago(url,data);
-
-            /*mostrar modal con datos del pago realizado*/
-            url={% url 'mostrarPago' %};
-            data={'idRowVer':id};
-            modalVerPago(url, data);
+            url={% url 'registrarPagoDeFacturaVenta' %};
+            data={'nroPedido':id};
+            enviarData(url,data);
 
         });
 
-        function incrustaModalHeader(url,data){
-            $.ajax({
-                /*data: $("#formFactura").serialize(),*/
-                /*data: identificador,*/
-                contentType:'json',
-                data: data,
-                type: 'get',
-                url: url,
-                success:function(response){
-                    $('#modalHeader').html(response);
-                }
-            });
-        }
-
-        function incrustaModalBody(url,data){
+        function enviarData(url,data){
             $.ajax({
 
                 contentType:'json',
@@ -228,50 +155,11 @@
                 type: 'get',
                 url: url,
                 success:function(response){
-                    $('#modalBody').html(response);
-                }
-            });
-        }
-
-        function incrustaModalFooter(url,data){
-            $.ajax({
-
-                contentType:'json',
-                data: data,
-                type: 'get',
-                url: url,
-                success:function(response){
-                    $('#modalFooter').html(response);
-                }
-            });
-        }
-
-        function formularioDePago(url,data){
-            $.ajax({
-
-                contentType:'json',
-                data: data,
-                type: 'get',
-                url: url,
-                success:function(response){
-                    $('#modalFormDePago').html(response);
-                }
-            });
-        }
-
-        function modalVerPago(url,data){
-            $.ajax({
-
-                contentType:'json',
-                data: data,
-                type: 'get',
-                url: url,
-                success:function(response){
-                    $('#verPagoModal').html(response);
+                    alert(response);
+                    window.location.assign("/facturasEmitidas/");
                 }
             });
         }
 
     </script>
-
 {% endblock %}
