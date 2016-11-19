@@ -620,6 +620,10 @@ def procesar_devolucion(laboratorio, lotes):
         detalleRemito.lote = lote
         detalleRemito.cantidad = lote.stock
         detalleRemito.save()
+        distribuidosVencidos = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote=lote)
+        for distVencido in distribuidosVencidos:
+            distVencido.cantidad = 0
+            distVencido.save()
         lote.stock = 0
         lote.save()
 

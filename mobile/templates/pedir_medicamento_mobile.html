@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Farma Movil</title>
+	<link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
     <link rel="stylesheet" href="{% static 'mobile/jquery.mobile-1.4.5.min.css' %}" />
 	<link rel="stylesheet" href="{% static 'mobile/FarmaPlus.css' %}" />
 	<link rel="stylesheet" href="{% static 'mobile/jquery.mobile.icons.min.css' %}" />
@@ -46,11 +47,13 @@
         </div>
 		<div data-role="content"data-theme="a">
     		<ul id="nav" data-role="listview" data-inset="true">
-        		<li><a>{{medicamento.nombreFantasia}}®</a></li>
-				<form action= "" method="" id="crearPedido">
-					<input class="form-control form-field form-field-simple" id="nroPedido" name="nroPedido" value="{{filtros.nroPedido}}" placeholder="Cantidad" type="text">
+        		<li><a id="medicamentoNF">{{medicamento.nombreFantasia}}®</a></li>
+
+
+					<input class="form-control form-field form-field-simple" id="cantidad" placeholder="Cantidad" type="text">
+
 					<button name="enviar" class="btn btn-default">PEDIR</button>
-				</form>
+
 			</ul>
 		</div>
 
@@ -78,19 +81,30 @@
 </html>
 <script type="text/javascript">
 	$("[name='enviar']").on("click", function(e){
-        registrar_pedido_ajax("{% url 'pedidoDeFarmacia_registrar' %}");
-        alert ("HOL")
-        e.stopPropagation();
+
+		var medicamentoApedir='{{medicamento.pk}}'
+		var cantidadApedir = document.getElementById("cantidad").value;
+		var farmaciaSolicitante = '{{user.farmacia}}';
+
+		url={% url 'pedidoDesdeMobilFarmacia' %};
+		data={'pkMedicamento':medicamentoApedir,'cantidadApedir':cantidadApedir,'farmaciaSolicitante':farmaciaSolicitante};
+
+		enviarPedidoDesdeMobil(url,data);
+
+
+
     });
 
-	function envioForm(url,data){
+	function enviarPedidoDesdeMobil(url,data){
 		$.ajax({
 			contentType:'json',
 			data: data,
 			type: 'get',
 			url: url,
+
 			success:function(response){
             }
 		});
 	}
+
 </script>

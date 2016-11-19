@@ -20,6 +20,7 @@ from medicamentos import  models as mmodels
 import json
 from xlsxwriter import Workbook
 import io
+import time
 
 
 def get_filtros(get, modelo):#las llamada es-->get_filtros(request.GET, models.PedidoAlaboratorio)
@@ -116,12 +117,80 @@ def pedidoDeFarmacia_verRemitos(request, id_pedido):
     return {'remitos': remitos_json}
 
 
+
+
+
+
+
+
+
+
+def pedidoDesdeMobilFarmacia(request):
+
+    farmaciaSolicitante=request.GET["farmaciaSolicitante"]
+    pkMedicamento = request.GET["pkMedicamento"]
+    cantidadApedir = request.GET["cantidadApedir"]
+    fecha = time.strftime("%d/%m/%Y")
+    farmaciaRs = omodels.Farmacia.objects.get(razonSocial=farmaciaSolicitante)
+    medicamentoBusq = mmodels.Medicamento.objects.get(pk=pkMedicamento)
+
+    pkFarmacia=farmaciaRs.pk
+
+    pedidosAll = pmodels.PedidoDeFarmacia.objects.all().count()
+    ultimoPedido=pedidosAll + 1
+
+    pedido={}
+    farmacia={}
+    medicamento={}
+    detalle = {}
+    detalles = []
+
+    farmacia[unicode("razonSocial")]=unicode(farmaciaSolicitante)
+    farmacia[unicode("id")]=unicode(pkFarmacia)
+
+    medicamento[unicode("descripcion")]= unicode(medicamentoBusq.presentacion)
+    medicamento[unicode("id")]=unicode(pkMedicamento)
+
+    pedido[unicode("fecha")]=unicode(fecha)
+    pedido[unicode("nroPedido")]=unicode(ultimoPedido)
+    pedido[unicode("farmacia")]=farmacia
+
+    detalle[unicode("renglon")]=unicode(1)
+    detalle[unicode("medicamento")]=medicamento
+    detalle[unicode("cantidad")]=unicode(cantidadApedir)
+    detalle[unicode("cantidadPendiente")]=unicode(0)
+
+    detalles.append(detalle)
+
+
+    #{u'fecha': u'19/11/2016', u'nroPedido': 6, u'farmacia': {u'razonSocial': u'Plaza', u'id': 1}}
+    #detalles [{u'renglon': 1, u'medicamento': {u'descripcion': u'Nombre Presentacion 1 mg', u'id': 1}, u'cantidad': 12, u'cantidadPendiente': 0}]
+
+
+    print "PRUEBA PEDIDO---->",pedido
+    print "PRUEBA DETALLE PEDIDO--->",detalles
+
+
+
+
+
+
+
+
+
+
+
 @json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def pedidoDeFarmacia_registrar(request):
+
     pedido = request.session['pedidoDeFarmacia']
     detalles = request.session['detallesPedidoDeFarmacia']
+
+    print "pedido",pedido
+    print "detalles",detalles
+
     mensaje_error = None
     if detalles:
         farmacia = omodels.Farmacia.objects.get(pk=pedido['farmacia']['id'])
@@ -145,7 +214,6 @@ def pedidoDeFarmacia_registrar(request):
     else:
         mensaje_error = "No se puede registrar un pedido sin detalles"
     return {'success': False, 'mensaje-error': mensaje_error}
-
 
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
