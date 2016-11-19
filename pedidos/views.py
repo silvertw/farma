@@ -170,7 +170,10 @@ def pedidoDesdeMobilFarmacia(request):
     print "PRUEBA PEDIDO---->",pedido
     print "PRUEBA DETALLE PEDIDO--->",detalles
 
+    #pedido = request.session['pedidoDeFarmacia']
+    ##detalles = request.session['detallesPedidoDeFarmacia']
 
+    pedidoDeFarmacia_registrar(request=request)
 
 
 

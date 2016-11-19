@@ -48,15 +48,10 @@
 		<div data-role="content"data-theme="a">
     		<ul id="nav" data-role="listview" data-inset="true">
         		<li><a id="medicamentoNF">{{medicamento.nombreFantasia}}®</a></li>
-
-
 					<input class="form-control form-field form-field-simple" id="cantidad" placeholder="Cantidad" type="text">
-
 					<button name="enviar" class="btn btn-default">PEDIR</button>
-
 			</ul>
 		</div>
-
 		<ul data-role="listview">
            	<tbody>
 				{% for pedido in pedidosFarm %}
@@ -81,20 +76,15 @@
 </html>
 <script type="text/javascript">
 	$("[name='enviar']").on("click", function(e){
-
 		var medicamentoApedir='{{medicamento.pk}}'
 		var cantidadApedir = document.getElementById("cantidad").value;
 		var farmaciaSolicitante = '{{user.farmacia}}';
-
 		url={% url 'pedidoDesdeMobilFarmacia' %};
 		data={'pkMedicamento':medicamentoApedir,'cantidadApedir':cantidadApedir,'farmaciaSolicitante':farmaciaSolicitante};
-
 		enviarPedidoDesdeMobil(url,data);
-
-
+		alert('Añadido al pedido')
 
     });
-
 	function enviarPedidoDesdeMobil(url,data){
 		$.ajax({
 			contentType:'json',
@@ -106,5 +96,4 @@
             }
 		});
 	}
-
 </script>
