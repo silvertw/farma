@@ -17,13 +17,13 @@ class UploadFormGenerico(forms.ModelForm):
         }
 
 
-class UploadForm(UploadFormGenerico):
+class UploadForm(forms.Form):
+    docfile = forms.FileField(label='Archivo de Ventas')
     helper = FormHelper()
     helper.form_class = 'form'
     helper.form_id = 'my-form'
     helper.form_action = 'File_add'
     helper.layout = Layout(
-        Field('filename',placeholder='Nombre'),
         Field('docfile', placeholder='Archivo'),
 
         FormActions(

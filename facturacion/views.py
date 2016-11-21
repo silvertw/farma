@@ -47,6 +47,43 @@ def facturacionVentas(request):
 
     return render(request,"obSocialesYclinicas/facturacionVentas.html",{"listPedidosClinicas":listPedidosClinicas})
 
+
+
+def facturasEmitidas(request):
+
+    filters = get_filtros_pedidos(request.GET, pmodels.PedidoDeClinica)
+    claves = filters.keys()#Se obtiene las claves que vienen en el diccionario filtro
+
+    if (len(claves)>1)and((claves[0]=="fecha__lte")or(claves[1]=="fecha__lte")):#Se verifica si vino un filtro y ademas si vienen fechas
+            #El formato de facha dd/mm/yyyy hace que el render falle
+            fecha1 = putils.formatearFecha(filters["fecha__lte"])#Esta funcion convierte de dd/mm/yyyy a yyyy-mm-dd
+            fecha2 = putils.formatearFecha(filters["fecha__gte"])#para que funcione bien
+            filters={'fecha__lte': fecha1, 'fecha__gte': fecha2}#Hay que reconstruir el diccionario con el formato nuevo
+
+    listPedidosClinicas = pmodels.PedidoDeClinica.objects.filter(**filters).filter(facturaAsociada=True)
+
+    estadisticas = {
+        'total': listPedidosClinicas.count(),
+        'filtrados': listPedidosClinicas.count()
+    }
+
+    return render(request,"obSocialesYclinicas/facturasEmitidas.html",{"listPedidosClinicas":listPedidosClinicas})
+
+def registrarPagoDeFacturaVenta(request):
+    valores=request.GET.items()
+    if(valores):
+        nroPedidoPorGet=request.GET['nroPedido']
+
+        facturaApagar=factmodels.FacturaAclinica.objects.get(pedidoRel=nroPedidoPorGet)
+        facturaApagar.pagada=True
+        facturaApagar.save()
+        msj="El registro de pago se realizo correctamente"
+
+        response = HttpResponse(msj)
+
+    return response
+
+
 @transaction.atomic
 def emitirFactura(request):
 
@@ -54,26 +91,22 @@ def emitirFactura(request):
     if(valores):
         claveValor= valores[0]
         nroPedidoPorGet=claveValor[1]
-
         pedidoClinica=pmodels.PedidoDeClinica.objects.get(nroPedido=nroPedidoPorGet)#Obtengo el pedido de clinica
         detallesPedidoClinica=pedidoClinica.get_detalles()#Obtengo el detalle del pedido
 
         facturaAclinica=factmodels.FacturaAclinica(
 
             tipo=1,
-            identificador="1",
             fecha=time.strftime("%Y-%m-%d"),
             titular="Cosme",
             pedidoRel=pedidoClinica,
         )
 
-        print "identi",facturaAclinica.identificador
-        print "fecha", facturaAclinica.fecha
-        print "titular", facturaAclinica.titular
-        print "pedido",facturaAclinica.pedidoRel
+        facturaAclinica.save()
 
         listaDetallesDeFacturaAclinica=[]
         subtotal=0
+
         for detP in detallesPedidoClinica:
             lotes=medmodels.Lote.objects.filter(medicamento__pk=detP.medicamento.pk)
             lote=lotes[0]
@@ -93,8 +126,6 @@ def emitirFactura(request):
         pieFactura.subtotal = subtotal
         pieFactura.iva = 21
         pieFactura.total = subtotal + (subtotal*(21/100))
-
-        facturaAclinica.save()
         #================esto debe hacerse de forma atomica===================
         @transaction.atomic
         def guardarDetalle():
@@ -104,46 +135,34 @@ def emitirFactura(request):
         pieFactura.save()#Guarda el pie de pagina.
         pedido = pmodels.PedidoDeClinica.objects.get(pk=nroPedidoPorGet)
         pedido.facturaAsociada = True
+        pedido.save()
         #======================================================================
 
-    msj="La Factura se Genero Correctamente"
-    response = HttpResponse(msj)
+        msj="La Factura se Genero Correctamente"
+
+        response = HttpResponse(msj)
 
     return response
 
 #================================================IMPRESION DE FACTURA================================================
-#class remitoOptimizarStock(PDFTemplateView):
-#    template_name = "obSocialesYclinicas/facturaCompras.html"
+class imprimirFactura(PDFTemplateView):
+    template_name = "obSocialesYclinicas/facturaCompras.html"
 
-#    def get_context_data(self, id):
+    def get_context_data(self, id):
 
-#        movimiento=models.movimientosDeStockDistribuido.objects.get(pedidoMov__pk=id)
-#        pedido=models.PedidoDeFarmacia.objects.get(pk=id)
-#        actividadMovimiento=movimiento.movimiento
+        pedido=models.PedidoDeClinica.objects.get(pk=id)
+        factura=models.FacturaAclinica.objects.get(pedidoRel=pedido)
+        detaLLeFactura=models.DetalleFacturaAclinica.objects.filter(factura=factura)
+        pieDeFactura=models.pieDeFacturaAclinica.objects.get(factura=factura)
 
-
-#        return super(remitoOptimizarStock, self).get_context_data(
-#            pagesize="A4",
-            #remito=pedido,
-            #detallesRemito=renglones
-#        )
+        return super(imprimirFactura, self).get_context_data(
+            pagesize="A4",
+            factura=factura,
+            detaLLeFactura=detaLLeFactura,
+            pieDeFactura=pieDeFactura,
+            pedido=pedido
+        )
 #================================================FIN IMPRESION DE FACTURA=============================================
-
-
-
-
-
-
-
-
-
-
-def facturasEmitidas(request):
-
-    return render(request,"obSocialesYclinicas/facturasEmitidas.html",{})
-
-
-
 
 
 @transaction.atomic

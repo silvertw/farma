@@ -208,12 +208,12 @@ urlpatterns = [
 
     url(r'^cancelarPago/$', fviews.cancelarPago, name="cancelarPago"),
 
+    url(r'^obSocialesYclinicas/(?P<id>\d+)/$', fviews.imprimirFactura.as_view(), name="imprimirFactura"),
 
+    url(r'^registrarPagoDeFacturaVenta/$', fviews.registrarPagoDeFacturaVenta, name="registrarPagoDeFacturaVenta"),
     #*****************************************Stock Distribuido********************************************
     url(r'^buscarEnFarm/$', pviews.buscarEnFarmacias, name="buscarEnFarm"),
     url(r'^stockDistribuido/$', distviews.stockDistribuido, name="stockDistribuido"),
 
-
     url(r'^uploads/', fileviews.uploadFile, name="uploads"),
-
 ]

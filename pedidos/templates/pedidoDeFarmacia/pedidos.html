@@ -102,7 +102,7 @@
 
                             {% if pedido.tieneMovimientos %}
                                 <li>
-                                    <a data-toggle="modal" name="impMov" data-target="" class="btn btn-primary center-block">Tiene Movimientos</a>
+                                    <a data-toggle="modal" name="impMov" class="btn btn-primary center-block">Tiene Movimientos</a>
                                 </li>
                             {% endif %}
 
@@ -198,18 +198,18 @@
                 <div class="modal-footer" id="modalFooter">
                   <!--inicio footer-->
 
-                    <button name="registrar" id='btnReg' class='btn btn-default'>REGISTRAR</button>
+                     <button name="registrar" id='btnReg' class='btn btn-default'>REGISTRAR</button>
                      <!--a class="action-link btn-ver-detalles" name="imprimir">
                          <span class="action-link-icon animated glyphicon glyphicon-eye-open"></span> IMPRIMIR
                      </a-->
                     <!--fin footer-->
 				</div>
-
                 <!--FIN CONTENIDO MODAL-->
 			</div>
         </div>
     </div>
 <!--===================================FIN MI MODAL==============================================-->
+
 {% endblock %}
 
 {% block more-scripts %}
@@ -217,7 +217,6 @@
     <script>
 
         (function() {
-
             var modal = modalAjax();
             modal.init();
 
@@ -246,7 +245,6 @@
                 success:function(response){
                     //data = JSON.parse(response);/*decodificacion de JSON a un object*/
                     $('#modalBody').html(response);
-
                 }
             });
         }
@@ -269,7 +267,6 @@
                 success:function(response){
                     alert("el movimiento se registro correctamente");
                     window.location.assign("{% url 'pedidosDeFarmacia'  %}");
-
                 }
             });
         }
@@ -283,6 +280,7 @@
         $("[name='impMov']").on("click", function(e){
            var nroPedido=id;
            window.location.assign("/pedidosDeFarmacia/remitoOptimizarStock/" + nroPedido);
+
         });
 
     </script>

@@ -98,7 +98,7 @@ class Lote(models.Model):
     FILTROS = ["numero__icontains"]
     numero = models.PositiveIntegerField(unique=True, error_messages={'unique': "Este numero de lote ya esta cargado"})
     fechaVencimiento= models.DateField()
-    stock = models.PositiveIntegerField()
+    stock = models.PositiveIntegerField()#Stock que hay en drogueria de este lote.
     precio = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     medicamento = models.ForeignKey('Medicamento', on_delete=models.CASCADE)
     stockFarmaYfarmacias = models.ForeignKey('StockFarmayFarmacias',null=True)
@@ -125,8 +125,9 @@ class Lote(models.Model):
     #    return st
 
 class StockFarmayFarmacias(models.Model):
-    stockFarma=models.PositiveIntegerField(default=0)
-    stockFarmacias=models.PositiveIntegerField(default=0)
+    stockFarma=models.PositiveIntegerField(default=0)#Stock que hay en farma de un determinado lote.
+    stockFarmacias=models.PositiveIntegerField(default=0)#Stock que hay en farmacias distribuido de un lote determinado.
+
     def __str__(self):
         return "Stock total en drogueria: %s" % (self.stockFarma)
 

@@ -410,25 +410,6 @@ def guardar_recepcion_detalle_con_nuevo_lote(session, detalle, infoRecepcionDeta
 
 def crear_nuevos_lotes(nuevosLotes):
 
-    claves=nuevosLotes.keys()#Llega un diccionario con varios lotes con determinadas claves asi que se obtienen.
-
-    if claves:#Se toma esta precaucion por que puede ser que no vengan nuevos lotes sino que se actualiza uno
-              #antiguo.
-        primerClave=claves[0]#Se obtiene la primer clave de estos nuevos lotes.
-        lote=nuevosLotes[primerClave]#Se obtiene uno de los lotes (el primero) en realidad no importa cual
-                                     #por que el objetivo es obtener el medicamento.
-
-        idMedicamento=lote['medicamento']#De ese lote se obtiene el id del medicamento
-        medicamento=mmodels.Medicamento.objects.get(pk=idMedicamento)#Finalmente se recupera el medicamento
-
-        if not medicamento.tiene_lotes():
-            stockFyF = mmodels.StockFarmayFarmacias()
-            stockFyF.save()
-        else:
-            #stockFyF=lote.stockFarmaYfarmacias-->verificar para mejorar
-            lotes=medicamento.get_lotes_activos()
-            stockFyF = lotes[0].stockFarmaYfarmacias
-
     for numeroLote, info in nuevosLotes.items():
         lote = mmodels.Lote()
         lote.numero = numeroLote
@@ -437,7 +418,15 @@ def crear_nuevos_lotes(nuevosLotes):
         lote.stock = info['stock']
         lote.medicamento = mmodels.Medicamento.objects.get(pk=info['medicamento'])
 
-        stockFyF.stockFarma = stockFyF.stockFarma+info['stock']
+        if not lote.medicamento.tiene_lotes(): #Si el medicamento no tiene lotes activos
+            stockFyF = mmodels.StockFarmayFarmacias()#Se crea un nuevo elemento
+            stockFyF.save()
+        else:
+            lotesm=lote.medicamento.get_lotes_activos()#Si tiene lotes activos
+            stockFyF = lotesm[0].stockFarmaYfarmacias#Recupero el primero
+
+        stockFyF.stockFarma += info['stock']
+        stockFyF.save()
         lote.stockFarmaYfarmacias=stockFyF
         lote.save()
         #=======================================INSERCION STOCK DISTRIBUIDO=================================
@@ -445,32 +434,23 @@ def crear_nuevos_lotes(nuevosLotes):
         stockDist.lote=lote
         stockDist.cantidad=0
         #===================================================================================================
-
         stockDist.save()
-    if claves:
         stockFyF.save()
 
 def actualizar_lotes(lotes):
-
-    claves=lotes.keys()
-
-    if claves:
-        primerClave=claves[0]
-        listLotes=mmodels.Lote.objects.filter(numero=primerClave)
-        lote=listLotes[0]
-        stockFyF=lote.stockFarmaYfarmacias
 
     for numeroLote, cantidadRecibida in lotes.items():
         if cantidadRecibida > 0:
             lote = mmodels.Lote.objects.get(numero=numeroLote)
             lote.stock += cantidadRecibida
-            stockFyF.stockFarma=stockFyF.stockFarma + cantidadRecibida
+            stockFyF=lote.stockFarmaYfarmacias
+
+            stockFyF.stockFarma += cantidadRecibida
+            stockFyF.save()
+
             lote.stockFarmaYfarmacias=stockFyF
             lote.save()
-    if claves:
-        stockFyF.save()
-
-
+            stockFyF.save()
 
 def actualizar_pedido(pedido, detalles):
 

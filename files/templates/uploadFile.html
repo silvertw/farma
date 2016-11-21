@@ -19,14 +19,27 @@
     <span class="glyphicon glyphicon-plus page-header-icon"></span>
 {% endblock%}
 
-{% block sub-header-form %}Complete el siguiente campo{% endblock %}
+{% block sub-header-form %}
+    Complete el siguiente campo
+{% endblock %}
 
 {% block msg-success %}
-    La Forma de pago fue agregada exitosamente al sistema.
+
 {% endblock %}
 
 {% block more-scripts %}
     <script>
+
+        window.onload = function() {
+            if('{{invalid}}' == 'True'){
+                alert("Error el archivo tiene incoherencias y no pudo procesarse.");
+            }
+            if('{{invalid}}' == 'Procesado'){
+                alert("El Archivo se proceso correctamente.");
+                window.location.assign("/uploads/");
+            }
+        };
+
         $(document).on("keyup", function(e){
             if(e.keyCode == 112){
                 var url = "{% static 'documentacion/build/html/farmacias.html' %}";
@@ -34,5 +47,6 @@
                 window.open(url);
             }
         });
+
     </script>
 {% endblock %}

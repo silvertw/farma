@@ -252,6 +252,11 @@ class PedidoDeClinica(PedidoVenta):
         else:
             return {}
 
+    def get_factura_estado(self):#Si fuera foreyng key seria self.facturaaclinica__set pero al ser
+                          #OneToOne no es necesario.
+        return self.facturaaclinica.pagada
+
+
     def get_detalles(self):
         response = []
         if self.nroPedido:
