@@ -173,14 +173,10 @@ def pedidoDesdeMobilFarmacia(request):
     #pedido = request.session['pedidoDeFarmacia']
     ##detalles = request.session['detallesPedidoDeFarmacia']
 
-    pedidoDeFarmacia_registrar(request=request)
+    request.session['pedidoDeFarmacia']=pedido
+    request.session['detallesPedidoDeFarmacia']=detalles
 
-
-
-
-
-
-
+    pedidoDeFarmacia_registrar(request)
 
 
 @json_view
