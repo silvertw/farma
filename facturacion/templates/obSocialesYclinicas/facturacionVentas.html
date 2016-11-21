@@ -137,7 +137,6 @@
         $("[name='imprimir']").on("click", function(e){
             var nroPedido = $(e.target).parents("tr").data()["id"];
             window.location.assign("/obSocialesYclinicas/" + nroPedido);
-
         });
 
         function enviarData(url,data){
