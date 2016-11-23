@@ -117,67 +117,37 @@ def pedidoDeFarmacia_verRemitos(request, id_pedido):
     return {'remitos': remitos_json}
 
 
-
-
-
-
-
-
-
-
 def pedidoDesdeMobilFarmacia(request):
-
-    farmaciaSolicitante=request.GET["farmaciaSolicitante"]
+    farmaciaSolicitanteRs=request.GET["farmaciaSolicitante"]
     pkMedicamento = request.GET["pkMedicamento"]
     cantidadApedir = request.GET["cantidadApedir"]
-    fecha = time.strftime("%d/%m/%Y")
-    farmaciaRs = omodels.Farmacia.objects.get(razonSocial=farmaciaSolicitante)
-    medicamentoBusq = mmodels.Medicamento.objects.get(pk=pkMedicamento)
+    fechaMobile = time.strftime("%d/%m/%Y")
+    farmaciaSolicitante = omodels.Farmacia.objects.get(razonSocial=farmaciaSolicitanteRs)
+    medicamento = mmodels.Medicamento.objects.get(pk=pkMedicamento)
+    fecha = datetime.datetime.strptime(fechaMobile, '%d/%m/%Y').date()
 
-    pkFarmacia=farmaciaRs.pk
+    if request.GET["finalizar"]=="false":#Se agregan detalles al pedido.
+        if not(models.PedidoDeFarmacia.objects.filter(mobile=True,farmacia__razonSocial=farmaciaSolicitanteRs).exists()):
+            pedidoDeFarmaciaMobile = models.PedidoDeFarmacia(farmacia=farmaciaSolicitante, fecha=fecha, mobile=True)
+            pedidoDeFarmaciaMobile.save()
+            detallePedFarmMobile = models.DetallePedidoDeFarmacia(#Se agrega el primer medicamento
+                pedidoDeFarmacia=pedidoDeFarmaciaMobile,
+                medicamento=medicamento,
+                cantidad=cantidadApedir
+            )
+            detallePedFarmMobile.save()
+        else:
+           pedidoDeFarmaciaMobile=models.PedidoDeFarmacia.objects.get(mobile=True,farmacia__razonSocial=farmaciaSolicitante)
+           detallePedFarmMobile = models.DetallePedidoDeFarmacia(
+                pedidoDeFarmacia=pedidoDeFarmaciaMobile,
+                medicamento=medicamento,
+                cantidad=cantidadApedir
+           )
+           detallePedFarmMobile.save()
 
-    pedidosAll = pmodels.PedidoDeFarmacia.objects.all().count()
-    ultimoPedido=pedidosAll + 1
-
-    pedido={}
-    farmacia={}
-    medicamento={}
-    detalle = {}
-    detalles = []
-
-    farmacia[unicode("razonSocial")]=unicode(farmaciaSolicitante)
-    farmacia[unicode("id")]=unicode(pkFarmacia)
-
-    medicamento[unicode("descripcion")]= unicode(medicamentoBusq.presentacion)
-    medicamento[unicode("id")]=unicode(pkMedicamento)
-
-    pedido[unicode("fecha")]=unicode(fecha)
-    pedido[unicode("nroPedido")]=unicode(ultimoPedido)
-    pedido[unicode("farmacia")]=farmacia
-
-    detalle[unicode("renglon")]=unicode(1)
-    detalle[unicode("medicamento")]=medicamento
-    detalle[unicode("cantidad")]=unicode(cantidadApedir)
-    detalle[unicode("cantidadPendiente")]=unicode(0)
-
-    detalles.append(detalle)
-
-
-    #{u'fecha': u'19/11/2016', u'nroPedido': 6, u'farmacia': {u'razonSocial': u'Plaza', u'id': 1}}
-    #detalles [{u'renglon': 1, u'medicamento': {u'descripcion': u'Nombre Presentacion 1 mg', u'id': 1}, u'cantidad': 12, u'cantidadPendiente': 0}]
-
-
-    print "PRUEBA PEDIDO---->",pedido
-    print "PRUEBA DETALLE PEDIDO--->",detalles
-
-    #pedido = request.session['pedidoDeFarmacia']
-    ##detalles = request.session['detallesPedidoDeFarmacia']
-
-    request.session['pedidoDeFarmacia']=pedido
-    request.session['detallesPedidoDeFarmacia']=detalles
-
-    pedidoDeFarmacia_registrar(request)
-
+    elif request.GET["finalizar"]=="true":#Se cierra o finaliza el pedido
+        pedidoDeFarmaciaMobile=models.PedidoDeFarmacia.objects.get(mobile=True,farmacia__razonSocial=farmaciaSolicitante)
+        utils.procesar_pedido_de_farmacia(pedidoDeFarmaciaMobile)
 
 @json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')

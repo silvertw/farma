@@ -165,6 +165,7 @@ class PedidoDeFarmacia(PedidoVenta):
     farmacia = models.ForeignKey('organizaciones.Farmacia', on_delete=models.CASCADE)
     estado = models.CharField(max_length=25, blank=True)
     tieneMovimientos = models.BooleanField(default=False)
+    mobile = models.BooleanField(default=False)
 
     class Meta(PedidoVenta.Meta):
         verbose_name_plural = "Pedidos de Farmacia"
@@ -199,6 +200,7 @@ class PedidoDeFarmacia(PedidoVenta):
         for detalle in detalles:
             total += detalle.cantidad
         return total
+
 
 class DetallePedidoDeFarmacia(DetallePedidoVenta):
     pedidoDeFarmacia = models.ForeignKey('PedidoDeFarmacia', on_delete=models.CASCADE)

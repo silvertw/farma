@@ -1,13 +1,15 @@
 #!/usr/bin/python
 # -*- encoding: utf-8 -*-
 from django import forms
+
+from organizaciones.views import farmacias
 from .models import Usuario
 from django.utils.translation import ugettext_lazy as _
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, HTML
 from crispy_forms.bootstrap import StrictButton, FormActions, PrependedText
 from django.contrib.auth import authenticate
-
+#from organizaciones import models.farmacias(farmacias)
 
 class UsuarioAddForm(forms.ModelForm):
     helper = FormHelper()
@@ -19,6 +21,15 @@ class UsuarioAddForm(forms.ModelForm):
         Field('password', placeholder='Contraseña'),
         Field('passwordConfirmar', placeholder='Confirmar Contraseña'),
         Field('cargo', placeholder='Cargo'),
+
+
+        # ACA
+        #print "farmacias",farmacias
+        Field('cargo', placeholder='Farmacia'),
+
+
+
+
         FormActions(
             StrictButton('Registrar', type="submit", css_class="btn btn-primary"),
              HTML("<p class=\"campos-obligatorios pull-right\"><span class=\"glyphicon glyphicon-info-sign\"></span> Estos campos son obligatorios (*)</p>")
