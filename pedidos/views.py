@@ -117,10 +117,9 @@ def pedidoDeFarmacia_verRemitos(request, id_pedido):
     return {'remitos': remitos_json}
 
 
-<<<<<<< HEAD
+
 #==================================LOGICA PARA ATENDER PETICIONES DESDE MOBIL================================
-=======
->>>>>>> bd2c920c3256470ec1c854d6d15b9cae40fcf862
+
 def pedidoDesdeMobilFarmacia(request):
     farmaciaSolicitanteRs=request.GET["farmaciaSolicitante"]
     pkMedicamento = request.GET["pkMedicamento"]
@@ -152,10 +151,10 @@ def pedidoDesdeMobilFarmacia(request):
     elif request.GET["finalizar"]=="true":#Se cierra o finaliza el pedido
         pedidoDeFarmaciaMobile=models.PedidoDeFarmacia.objects.get(mobile=True,farmacia__razonSocial=farmaciaSolicitante)
         utils.procesar_pedido_de_farmacia(pedidoDeFarmaciaMobile)
-<<<<<<< HEAD
 
-=======
->>>>>>> bd2c920c3256470ec1c854d6d15b9cae40fcf862
+
+#============================================================================================================
+
 
 @json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
