@@ -202,6 +202,7 @@ class PedidoDeFarmacia(PedidoVenta):
             total += detalle.cantidad
         return total
 
+
 class DetallePedidoDeFarmacia(DetallePedidoVenta):
     pedidoDeFarmacia = models.ForeignKey('PedidoDeFarmacia', on_delete=models.CASCADE)
     cantidadPendiente = models.PositiveIntegerField(default=0)
