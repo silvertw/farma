@@ -66,7 +66,7 @@
             	{% endfor %}
            	</tbody>
         </ul>
-		<button data-disabled="false" class="ui-btn-hidden" type="submit" data-theme="d">Finalizar Pedido</button>
+		<button name="finalizar" class="btn btn-default">Finalizar Pedido</button>
 		<div data-role="footer" data-theme="a" class="ui-nodisc-icon ui-btn-icon-right">
 			<p class="text-muted" align="center"><span class=" glyphicon glyphicon-copyright-mark">Usted accedio como: <a>{{user}}</a></br>Encargado de la sucursal: <a>{{user.farmacia}}</a> </br></br></span>Copyright 2016 UNPSJB - Todos los derechos reservados</p>
 			<p><img src="{% static 'mobile/images/d-logo.png' %}" style="width: 15%; height: 10%;"> <img src="{% static 'mobile/images/u-logo.png' %}"style="width: 55%; height: 13%;"> <img src="{% static 'mobile/images/b-logo.png' %}" style="width: 13%; height: 10%;"><img src="{% static 'mobile/images/jq-logo.png' %}" style="width: 13%; height: 10%;"></p>
@@ -79,19 +79,30 @@
 		var medicamentoApedir='{{medicamento.pk}}'
 		var cantidadApedir = document.getElementById("cantidad").value;
 		var farmaciaSolicitante = '{{user.farmacia}}';
+		var estado = "false"
 		url={% url 'pedidoDesdeMobilFarmacia' %};
-		data={'pkMedicamento':medicamentoApedir,'cantidadApedir':cantidadApedir,'farmaciaSolicitante':farmaciaSolicitante};
+		data={'pkMedicamento':medicamentoApedir,'cantidadApedir':cantidadApedir,'farmaciaSolicitante':farmaciaSolicitante,'finalizar':estado};
 		enviarPedidoDesdeMobil(url,data);
 		alert('Añadido al pedido')
-
     });
+
+    $("[name='finalizar']").on("click", function(e){
+		var medicamentoApedir='{{medicamento.pk}}'
+		var cantidadApedir = document.getElementById("cantidad").value;
+		var farmaciaSolicitante = '{{user.farmacia}}';
+		var estado = "true"
+		url={% url 'pedidoDesdeMobilFarmacia' %};
+		data={'pkMedicamento':medicamentoApedir,'cantidadApedir':cantidadApedir,'farmaciaSolicitante':farmaciaSolicitante,'finalizar':estado};
+		enviarPedidoDesdeMobil(url,data);
+		alert("El pedido se realizo correctamente");
+    });
+
 	function enviarPedidoDesdeMobil(url,data){
 		$.ajax({
 			contentType:'json',
 			data: data,
 			type: 'get',
 			url: url,
-
 			success:function(response){
             }
 		});

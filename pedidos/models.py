@@ -118,7 +118,8 @@ class DetalleRemitoMedicamentosVencido(models.Model):
     medicamento = models.ForeignKey('medicamentos.Medicamento')
     lote = models.ForeignKey('medicamentos.Lote')
     cantidad = models.PositiveIntegerField()
-
+    dependencia = models.CharField(max_length=50, unique=True)#Para saber de que farmacia provienen medicamentos
+                                                              #vencidos.
     def __str__(self):
         return str(self.id)
 
@@ -165,6 +166,7 @@ class PedidoDeFarmacia(PedidoVenta):
     farmacia = models.ForeignKey('organizaciones.Farmacia', on_delete=models.CASCADE)
     estado = models.CharField(max_length=25, blank=True)
     tieneMovimientos = models.BooleanField(default=False)
+    mobile = models.BooleanField(default=False)
 
     class Meta(PedidoVenta.Meta):
         verbose_name_plural = "Pedidos de Farmacia"
