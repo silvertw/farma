@@ -21,14 +21,7 @@ class UsuarioAddForm(forms.ModelForm):
         Field('password', placeholder='Contraseña'),
         Field('passwordConfirmar', placeholder='Confirmar Contraseña'),
         Field('cargo', placeholder='Cargo'),
-
-
-        # ACA
-        #print "farmacias",farmacias
-        Field('cargo', placeholder='Farmacia'),
-
-
-
+        Field('farmacia', placeholder='Farmacia'),
 
         FormActions(
             StrictButton('Registrar', type="submit", css_class="btn btn-primary"),
@@ -41,10 +34,11 @@ class UsuarioAddForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ['username', 'password', 'cargo']
+        fields = ['username', 'password', 'cargo', 'farmacia']
         labels = {
             'username': _('Nombre de Usuario'),
-            'cargo': _('Cargo')
+            'cargo': _('Cargo'),
+            'farmacia': _('Farmacia')
         }
 
     def __init__(self, *args, **kwargs):

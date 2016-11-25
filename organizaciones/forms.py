@@ -173,7 +173,7 @@ class ClinicaFormAdd(ClinicaFormGenerico):
         Field('direccion', placeholder='Direccion'),
         Field('telefono', placeholder='Telefono'),
         Field('email', placeholder='Email'),
-        Field('obraSocial', placeholder='Obras Sociales con la que Trabaja'),
+        Field('obraSocial', placeholder='Obras Sociales con la que Trabaja',css_class = 'chosen'),
         FormActions(
             StrictButton('Guardar y Continuar', type="submit", name="_continuar", value="_continuar", id="btn-guardar-continuar", 
                         css_class="btn btn-primary"),

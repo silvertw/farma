@@ -256,6 +256,9 @@ def ObSocAdjuntarAclinica(request, id_clinica):
     mfilters = dict(filter(lambda v: v[0] in models.ObraSocial.FILTROS, filters.items()))
     lObrasSociales = lObSoc.filter(**mfilters)
 
+    print "OBRAS SOCIALES1-->",lObSoc
+    print "OBRAS SOCIALES2-->",lObrasSociales
+
     estadisticas = {
         'total': models.ObraSocial.objects.all().count(),
         'filtrados': lObrasSociales.count()
