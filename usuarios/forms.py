@@ -25,7 +25,7 @@ class UsuarioAddForm(forms.ModelForm):
 
         # ACA
         #print "farmacias",farmacias
-        Field('farmacia', placeholder='Farmacia'),
+        Field('cargo', placeholder='Farmacia'),
 
 
 
