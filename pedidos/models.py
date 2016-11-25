@@ -112,13 +112,23 @@ class RemitoMedicamentosVencidos(models.Model):
         else:
             return {}
 
-        
+    def tiene_pedidoAlaboCon_remitoVencidosAsociado(self):
+        try:
+            valor = self.pedidoalaboratorio.tengo_remitos_de_vencidos()
+
+        except Exception:
+            return False
+        return True
+
+
+
 class DetalleRemitoMedicamentosVencido(models.Model):
     remito = models.ForeignKey('RemitoMedicamentosVencidos', on_delete=models.CASCADE)
     medicamento = models.ForeignKey('medicamentos.Medicamento')
     lote = models.ForeignKey('medicamentos.Lote')
     cantidad = models.PositiveIntegerField()
-
+    dependencia = models.CharField(max_length=50)#Para saber de que farmacia provienen medicamentos
+                                                              #vencidos.
     def __str__(self):
         return str(self.id)
 
@@ -304,9 +314,12 @@ class PedidoAlaboratorio(models.Model):
     nroPedido = models.AutoField(primary_key=True)
     fecha = models.DateField(auto_now_add=True)
     laboratorio = models.ForeignKey('organizaciones.Laboratorio', on_delete=models.CASCADE)
-
     estado = models.CharField(max_length=25, blank=True, default="Pendiente")# cancelado, parcialmente recibido, pendiente, completo
     facturaAsociada = models.BooleanField(default=False)
+    #Si es un pedido realizado con el fin de cubrir la quita de medicamentos vencidos, se
+    #asocia el remito que da detalle de donde provienen esos medicamentos vencidos.
+    remitoVencidosAsociado = models.OneToOneField('RemitoMedicamentosVencidos',blank=True,null=True)
+
 
     def __str__(self):
         return 'Pedido Nro %s - Laboratorio: %s' % (self.nroPedido, self.laboratorio)
@@ -325,6 +338,11 @@ class PedidoAlaboratorio(models.Model):
             response = DetallePedidoAlaboratorio.objects.filter(pedido=self)
         return response
 
+    def tengo_remitos_de_vencidos(self):
+        if self.remitoVencidosAsociado:
+            return True
+        else:
+            return False
 
 # DETALLE PEDIDO A LABORATORIO
 

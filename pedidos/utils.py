@@ -8,6 +8,7 @@ from pedidos import models, config
 from collections import OrderedDict
 from django.db.models import Sum
 import itertools
+import time
 import re
 
 # **********************
@@ -586,7 +587,7 @@ def procesar_recepcion(sesion, pedido):
 # DEVOLUCION MEDICAMENTOS
 # ************************
 
-def procesar_devolucion(laboratorio, lotes):
+def procesar_devolucion(laboratorio, lotes, distribuidos):
     remito = models.RemitoMedicamentosVencidos()
     remito.numero = get_next_nro_pedido_laboratorio(models.RemitoMedicamentosVencidos, "numero")
     remito.fecha = datetime.datetime.now()
@@ -598,15 +599,27 @@ def procesar_devolucion(laboratorio, lotes):
         detalleRemito.remito = remito
         detalleRemito.medicamento = lote.medicamento
         detalleRemito.lote = lote
+
         detalleRemito.cantidad = lote.stock
+        detalleRemito.dependencia = "Drogueria Farma"
+
+        for dist in distribuidos:
+            if lote.pk == dist.lote.pk:
+                detalleRemitoFarm = models.DetalleRemitoMedicamentosVencido()
+                detalleRemitoFarm.remito = remito
+                detalleRemitoFarm.medicamento = lote.medicamento
+                detalleRemitoFarm.lote = lote
+                detalleRemitoFarm.cantidad = dist.cantidad
+                detalleRemitoFarm.dependencia = dist.farmacia.razonSocial
+                dist.lote.stock=0
+                dist.lote.save()
+                dist.cantidad=0
+                dist.save()
+                detalleRemitoFarm.save()
+
         detalleRemito.save()
-        distribuidosVencidos = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote=lote)
-        for distVencido in distribuidosVencidos:
-            distVencido.cantidad = 0
-            distVencido.save()
         lote.stock = 0
         lote.save()
-
 
 def hay_medicamentos_con_stock():
     medicamentos = mmodels.Medicamento.objects.all()

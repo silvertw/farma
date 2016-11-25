@@ -117,6 +117,9 @@ def pedidoDeFarmacia_verRemitos(request, id_pedido):
     return {'remitos': remitos_json}
 
 
+
+#==================================LOGICA PARA ATENDER PETICIONES DESDE MOBIL================================
+
 def pedidoDesdeMobilFarmacia(request):
     farmaciaSolicitanteRs=request.GET["farmaciaSolicitante"]
     pkMedicamento = request.GET["pkMedicamento"]
@@ -150,6 +153,10 @@ def pedidoDesdeMobilFarmacia(request):
         pedidoDeFarmaciaMobile=models.PedidoDeFarmacia.objects.get(mobile=True,farmacia__razonSocial=farmaciaSolicitante)
         utils.procesar_pedido_de_farmacia(pedidoDeFarmaciaMobile)
 
+
+#============================================================================================================
+
+
 @json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
@@ -157,14 +164,11 @@ def pedidoDeFarmacia_registrar(request):
 
     pedido = request.session['pedidoDeFarmacia']
     detalles = request.session['detallesPedidoDeFarmacia']
-
-    print "pedido",pedido
-    print "detalles",detalles
-
     mensaje_error = None
     if detalles:
         farmacia = omodels.Farmacia.objects.get(pk=pedido['farmacia']['id'])
         fecha = datetime.datetime.strptime(pedido['fecha'], '%d/%m/%Y').date()
+
         if not(models.PedidoDeFarmacia.objects.filter(pk=pedido["nroPedido"]).exists()):
             p = models.PedidoDeFarmacia(farmacia=farmacia, fecha=fecha)
             p.save()
@@ -172,6 +176,7 @@ def pedidoDeFarmacia_registrar(request):
                 medicamento = mmodels.Medicamento.objects.get(pk=detalle['medicamento']['id'])
                 d = models.DetallePedidoDeFarmacia(pedidoDeFarmacia=p, medicamento=medicamento, cantidad=detalle['cantidad'])
                 d.save()
+
             utils.procesar_pedido_de_farmacia(p)
             existeRemito = p.estado != "Pendiente"
             if existeRemito:
@@ -755,7 +760,10 @@ def recepcionPedidoAlaboratorio_cargarPedido(request, id_pedido):
 @login_required(login_url='login')
 def recepcionPedidoAlaboratorio_controlPedido(request, id_pedido):
     pedido = models.PedidoAlaboratorio.objects.get(pk=id_pedido)
-    detalles = request.session['recepcionPedidoAlaboratorio']['detalles']
+    if pedido.remitoVencidosAsociado:
+        detalles=pedido.get_detalles
+    else:
+        detalles = request.session['recepcionPedidoAlaboratorio']['detalles']
     return render(request, "recepcionPedidoALaboratorio/controlPedido.html", {'pedido': pedido, 'detalles': detalles})
 
 
@@ -904,8 +912,9 @@ def devolucionMedicamentosVencidos_registrar(request, id_laboratorio):
 
     lt = datetime.date.today() + datetime.timedelta(weeks=26)  # fecha vencimiento.(limite)
     lotes = mmodels.Lote.objects.filter(fechaVencimiento__lte=lt, medicamento__pk__in=lista, stock__gt=0)
+    distribuidos = mmodels.StockDistribuidoEnFarmacias.objects.all()
 
-    utils.procesar_devolucion(laboratorio, lotes)
+    utils.procesar_devolucion(laboratorio, lotes, distribuidos)
     return render(request, "devolucionMedicamentosVencidos/devolucionMedicamentosVencidos_detalle.html",
                   {'laboratorioId': id_laboratorio, 'abrirModal': True, 'fecha': datetime.datetime.now(),
                   'numero': utils.get_next_nro_pedido_laboratorio(models.RemitoMedicamentosVencidos, "numero")-1})
@@ -915,12 +924,57 @@ class remitoDevolucion(PDFTemplateView):
     template_name = "devolucionMedicamentosVencidos/remitoDevolucion.html"
 
     def get_context_data(self, id_remito):
+
+        fechaActual = time.strftime("%d/%m/%Y")
+        fecha = datetime.datetime.strptime(fechaActual, '%d/%m/%Y').date()
         remito = models.RemitoMedicamentosVencidos.objects.get(numero=id_remito)
         detallesRemito = models.DetalleRemitoMedicamentosVencido.objects.filter(remito=remito)
+        totalVencidos=0
+        for detRemito in detallesRemito:
+            totalVencidos += detRemito.cantidad
+
+        if not remito.tiene_pedidoAlaboCon_remitoVencidosAsociado():
+            pedidoPcubrirVencidos=pmodels.PedidoAlaboratorio()
+            pedidoPcubrirVencidos.fecha=fecha
+            pedidoPcubrirVencidos.laboratorio=remito.laboratorio
+            pedidoPcubrirVencidos.remitoVencidosAsociado=remito
+            pedidoPcubrirVencidos.save()
+
+            detallePcubrirVencidos=pmodels.DetallePedidoAlaboratorio()
+            detallePcubrirVencidos.cantidad=0
+            detallePcubrirVencidos.cantidadPendiente=0
+
+            for detalle in detallesRemito:
+
+                if not detallePcubrirVencidos.pedido:
+                    detallePcubrirVencidos.pedido = pedidoPcubrirVencidos
+                    detallePcubrirVencidos.cantidad += int(detalle.cantidad)
+                    detallePcubrirVencidos.medicamento = detalle.medicamento
+                    detallePcubrirVencidos.cantidadPendiente += int(detalle.cantidad)
+                    detallePcubrirVencidos.save()
+
+                elif detallePcubrirVencidos.medicamento == detalle.medicamento:
+                    detallePcubrirVencidos.cantidad += int(detalle.cantidad)
+                    detallePcubrirVencidos.cantidadPendiente += int(detalle.cantidad)
+                    detallePcubrirVencidos.medicamento = detalle.medicamento
+                    detallePcubrirVencidos.save()
+
+                elif detallePcubrirVencidos.medicamento != detalle.medicamento:
+                    detallePcubrirVencidos = pmodels.DetallePedidoAlaboratorio()
+                    detallePcubrirVencidos.cantidad = 0
+                    detallePcubrirVencidos.cantidadPendiente=0
+
+                    detallePcubrirVencidos.pedido = pedidoPcubrirVencidos
+                    detallePcubrirVencidos.cantidad += int(detalle.cantidad)
+                    detallePcubrirVencidos.medicamento = detalle.medicamento
+                    detallePcubrirVencidos.cantidadPendiente += int(detalle.cantidad)
+                    detallePcubrirVencidos.save()
+
         return super(remitoDevolucion, self).get_context_data(
             pagesize="A4",
             remito=remito,
-            detallesRemito=detallesRemito
+            detallesRemito=detallesRemito,
+            totalVencidos=totalVencidos
         )
 
 
