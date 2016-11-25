@@ -9,7 +9,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, HTML
 from crispy_forms.bootstrap import StrictButton, FormActions, PrependedText
 from django.contrib.auth import authenticate
-#from organizaciones import models.farmacias(farmacias)
+#from organizaciones import omodels.farmacias(farmacias)
 
 class UsuarioAddForm(forms.ModelForm):
     helper = FormHelper()
@@ -25,7 +25,7 @@ class UsuarioAddForm(forms.ModelForm):
 
         # ACA
         #print "farmacias",farmacias
-        Field('cargo', placeholder='Farmacia'),
+        Field('farmacia', placeholder='Farmacia'),
 
 
 

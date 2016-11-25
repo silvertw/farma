@@ -1,4 +1,4 @@
-Grupo Farma
+FarmaPlus
 ===========
 
 .. toctree::
@@ -9,4 +9,7 @@ Grupo Farma
    medicamentos
    organizaciones
    pedidos
-
+   vistamovil
+   facturacion
+   stockdistribuido
+   informedeventas

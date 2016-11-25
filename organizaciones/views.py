@@ -33,7 +33,12 @@ def hubo_alta(session):
 
 
 @login_required(login_url='login')
-def farmacias(request):  
+def farmacias(request):
+    # type: (object) -> object
+    """
+
+    :rtype: object
+    """
     filters = get_filtros(request.GET, models.Farmacia)
     mfilters = dict(filter(lambda v: v[0] in models.Farmacia.FILTROS, filters.items()))
     lfarmacias = models.Farmacia.objects.filter(**mfilters)
