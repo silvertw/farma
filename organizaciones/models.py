@@ -40,3 +40,10 @@ class Laboratorio(Organizacion):
 
     def __str__(self):
         return self.razonSocial
+
+    def medicamentos_que_produzco(self):
+        return self.medicamento_set
+
+
+
+
