@@ -87,10 +87,14 @@ def registrarPagoDeFacturaVenta(request):
 @transaction.atomic
 def emitirFactura(request):
 
-    valores=request.GET.items()
-    if(valores):
-        claveValor= valores[0]
-        nroPedidoPorGet=claveValor[1]
+    #valores=request.GET.items()
+    #if(valores):
+    #    claveValor= valores[0]
+    #    nroPedidoPorGet=claveValor[1]
+
+    #--------verificar mejora-----------
+    if "nroPedido" in request.GET:
+        nroPedidoPorGet=request.GET["nroPedido"]
         pedidoClinica=pmodels.PedidoDeClinica.objects.get(nroPedido=nroPedidoPorGet)#Obtengo el pedido de clinica
         detallesPedidoClinica=pedidoClinica.get_detalles()#Obtengo el detalle del pedido
 
@@ -233,12 +237,15 @@ def facturacionCompras(request):
 
     if request.method == "GET":
 
-        valores=request.GET.items()
-        if(valores):
-            claveValor= valores[0]
-            nroPedidoAlab=claveValor[1]
-            request.session['nroPedidoAlab'] = nroPedidoAlab #Se guarda el numero de pediod de laboratorio en sesion
-
+        #valores=request.GET.items()
+        #if(valores):
+        #    claveValor= valores[0]
+        #    nroPedidoAlab=claveValor[1]
+        #    request.session['nroPedidoAlab'] = nroPedidoAlab #Se guarda el numero de pediod de laboratorio en sesion
+        #---------verificar mejora---------------
+        if "idRow" in request.GET:
+            nroPedidoAlab=request.GET["idRow"]
+            request.session['nroPedidoAlab'] = nroPedidoAlab
 
     filters = get_filtros_pedidos(request.GET, pmodels.PedidoAlaboratorio)
     claves = filters.keys()#Se obtiene las claves que vienen en el diccionario filtro
