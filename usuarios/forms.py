@@ -9,7 +9,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, HTML
 from crispy_forms.bootstrap import StrictButton, FormActions, PrependedText
 from django.contrib.auth import authenticate
-#from organizaciones import models.farmacias(farmacias)
+#from organizaciones import omodels.farmacias(farmacias)
 
 class UsuarioAddForm(forms.ModelForm):
     helper = FormHelper()
@@ -21,7 +21,18 @@ class UsuarioAddForm(forms.ModelForm):
         Field('password', placeholder='Contraseña'),
         Field('passwordConfirmar', placeholder='Confirmar Contraseña'),
         Field('cargo', placeholder='Cargo'),
+<<<<<<< HEAD
         Field('farmacia', placeholder='Farmacia'),
+=======
+
+
+        # ACA
+        #print "farmacias",farmacias
+        Field('farmacia', placeholder='Farmacia'),
+
+
+
+>>>>>>> 8f87ce12a90d3ad2cff12660282cb5e0055ffbe7
 
         FormActions(
             StrictButton('Registrar', type="submit", css_class="btn btn-primary"),

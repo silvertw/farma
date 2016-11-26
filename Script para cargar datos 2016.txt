@@ -1,0 +1,360 @@
+/*PRESENTACION*/
+
+INSERT INTO "medicamentos_presentacion" VALUES(1,'Presentacion',1,'mg');
+
+INSERT INTO "medicamentos_presentacion" VALUES(2,'600',20,'CMPR');
+
+INSERT INTO "medicamentos_presentacion" VALUES(3,'50',1,'g');
+
+INSERT INTO "medicamentos_presentacion" VALUES(4,'Comprimidos Efervecentes',20,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(5,'Jarabe',100,'ml');
+
+INSERT INTO "medicamentos_presentacion" VALUES(6,'Comprimidos Sublinguales',10,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(7,'500',8,'Comprimidos');
+
+INSERT INTO "medicamentos_presentacion" VALUES(8,'Comprimidos',28,'Comprimidos');
+
+INSERT INTO "medicamentos_presentacion" VALUES(9,'Jarabe',100,'ml');
+
+INSERT INTO "medicamentos_presentacion" VALUES(10,'Comp',30,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(11,'Comp',20,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(12,'Comp',60,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(13,'Comp',80,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(14,'Comp',40,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(15,'Comp',100,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(16,'Comp',14,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(17,'Comp',12,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(18,'Comp',16,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(19,'comp.rev.microdel',10,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(20,'comp.rev.microdel',30,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(21,'Comp',30,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(22,'Expend',30,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(23,'Comp',300,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(24,'Comp',10,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(25,'Comp',15,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(26,'Comp',5,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(27,'Comp',4,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(28,'Comp',3,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(29,'Comp',2,'U');
+
+INSERT INTO "medicamentos_presentacion" VALUES(30,'Comp',1,'U');
+
+
+/*NOMBRE FANTASIA*/
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(1,'Nombre');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(2,'Tabcin');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(3,'Ibu');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(4,'Tafirol');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(5,'ACEMUK');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(6,'Sinalgico SL');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(7,'Clarimax UD');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(8,'YAZ');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(9,'Athos');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(10,'GLUCOBAY');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(11,'SINTROM');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(12,'DIAMOX');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(13,'ACEMUK2');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(14,'FLUIMUCIL');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(15,'ACC');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(16,'CARDIOASPIRINA');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(17,'ECOTRIN');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(18,'ACICLOVIR FILAXIS');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(19,'POVIRAL');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(20,'XICLOVIR');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(21,'ACERPES');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(22,'LIXAR');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(23,'SOLUTRAT');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(24,'DEXO');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(25,'NEOTIGASON');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(26,'ACTHELEA 40 UI');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(27,'VASTUS 400');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(28,'ALENATO');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(29,'LAFEDAN');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(30,'REGENESIS');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(31,'SILIDRAL');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(32,'ALLOBOXAL');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(33,'ALLOPURINOL 300 CRAVERI');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(34,'ALLOPURINOL PHOENIX');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(35,'GOTIR');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(36,'ALDROX');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(37,'PEPSAMAR');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(38,'ALUDROX');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(39,'MYLANTA SIMPLE');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(40,'MAALOX');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(41,'VIROSOL');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(42,'BIKLIN');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(43,'IPSILON');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(44,'AMINOFILINA NORTHIA');
+
+INSERT INTO "medicamentos_nombrefantasia" VALUES(45,'ATLANSIL');
+
+
+/*MONODROGA*/
+
+INSERT INTO "medicamentos_monodroga" VALUES(1,'ACENOCUMAROL');
+
+INSERT INTO "medicamentos_monodroga" VALUES(2,'Ibuprofeno');
+
+INSERT INTO "medicamentos_monodroga" VALUES(3,'Adrenalina');
+
+INSERT INTO "medicamentos_monodroga" VALUES(4,'N Acetilcisteina');
+
+INSERT INTO "medicamentos_monodroga" VALUES(5,'Acetilcisteina');
+
+INSERT INTO "medicamentos_monodroga" VALUES(6,'Ketorolac');
+
+INSERT INTO "medicamentos_monodroga" VALUES(7,'Claritromicina');
+
+INSERT INTO "medicamentos_monodroga" VALUES(8,'Drospirenona');
+
+INSERT INTO "medicamentos_monodroga" VALUES(9,'Etinilestradiol');
+
+INSERT INTO "medicamentos_monodroga" VALUES(10,'Hedera helix');
+
+INSERT INTO "medicamentos_monodroga" VALUES(11,'Acetilsalicílico, c.');
+
+INSERT INTO "medicamentos_monodroga" VALUES(12,'Alendronato');
+
+INSERT INTO "medicamentos_monodroga" VALUES(13,'Acenocumarol');
+
+INSERT INTO "medicamentos_monodroga" VALUES(14,'GLUCOBAY');
+
+INSERT INTO "medicamentos_monodroga" VALUES(15,'ACICLOVIR');
+
+INSERT INTO "medicamentos_monodroga" VALUES(16,'ACIDO URSODEXOXICOLICO');
+
+INSERT INTO "medicamentos_monodroga" VALUES(17,'ALBENDAZOL');
+
+INSERT INTO "medicamentos_monodroga" VALUES(18,'ALENDRONATO');
+
+INSERT INTO "medicamentos_monodroga" VALUES(19,'ALOPURINOL');
+
+INSERT INTO "medicamentos_monodroga" VALUES(20,'ALUMINIO HIDROXIDO');
+
+INSERT INTO "medicamentos_monodroga" VALUES(21,'ALUMINIO+MG. HIDROXIDO');
+
+INSERT INTO "medicamentos_monodroga" VALUES(22,'AMANTADINA');
+
+INSERT INTO "medicamentos_monodroga" VALUES(23,'AMINOCAPROICO ACIDO');
+
+INSERT INTO "medicamentos_monodroga" VALUES(24,'AMINOFILINA');
+
+INSERT INTO "medicamentos_monodroga" VALUES(25,'AMITRIPTILINA');
+
+
+
+/*DOSIS*/
+
+INSERT INTO "medicamentos_dosis" VALUES(1,1,1,1,1);
+
+INSERT INTO "medicamentos_dosis" VALUES(2,2,2,2,600);
+
+INSERT INTO "medicamentos_dosis" VALUES(3,3,3,2,1);
+
+INSERT INTO "medicamentos_dosis" VALUES(4,4,4,2,600);
+
+INSERT INTO "medicamentos_dosis" VALUES(5,5,4,2,200);
+
+INSERT INTO "medicamentos_dosis" VALUES(6,6,6,2,10);
+
+INSERT INTO "medicamentos_dosis" VALUES(7,7,7,2,500);
+
+INSERT INTO "medicamentos_dosis" VALUES(8,8,8,2,3);
+
+INSERT INTO "medicamentos_dosis" VALUES(9,8,9,2,1);
+
+INSERT INTO "medicamentos_dosis" VALUES(10,9,10,1,100);
+
+
+
+
+
+INSERT INTO "medicamentos_dosis" VALUES(11,11,11,1,100);
+
+INSERT INTO "medicamentos_dosis" VALUES(12,12,12,1,34);
+
+INSERT INTO "medicamentos_dosis" VALUES(13,13,13,1,521);
+
+INSERT INTO "medicamentos_dosis" VALUES(14,14,14,2,532);
+
+INSERT INTO "medicamentos_dosis" VALUES(15,15,15,2,546);
+
+INSERT INTO "medicamentos_dosis" VALUES(16,16,16,2,765);
+
+INSERT INTO "medicamentos_dosis" VALUES(17,17,17,2,546);
+
+INSERT INTO "medicamentos_dosis" VALUES(18,18,18,2,56);
+
+INSERT INTO "medicamentos_dosis" VALUES(19,19,19,2,34);
+
+INSERT INTO "medicamentos_dosis" VALUES(20,20,20,2,36);
+
+INSERT INTO "medicamentos_dosis" VALUES(21,21,21,2,456);
+
+INSERT INTO "medicamentos_dosis" VALUES(22,22,22,2,54);
+
+INSERT INTO "medicamentos_dosis" VALUES(23,23,23,1,5);
+
+INSERT INTO "medicamentos_dosis" VALUES(24,24,24,1,4);
+
+INSERT INTO "medicamentos_dosis" VALUES(25,25,25,2,46);
+
+INSERT INTO "medicamentos_dosis" VALUES(26,25,25,2,156);
+
+INSERT INTO "medicamentos_dosis" VALUES(27,27,25,1,106);
+
+INSERT INTO "medicamentos_dosis" VALUES(28,28,25,1,554);
+
+INSERT INTO "medicamentos_dosis" VALUES(29,29,25,1,546);
+
+
+
+/*MEDICAMETOS*/
+					
+INSERT INTO "medicamentos_medicamento" VALUES(1,2,1,'2343345687',1,15,15);
+
+INSERT INTO "medicamentos_medicamento" VALUES(2,3,2,'61553829651',1,50,25);
+
+INSERT INTO "medicamentos_medicamento" VALUES(3,4,3,'627926525',1,50,65);
+
+INSERT INTO "medicamentos_medicamento" VALUES(4,5,4,'7789786654325',2,50,258.47);
+
+INSERT INTO "medicamentos_medicamento" VALUES(5,5,5,'7765483745675',2,50,132.97);
+
+INSERT INTO "medicamentos_medicamento" VALUES(6,6,6,'7654837256152',3,50,130.55);
+
+INSERT INTO "medicamentos_medicamento" VALUES(7,7,7,'7876543524312',4,50,203.71);
+
+INSERT INTO "medicamentos_medicamento" VALUES(8,8,8,'7777654354235',5,50,291.76);
+
+INSERT INTO "medicamentos_medicamento" VALUES(9,9,9,'7778765456765',5,50,101.13);
+
+INSERT INTO "medicamentos_medicamento" VALUES(10,10,10,'9928991',1,50,23);
+
+INSERT INTO "medicamentos_medicamento" VALUES(11,11,11,'9908940',1,50,24);
+
+INSERT INTO "medicamentos_medicamento" VALUES(12,12,12,'9901178',1,50,35);
+
+INSERT INTO "medicamentos_medicamento" VALUES(13,13,13,'9919816',1,50,342);
+
+INSERT INTO "medicamentos_medicamento" VALUES(14,14,14,'9919817',1,50,3435);
+
+INSERT INTO "medicamentos_medicamento" VALUES(15,15,15,'4220561',1,50,35);
+
+INSERT INTO "medicamentos_medicamento" VALUES(16,16,16,'5905002',1,50,235);
+
+INSERT INTO "medicamentos_medicamento" VALUES(17,17,17,'5695392',1,50,532);
+
+INSERT INTO "medicamentos_medicamento" VALUES(18,18,18,'3177601',1,50,325);
+
+INSERT INTO "medicamentos_medicamento" VALUES(19,19,19,'3177781',1,50,865);
+
+INSERT INTO "medicamentos_medicamento" VALUES(20,20,20,'327221',1,50,657);
+
+INSERT INTO "medicamentos_medicamento" VALUES(21,21,21,'558468',1,50,65);
+
+INSERT INTO "medicamentos_medicamento" VALUES(22,22,22,'5492551',1,50,4);
+
+INSERT INTO "medicamentos_medicamento" VALUES(23,23,23,'5362971',1,50,54);
+
+INSERT INTO "medicamentos_medicamento" VALUES(24,24,24,'5362841',1,50,675);
+
+INSERT INTO "medicamentos_medicamento" VALUES(25,25,25,'5417554',1,50,765);
+
+
+/* ORGANIZACIONES */
+
+/* Clinicas */
+
+INSERT INTO "organizaciones_clinica" VALUES(1,'San Miguel','23-43433654-6','Trelew','Edison 430','sanmiguel@sanmiguel.com','0280 442-6289');
+
+INSERT INTO "organizaciones_clinica" VALUES(2,'Sanatorio Trelew','23-43433604-3','Trelew','Pecoraro 456','sanatw@sanatw.com','0810-555-6733');
+
+/* Clinicas/OS */
+INSERT INTO "organizaciones_clinica_obraSocial" VALUES(1,1,1);
+
+/* Farmacias */
+INSERT INTO "organizaciones_farmacia" VALUES(1,'Plaza','2343336546','Puerto Madryn','Obra Social 1 Direccion','ksdf@dhf.com','2804422406','tincho');
+
+INSERT INTO "organizaciones_farmacia" VALUES(2,'Querol','23-43433654-3','Trelew','25 de Mayo 401','querol@farmaciaspatagonicas.com','0280 442-6289','Ana Maria');
+
+INSERT INTO "organizaciones_farmacia" VALUES(3,'Mitre','23-43423654-3','Trelew','Mitre 598','mitre@farmaciaspatagonicas.com','0280 4434567','Pablo Diaz');
+
+/* Laboratorios */
+INSERT INTO "organizaciones_laboratorio" VALUES(1,'Bago','23-43433654-1','RW','Obra Social 54','Bago@bago.com','3453465546');
+
+INSERT INTO "organizaciones_laboratorio" VALUES(2,'Investi','23-44333654-6','Buenos Aires','9 de Julio 3849','investi@investi.com','011 2345 2345');
+
+INSERT INTO "organizaciones_laboratorio" VALUES(3,'Bernabo','23-44333654-4','Buenos Aires','Terrada 2346','bernabo@bernad.com','011 4501 3268');
+
+INSERT INTO "organizaciones_laboratorio" VALUES(4,'Montpellier','23-44323654-6','Buenos Aires','Virrey Liniers 673','montpellier@mont.com','011 2345 2343');
+
+INSERT INTO "organizaciones_laboratorio" VALUES(5,'Bayer','23-44233654-4','Buenos Aires','Ricardo Gutierres 3652','bayer@bayer.com','011 2345 2344');
+
+/* OS */
+INSERT INTO "organizaciones_obrasocial" VALUES(1,'OSDE','23-44333654-6','Trelew','Pellegrini 234','osde@osde.com','3453465546','Susana Ferranti');

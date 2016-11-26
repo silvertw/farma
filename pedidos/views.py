@@ -128,6 +128,7 @@ def pedidoDesdeMobilFarmacia(request):
     farmaciaSolicitante = omodels.Farmacia.objects.get(razonSocial=farmaciaSolicitanteRs)
     medicamento = mmodels.Medicamento.objects.get(pk=pkMedicamento)
     fecha = datetime.datetime.strptime(fechaMobile, '%d/%m/%Y').date()
+    estado = "CR"
 
     if request.GET["finalizar"]=="false":#Se agregan detalles al pedido.
         if not(models.PedidoDeFarmacia.objects.filter(mobile=True,farmacia__razonSocial=farmaciaSolicitanteRs).exists()):
