@@ -133,13 +133,22 @@ class StockFarmayFarmacias(models.Model):
 
 
 class StockDistribuidoEnFarmacias(models.Model):
-    FILTROS = ["farmacia__razonSocial__icontains"]
-    lote=models.ForeignKey('Lote', null=True)
+
+    FILTROS = ["farmacia", "numLote", "medicamento"]
+    FILTERMAPPER = {
+        'farmacia': "farmacia__razonSocial__icontains",
+        'numLote': "lote__numero__icontains",
+        'medicamento': "lote__medicamento__nombreFantasia__nombreF__icontains",
+
+    }
+    lote=models.ForeignKey(Lote, null=True)
     cantidad=models.PositiveIntegerField(default=0)
     farmacia=models.ForeignKey(Farmacia,null=True)
 
+    def miNombreFantasia(self):
+        return self.lote.medicamento.nombreFantasia.nombreF
+
     def __str__(self):
         return "nro. lote:%s - Cantidad en: %s - %s" % (self.lote, self.farmacia, self.cantidad)
-
 
 

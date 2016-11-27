@@ -25,10 +25,13 @@ import time
 
 def get_filtros(get, modelo):#las llamada es-->get_filtros(request.GET, models.PedidoAlaboratorio)
     mfilter = {}
-    for filtro in modelo.FILTROS:#se recorre el arreglo filtros-->FILTROS = ["laboratorio", "desde", "hasta"]
+
+    for filtro in modelo.FILTROS:#se recorre el arreglo filtros-->FILTROS = ["organizacion", "desde", "hasta","estado"]
         if filtro in get and get[filtro]:
             attr = filtro
             value = get[filtro]
+
+
             if hasattr(modelo, "FILTERMAPPER") and filtro in modelo.FILTERMAPPER:
                 attr = modelo.FILTERMAPPER[filtro]
             if hasattr(value, "isdigit") and value.isdigit():
@@ -42,6 +45,16 @@ def get_filtros(get, modelo):#las llamada es-->get_filtros(request.GET, models.P
                     pass
             else:
                 mfilter[attr] = value
+
+    if "fecha__lte" in mfilter and mfilter["fecha__lte"]:
+        fecha1 = utils.formatearFecha(mfilter["fecha__lte"])
+        mfilter["fecha__lte"]=fecha1
+
+    if "fecha__gte" in mfilter and mfilter["fecha__gte"]:
+        fecha2 = utils.formatearFecha(mfilter["fecha__gte"])
+        mfilter["fecha__gte"]=fecha2
+
+
     return mfilter
 
 
@@ -552,15 +565,6 @@ class remitoDeClinica(PDFTemplateView):
 @login_required(login_url='login')
 def pedidosAlaboratorio(request):
     mfilters = get_filtros(request.GET, models.PedidoAlaboratorio)
-
-    claves = mfilters.keys()#Se obtiene las claves que vienen en el diccionario filtro
-
-    if ((len(claves)>1) and ((claves[0]=="fecha__lte")or(claves[1]=="fecha__lte")) ):#Se verifica si vino un filtro y ademas si vienen fechas
-        #El formato de facha dd/mm/yyyy hace que el render falle
-        fecha1 = utils.formatearFecha(mfilters["fecha__lte"])#Esta funcion convierte de dd/mm/yyyy a yyyy-mm-dd
-        fecha2 = utils.formatearFecha(mfilters["fecha__gte"])#para que funcione bien
-        mfilters={'fecha__lte': fecha1, 'fecha__gte': fecha2}#Hay que reconstruir el diccionario con el formato nuevo
-
     pedidos = models.PedidoAlaboratorio.objects.filter(**mfilters).exclude(estado="Cancelado")
 
     estadisticas = {

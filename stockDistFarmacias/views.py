@@ -4,18 +4,23 @@ from pedidos import models as pmodels
 from medicamentos import models as mmodels
 
 def get_filtros(get, modelo):
-    mfilter = {}
+    mfilter={}
     for filtro in modelo.FILTROS:
-        attr = filtro.split("__")[0]
-        if attr in get and get[attr]:
-            mfilter[filtro] = get[attr]
-            mfilter[attr] = get[attr]
+       if filtro in get and get[filtro]:
+            attr = filtro
+            value = get[filtro]
+
+            if hasattr(modelo, "FILTERMAPPER") and filtro in modelo.FILTERMAPPER:
+                attr = modelo.FILTERMAPPER[filtro]
+                mfilter[attr] = value
+    print "-->",mfilter
     return mfilter
+
 
 def stockDistribuido(request):
 
-    filters = get_filtros(request.GET, mmodels.StockDistribuidoEnFarmacias)
-    mfilters = dict(filter(lambda v: v[0] in mmodels.StockDistribuidoEnFarmacias.FILTROS, filters.items()))
+    mfilters = get_filtros(request.GET, mmodels.StockDistribuidoEnFarmacias)
+    #mfilters={'lote__medicamento':'ibu4'}
     distribuidos = mmodels.StockDistribuidoEnFarmacias.objects.filter(**mfilters)
 
     estadisticas = {
@@ -23,5 +28,5 @@ def stockDistribuido(request):
         'filtrados': distribuidos.count()
     }
 
-    return render(request, "stockDist.html", {"distribuidos": distribuidos,"filtros": filters})
+    return render(request, "stockDist.html", {"distribuidos": distribuidos,"filtros": request.GET})
 

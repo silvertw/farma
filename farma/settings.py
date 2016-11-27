@@ -33,13 +33,13 @@ INSTALLED_APPS = (
     'easy_pdf',
     'reportlab',
 
+    'stockDistFarmacias',
     'medicamentos',
     'organizaciones',
     'pedidos',
     'usuarios',
     'mobile',
     'facturacion',
-    'stockDistFarmacias',
     'minidetector',
     'files',
 )
