@@ -41,7 +41,7 @@
 {% block form-fields-avanzados %}
 
     <!--div>
-        <input class="form-control form-field form-field-simple" id="facturaLab" name="facturaLab" value="{{filtros.laboratorio}}" placeholder="Numero Factura" type="text" />
+        <input class="form-control form-field form-field-simple" id="facturaLab" name="facturaLab" value="{{filtros.laboratorio}}" placeholder="Numero FacturaDeProveedor" type="text" />
     </div-->
 
     <div>
@@ -85,9 +85,9 @@
                 <td>{{ listPedido.clinica }}</td>
                 <td>{{ listPedido.fecha }}</td>
                 {% if listPedido.get_factura_estado  %}
-                    <td><font color="green">{{ listPedido.obraSocial }} Factura Pagada </font></td>
+                    <td><font color="green">{{ listPedido.obraSocial }} FacturaDeProveedor Pagada </font></td>
                 {% else %}
-                    <td><font color="red">{{ listPedido.obraSocial }} Factura Impaga </font></td>
+                    <td><font color="red">{{ listPedido.obraSocial }} FacturaDeProveedor Impaga </font></td>
                 {% endif %}
                 <td class="action">
                     <div class="dropdown">

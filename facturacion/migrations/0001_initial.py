@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Factura',
+            name='FacturaDeProveedor',
             fields=[
                 ('tipo', models.PositiveIntegerField(choices=[(1, b'A'), (2, b'B'), (3, b'C'), (4, b'D')])),
                 ('identificador', models.CharField(max_length=45, serialize=False, primary_key=True)),
@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
                 ('importe', models.DecimalField(default=0, max_digits=8, decimal_places=2)),
                 ('fecha', models.DateField()),
                 ('observaciones', models.CharField(max_length=120, null=True)),
-                ('factura', models.ForeignKey(to='facturacion.Factura', null=True)),
+                ('factura', models.ForeignKey(to='facturacion.FacturaDeProveedor', null=True)),
                 ('formaDePago', models.ForeignKey(to='facturacion.formaDePago', null=True)),
             ],
         ),
@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
                 ('subtotal', models.DecimalField(default=0, max_digits=8, decimal_places=2)),
                 ('iva', models.DecimalField(default=0, max_digits=8, decimal_places=2)),
                 ('total', models.DecimalField(default=0, max_digits=8, decimal_places=2)),
-                ('factura', models.OneToOneField(null=True, to='facturacion.Factura')),
+                ('factura', models.OneToOneField(null=True, to='facturacion.FacturaDeProveedor')),
             ],
         ),
         migrations.CreateModel(
@@ -104,7 +104,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='detallefactura',
             name='factura',
-            field=models.ForeignKey(to='facturacion.Factura', null=True),
+            field=models.ForeignKey(to='facturacion.FacturaDeProveedor', null=True),
         ),
         migrations.AddField(
             model_name='detallefactura',

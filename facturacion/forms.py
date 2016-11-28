@@ -9,7 +9,7 @@ import re
 
 class FacturaGenerico(forms.ModelForm):
     class Meta:
-        model = models.Factura
+        model = models.FacturaDeProveedor
         fields = ["tipo", "identificador", "fecha", "titular"]
         labels = {
             'tipo': _('Tipo'),

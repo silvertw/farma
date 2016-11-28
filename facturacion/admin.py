@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from .models import Factura
-from .models import DetalleFactura
-from .models import pieDeFactura
+from .models import FacturaDeProveedor
+from .models import DetalleFacturaDeProveedor
+from .models import pieDeFacturaDeProveedor
 
 from .models import FacturaAclinica
 from .models import DetalleFacturaAclinica
@@ -13,10 +13,10 @@ from .models import Pago
 
 
 class detalleFacturaLabTabularInline(admin.TabularInline):
-    model = DetalleFactura
+    model = DetalleFacturaDeProveedor
 
 class pieDeFacturaTabularInline(admin.TabularInline):
-    model = pieDeFactura
+    model = pieDeFacturaDeProveedor
 
 class FacturaAdmin(admin.ModelAdmin):
     inlines = [ detalleFacturaLabTabularInline,pieDeFacturaTabularInline ]
@@ -32,11 +32,11 @@ class pieDeFacturaAclinicaTabularInline(admin.TabularInline):
 class FacturaAclinicaAdmin(admin.ModelAdmin):
     inlines = [ detalleFacturaAclinicaTabularInline,pieDeFacturaAclinicaTabularInline ]
 
-admin.site.register(Factura, FacturaAdmin)
+admin.site.register(FacturaDeProveedor, FacturaAdmin)
 admin.site.register(FacturaAclinica, FacturaAclinicaAdmin)
 
-admin.site.register(DetalleFactura)
-admin.site.register(pieDeFactura)
+admin.site.register(DetalleFacturaDeProveedor)
+admin.site.register(pieDeFacturaDeProveedor)
 
 admin.site.register(DetalleFacturaAclinica)
 admin.site.register(pieDeFacturaAclinica)
