@@ -6,51 +6,21 @@ from pedidos import models as pLabModel
 from pedidos.models import PedidoAlaboratorio
 from pedidos.models import PedidoDeClinica
 
-class Factura(models.Model):
-    FILTROS = ["identificador"]
-    FILTERMAPPER = {
-        'identificador': "identificador__icontains",
-    }
+
+class FacturaDeProveedor(models.Model):
+
     TIPO = (
         (1, "A"),
         (2, "B"),
         (3, "C"),
         (4, "D")
     )
-    tipo = models.PositiveIntegerField(choices=TIPO)
     identificador = models.CharField(max_length=45,primary_key=True)
+    tipo = models.PositiveIntegerField(choices=TIPO)
     fecha = models.DateField()
+    titular = models.CharField(max_length=45,default="Propietario")
     pagada = models.BooleanField(default=False)
-
-    class Meta:
-        abstract = True
-
-class DetalleDeFactura(models.Model):
-    renglon = models.AutoField(primary_key=True)
-    medicamento = models.ForeignKey('medicamentos.Medicamento')
-    cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1),
-                                           MaxValueValidator(config.MAXIMA_CANTIDAD_MEDICAMENTOS)])
-    precioUnitario = models.DecimalField(max_digits=8, decimal_places=2, default=0)
-    importe = models.DecimalField(max_digits=8, decimal_places=2, default=0)
-
-    class Meta:
-        abstract = True
-
-
-class PieDeFactura(models.Model):
-    subtotal = models.DecimalField(max_digits=8, decimal_places=2, default=0)
-    iva = models.DecimalField(max_digits=8, decimal_places=2, default=0)
-    total = models.DecimalField(max_digits=8, decimal_places=2, default=0)
-
-    class Meta:
-        abstract = True
-
-
-#===================================concretas===========================================
-
-class FacturaDeProveedor(Factura):
     pedidoRel = models.OneToOneField(PedidoAlaboratorio,null=True)
-    titular = models.CharField(max_length=45)
 
     def __str__(self):
         return "%s - %s %s" % (self.tipo, self.identificador, self.titular)
@@ -62,20 +32,40 @@ class FacturaDeProveedor(Factura):
         return response
 
 
-class DetalleFacturaDeProveedor(DetalleDeFactura):
+class DetalleFacturaDeProveedor(models.Model):
+    renglon = models.AutoField(primary_key=True)
+    medicamento = models.ForeignKey('medicamentos.Medicamento')
+    cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1),
+                                           MaxValueValidator(config.MAXIMA_CANTIDAD_MEDICAMENTOS)])
+    precioUnitario = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    importe = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     factura = models.ForeignKey('FacturaDeProveedor', null=True, on_delete=models.CASCADE)
 
 
-class pieDeFacturaDeProveedor(PieDeFactura):
+class pieDeFacturaDeProveedor(models.Model):
+    subtotal = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    iva = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    total = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     factura = models.OneToOneField('FacturaDeProveedor',null=True)
 
 
 
 #====================================FACTURACION A CLINICA===================================================
 
-class FacturaAclinica(Factura):
-    pedidoRel = models.OneToOneField(PedidoDeClinica,null=True)
+class FacturaAclinica(models.Model):
+    TIPO = (
+        (1, "A"),
+        (2, "B"),
+        (3, "C"),
+        (4, "D")
+    )
+    identificador=models.AutoField(primary_key=True)
+    tipo = models.PositiveIntegerField(choices=TIPO)
+    fecha = models.DateField()
     titular = models.CharField(max_length=45,default="Propietario")
+    pagada = models.BooleanField(default=False)
+    pedidoRel = models.OneToOneField(PedidoDeClinica,null=True)
+
     def __str__(self):
         return "%s - %s %s" % (self.tipo, self.identificador, self.titular)
 
@@ -86,10 +76,19 @@ class FacturaAclinica(Factura):
         return response
 
 
-class DetalleFacturaAclinica(DetalleDeFactura):
+class DetalleFacturaAclinica(models.Model):
+    renglon = models.AutoField(primary_key=True)
+    medicamento = models.ForeignKey('medicamentos.Medicamento')
+    cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1),
+                                           MaxValueValidator(config.MAXIMA_CANTIDAD_MEDICAMENTOS)])
+    precioUnitario = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    importe = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     factura = models.ForeignKey('FacturaAclinica', null=True, on_delete=models.CASCADE)
 
-class pieDeFacturaAclinica(PieDeFactura):
+class pieDeFacturaAclinica(models.Model):
+    subtotal = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    iva = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    total = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     factura = models.OneToOneField('FacturaAclinica',null=True)
 
 #==================================================================================================

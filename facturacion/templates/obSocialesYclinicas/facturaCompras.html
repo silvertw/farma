@@ -5,7 +5,7 @@
     <p>
         Fecha de Emision: {{factura.fecha}}<br>
         Titular: {{factura.titular}}<br>
-        FacturaDeProveedor: ABZX-000-0001234{{factura.identificador}}<br>
+        Factura: ABZX-000-0001234{{factura.identificador}}<br>
         Tel (02965) 43-4159 <br>
         Lezama 479 <br/>
         Trelew, Chubut
@@ -34,7 +34,7 @@
     <br/>
     <br/>
     {% if factura.tipo == 1 %}
-        FacturaDeProveedor "A" <br>
+        Factura "A" <br>
     {% endif %}
     Clinica: {{pedido.clinica.razonSocial}} Cuit:{{pedido.clinica.cuit}}<br>
     Obra Social Interviniente: {{pedido.obraSocial.razonSocial}}
@@ -87,9 +87,9 @@
         <tr>
             <!--td class="text-left"></td-->
             <td class="text-right"></td>
-            <td class="text-right"><strong>Subtotal: ${{pieDeFacturaDeProveedor.subtotal}}</strong></td>
-            <td class="text-right"><strong>IVA: {{pieDeFacturaDeProveedor.iva}}</strong></td>
-            <td class="text-right"><strong>Total: ${{pieDeFacturaDeProveedor.total}}</strong></td>
+            <td class="text-right"><strong>Subtotal: ${{pieDeFactura.subtotal}}</strong></td>
+            <td class="text-right"><strong>IVA: {{pieDeFactura.iva}}</strong></td>
+            <td class="text-right"><strong>Total: ${{pieDeFactura.total}}</strong></td>
         </tr>
     </tbody>
 

@@ -73,7 +73,7 @@
 
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
                             <li>
-                                <a name="generarFactura" class="btn btn-primary center-block" >Generar FacturaDeProveedor</a>
+                                <a name="generarFactura" class="btn btn-primary center-block" >Generar Factura</a>
                             </li>
                         </ul>
 
@@ -149,6 +149,7 @@
                 url: url,
                 success:function(response){
                     alert(response);
+                    window.location.assign("/facturacionVentas/");
                 }
             });
         }

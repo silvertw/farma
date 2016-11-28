@@ -21,23 +21,22 @@ import json
 
 def facturacionVentas(request):
 
-    #if request.method == "GET":
+    if request.method == "GET":
 
-    #    valores=request.GET.items()
-    #    if(valores):
-    #        claveValor= valores[0]
-    #        nroPedidoAlab=claveValor[1]
-    #        request.session['nroPedidoAlab'] = nroPedidoAlab #Se guarda el numero de pediod de laboratorio en sesion
+        valores=request.GET.items()
+        print "HOLA"
+        if(valores):
+            claveValor= valores[0]
+            nroPedidoAlab=claveValor[1]
+            request.session['nroPedidoAlab'] = nroPedidoAlab #Se guarda el numero de pediod de laboratorio en sesion
+
+    # if request.method == "GET":
+    #     if "idRow" in request.GET:
+    #         print "-->tengo idrow"
+    #         nroPedidoAlab=request.GET["idRow"]
+    #         request.session['nroPedidoAlab'] = nroPedidoAlab
 
     filters = get_filtros_pedidos(request.GET, pmodels.PedidoDeClinica)
-    claves = filters.keys()#Se obtiene las claves que vienen en el diccionario filtro
-
-    if (len(claves)>1)and((claves[0]=="fecha__lte")or(claves[1]=="fecha__lte")):#Se verifica si vino un filtro y ademas si vienen fechas
-            #El formato de facha dd/mm/yyyy hace que el render falle
-            fecha1 = putils.formatearFecha(filters["fecha__lte"])#Esta funcion convierte de dd/mm/yyyy a yyyy-mm-dd
-            fecha2 = putils.formatearFecha(filters["fecha__gte"])#para que funcione bien
-            filters={'fecha__lte': fecha1, 'fecha__gte': fecha2}#Hay que reconstruir el diccionario con el formato nuevo
-
     listPedidosClinicas = pmodels.PedidoDeClinica.objects.filter(**filters).filter(facturaAsociada=False)
 
     estadisticas = {
@@ -87,17 +86,15 @@ def registrarPagoDeFacturaVenta(request):
 @transaction.atomic
 def emitirFactura(request):
 
-    #valores=request.GET.items()
-    #if(valores):
-    #    claveValor= valores[0]
-    #    nroPedidoPorGet=claveValor[1]
-
+    # valores=request.GET.items()
+    # if(valores):
+    #     claveValor= valores[0]
+    #     nroPedidoPorGet=claveValor[1]
     #--------verificar mejora-----------
     if "nroPedido" in request.GET:
         nroPedidoPorGet=request.GET["nroPedido"]
         pedidoClinica=pmodels.PedidoDeClinica.objects.get(nroPedido=nroPedidoPorGet)#Obtengo el pedido de clinica
         detallesPedidoClinica=pedidoClinica.get_detalles()#Obtengo el detalle del pedido
-
         facturaAclinica=factmodels.FacturaAclinica(
 
             tipo=1,
@@ -237,25 +234,11 @@ def facturacionCompras(request):
 
     if request.method == "GET":
 
-        #valores=request.GET.items()
-        #if(valores):
-        #    claveValor= valores[0]
-        #    nroPedidoAlab=claveValor[1]
-        #    request.session['nroPedidoAlab'] = nroPedidoAlab #Se guarda el numero de pediod de laboratorio en sesion
-        #---------verificar mejora---------------
         if "idRow" in request.GET:
             nroPedidoAlab=request.GET["idRow"]
             request.session['nroPedidoAlab'] = nroPedidoAlab
 
     filters = get_filtros_pedidos(request.GET, pmodels.PedidoAlaboratorio)
-    claves = filters.keys()#Se obtiene las claves que vienen en el diccionario filtro
-
-    if (len(claves)>1)and((claves[0]=="fecha__lte")or(claves[1]=="fecha__lte")):#Se verifica si vino un filtro y ademas si vienen fechas
-            #El formato de facha dd/mm/yyyy hace que el render falle
-            fecha1 = putils.formatearFecha(filters["fecha__lte"])#Esta funcion convierte de dd/mm/yyyy a yyyy-mm-dd
-            fecha2 = putils.formatearFecha(filters["fecha__gte"])#para que funcione bien
-            filters={'fecha__lte': fecha1, 'fecha__gte': fecha2}#Hay que reconstruir el diccionario con el formato nuevo
-
     listPedidos = pmodels.PedidoAlaboratorio.objects.filter(**filters).filter(estado="Completo",facturaAsociada=False)
 
     listLaboConPedCompleto=[]
@@ -307,16 +290,6 @@ def facturasRegistradasCompras(request):
                 nroPedidoAlab=None
 
     filters = get_filtros_pedidos(request.GET, pmodels.PedidoAlaboratorio)
-    filters2 = get_filtros_pedidos(request.GET, factmodels.FacturaDeProveedor)
-
-    claves = filters.keys()#Se obtiene las claves que vienen en el diccionario filtro
-
-    if (len(claves)>1)and((claves[0]=="fecha__lte")or(claves[1]=="fecha__lte")):#Se verifica si vino un filtro y ademas si vienen fechas
-            #El formato de facha dd/mm/yyyy hace que el render falle
-            fecha1 = putils.formatearFecha(filters["fecha__lte"])#Esta funcion convierte de dd/mm/yyyy a yyyy-mm-dd
-            fecha2 = putils.formatearFecha(filters["fecha__gte"])#para que funcione bien
-            filters={'fecha__lte': fecha1, 'fecha__gte': fecha2}#Hay que reconstruir el diccionario con el formato nuevo
-
     listPedidos = pmodels.PedidoAlaboratorio.objects.filter(**filters).filter(estado="Completo",facturaAsociada=True)
 
     listLaboConPedCompleto=[]
