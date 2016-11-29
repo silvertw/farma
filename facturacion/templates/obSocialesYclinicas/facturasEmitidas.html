@@ -60,6 +60,10 @@
             <span class="glyphicon glyphicon-signal"></span>Reportes
             <span class="caret"></span>
           </a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <li><a href="{% url 'pedidosDeClinica_topClinicasConMasMedicamentos' %}">Top 10 Clínicas con mayor demanda de medicamentos</a></li>
+            <li><a href="{% url 'pedidosDeClinica_topClinicasConMasPedidos' %}">Top 10 Clínicas con mayor demanda de pedidos</a></li>
+          </ul>
         </div>
 
     {% endif %}

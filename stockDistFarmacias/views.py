@@ -13,20 +13,16 @@ def get_filtros(get, modelo):
             if hasattr(modelo, "FILTERMAPPER") and filtro in modelo.FILTERMAPPER:
                 attr = modelo.FILTERMAPPER[filtro]
                 mfilter[attr] = value
-    print "-->",mfilter
     return mfilter
 
 
 def stockDistribuido(request):
-
     mfilters = get_filtros(request.GET, mmodels.StockDistribuidoEnFarmacias)
-    #mfilters={'lote__medicamento':'ibu4'}
     distribuidos = mmodels.StockDistribuidoEnFarmacias.objects.filter(**mfilters)
-
     estadisticas = {
         'total': mmodels.StockDistribuidoEnFarmacias.objects.all().count(),
         'filtrados': distribuidos.count()
     }
 
-    return render(request, "stockDist.html", {"distribuidos": distribuidos,"filtros": request.GET})
+    return render(request, "stockDist.html", {"distribuidos": distribuidos,"filtros": request.GET,"estadisticas":estadisticas})
 
