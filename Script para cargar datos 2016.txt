@@ -335,6 +335,10 @@ INSERT INTO "organizaciones_clinica" VALUES(1,'San Miguel','23-43433654-6','Trel
 
 INSERT INTO "organizaciones_clinica" VALUES(2,'Sanatorio Trelew','23-43433604-3','Trelew','Pecoraro 456','sanatw@sanatw.com','0810-555-6733');
 
+INSERT INTO "organizaciones_clinica" VALUES(3,'Instituto Medico del sur','23-40033604-3','Trelew','Pellegrini 456','instsurtw@instsurtw.com','0810-555-6733');
+
+INSERT INTO "organizaciones_clinica" VALUES(4,'Stagnita','23-48830614-3','Trelew','Pellegrini 156','stagnitatw@stagnitatw.com','0810-151-6733');
+
 /* Clinicas/OS */
 INSERT INTO "organizaciones_clinica_obraSocial" VALUES(1,1,1);
 

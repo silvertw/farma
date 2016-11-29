@@ -18,11 +18,10 @@ def get_filtros(get, modelo):
 
 def stockDistribuido(request):
     mfilters = get_filtros(request.GET, mmodels.StockDistribuidoEnFarmacias)
-    distribuidos = mmodels.StockDistribuidoEnFarmacias.objects.filter(**mfilters)
+    distribuidos = mmodels.StockDistribuidoEnFarmacias.objects.filter(**mfilters).exclude(cantidad=0)
     estadisticas = {
-        'total': mmodels.StockDistribuidoEnFarmacias.objects.all().count(),
+        'total': mmodels.StockDistribuidoEnFarmacias.objects.exclude(cantidad=0).count(),
         'filtrados': distribuidos.count()
     }
-
     return render(request, "stockDist.html", {"distribuidos": distribuidos,"filtros": request.GET,"estadisticas":estadisticas})
 
