@@ -35,14 +35,12 @@
 {% block header-title %} Facturas Emitidas Registradas {% endblock %}
 
 {% block form-field-simple %}
-    <input class="form-control form-field form-field-simple" id="laboratorio" name="laboratorio" value="{{filtros.laboratorio}}" placeholder="Proveedor" type="text" />
+    <input class="form-control form-field form-field-simple" id="laboratorio" name="laboratorio" value="{{filtros.laboratorio}}" placeholder="Cliente" type="text" />
 {% endblock %}
 
 {% block form-fields-avanzados %}
 
-    <!--div>
-        <input class="form-control form-field form-field-simple" id="facturaLab" name="facturaLab" value="{{filtros.laboratorio}}" placeholder="Numero FacturaDeProveedor" type="text" />
-    </div-->
+    <input class="form-control form-field form-field-simple" id="nroFacturaId" name="nroFactura" value="" placeholder="Nro. Factura" type="text" />
 
     <div>
         <input class="datepicker form-control form-field"  id="desde" name="desde" value="{{filtros.desde}}" placeholder="Desde" type="text" />

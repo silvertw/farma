@@ -51,26 +51,34 @@ def facturacionVentas(request):
 def facturasEmitidas(request):
 
     filters = get_filtros_pedidos(request.GET, pmodels.PedidoDeClinica)
-    claves = filters.keys()#Se obtiene las claves que vienen en el diccionario filtro
-
-    if (len(claves)>1)and((claves[0]=="fecha__lte")or(claves[1]=="fecha__lte")):#Se verifica si vino un filtro y ademas si vienen fechas
-            #El formato de facha dd/mm/yyyy hace que el render falle
-            fecha1 = putils.formatearFecha(filters["fecha__lte"])#Esta funcion convierte de dd/mm/yyyy a yyyy-mm-dd
-            fecha2 = putils.formatearFecha(filters["fecha__gte"])#para que funcione bien
-            filters={'fecha__lte': fecha1, 'fecha__gte': fecha2}#Hay que reconstruir el diccionario con el formato nuevo
-
     listPedidosClinicas = pmodels.PedidoDeClinica.objects.filter(**filters).filter(facturaAsociada=True)
 
     estadisticas = {
-        'total': listPedidosClinicas.count(),
-        'filtrados': listPedidosClinicas.count()
+          'total': listPedidosClinicas.count(),
+          'filtrados': listPedidosClinicas.count(),
     }
+
+    if "nroFactura" in request.GET:
+        nroFacturaAbuscar= request.GET["nroFactura"]
+        if nroFacturaAbuscar:
+            try:
+               facturaAclinica = factmodels.FacturaAclinica.objects.get(identificador=nroFacturaAbuscar)
+               if facturaAclinica:
+                   listPedidosClinicas=[]
+                   pedidoDeClinica = facturaAclinica.pedidoRel
+                   listPedidosClinicas.append(pedidoDeClinica)
+                   estadisticas = {
+                      'total': 1,
+                      'filtrados': 1,
+                   }
+            except:
+                listPedidosClinicas = []
+            
 
     return render(request,"obSocialesYclinicas/facturasEmitidas.html",{"listPedidosClinicas":listPedidosClinicas})
 
 def registrarPagoDeFacturaVenta(request):
-    valores=request.GET.items()
-    if(valores):
+    if "nroPedido" in request.GET:
         nroPedidoPorGet=request.GET['nroPedido']
 
         facturaApagar=factmodels.FacturaAclinica.objects.get(pedidoRel=nroPedidoPorGet)
@@ -86,11 +94,6 @@ def registrarPagoDeFacturaVenta(request):
 @transaction.atomic
 def emitirFactura(request):
 
-    # valores=request.GET.items()
-    # if(valores):
-    #     claveValor= valores[0]
-    #     nroPedidoPorGet=claveValor[1]
-    #--------verificar mejora-----------
     if "nroPedido" in request.GET:
         nroPedidoPorGet=request.GET["nroPedido"]
         pedidoClinica=pmodels.PedidoDeClinica.objects.get(nroPedido=nroPedidoPorGet)#Obtengo el pedido de clinica
@@ -172,23 +175,17 @@ def facturacionCompras(request):
     nroPedidoAlab=0
 
     if request.method == "POST":
-
         form = forms.RegistrarFactura(request.POST)
         if form.is_valid():
-
             #==================Logica para crear factura======================
 
             factura = form.save(commit=False)
             listaDetallesFactura=[]
-
             nroPedido = request.session['nroPedidoAlab']
             pedido = pmodels.PedidoAlaboratorio.objects.get(pk=nroPedido)
             detallesPedido = pmodels.DetallePedidoAlaboratorio.objects.filter(pedido=pedido)
-
             factura.pedidoRel=pedido#Se setea el pedido asocioado a esta factura
-
             subtotal=0
-
             for detP in detallesPedido:
                 lotes=medmodels.Lote.objects.filter(medicamento__pk=detP.medicamento.pk)
                 lote=lotes[0]
