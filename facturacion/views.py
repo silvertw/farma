@@ -135,7 +135,7 @@ def emitirFactura(request):
         pedido.save()
         #======================================================================
 
-        msj="La FacturaDeProveedor se Genero Correctamente"
+        msj="La Factura se Genero Correctamente"
 
         response = HttpResponse(msj)
 
