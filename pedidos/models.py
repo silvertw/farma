@@ -239,12 +239,12 @@ class DetallePedidoDeFarmacia(DetallePedidoVenta):
 # ******************PEDIDO DE CLINICA Y DETALLE PEDIDO DE CLINICA******************#
 
 class PedidoDeClinica(PedidoVenta):
-    FILTROS = ["clinica", "obraSocial", "desde", "hasta"]
+    FILTROS = ["desde", "hasta","obSoc","cliente"]
     FILTERMAPPER = {
         'desde': "fecha__gte",
         'hasta': "fecha__lte",
-        'obraSocial': "obraSocial__razonSocial__icontains",
-        'clinica': "clinica__razonSocial__icontains"
+        'obSoc': "obraSocial__razonSocial__icontains",
+        'cliente': "clinica__razonSocial__icontains"
     }
     clinica = models.ForeignKey('organizaciones.Clinica', on_delete=models.CASCADE)
     obraSocial = models.ForeignKey('organizaciones.ObraSocial', on_delete=models.CASCADE)

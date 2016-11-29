@@ -24,17 +24,10 @@ def facturacionVentas(request):
     if request.method == "GET":
 
         valores=request.GET.items()
-        print "HOLA"
         if(valores):
             claveValor= valores[0]
             nroPedidoAlab=claveValor[1]
             request.session['nroPedidoAlab'] = nroPedidoAlab #Se guarda el numero de pediod de laboratorio en sesion
-
-    # if request.method == "GET":
-    #     if "idRow" in request.GET:
-    #         print "-->tengo idrow"
-    #         nroPedidoAlab=request.GET["idRow"]
-    #         request.session['nroPedidoAlab'] = nroPedidoAlab
 
     filters = get_filtros_pedidos(request.GET, pmodels.PedidoDeClinica)
     listPedidosClinicas = pmodels.PedidoDeClinica.objects.filter(**filters).filter(facturaAsociada=False)
@@ -44,7 +37,7 @@ def facturacionVentas(request):
         'filtrados': listPedidosClinicas.count()
     }
 
-    return render(request,"obSocialesYclinicas/facturacionVentas.html",{"listPedidosClinicas":listPedidosClinicas})
+    return render(request,"obSocialesYclinicas/facturacionVentas.html",{"listPedidosClinicas":listPedidosClinicas,"filtros": request.GET,"estadisticas":estadisticas})
 
 
 
@@ -73,9 +66,9 @@ def facturasEmitidas(request):
                    }
             except:
                 listPedidosClinicas = []
-            
 
-    return render(request,"obSocialesYclinicas/facturasEmitidas.html",{"listPedidosClinicas":listPedidosClinicas})
+
+    return render(request,"obSocialesYclinicas/facturasEmitidas.html",{"listPedidosClinicas":listPedidosClinicas,"filtros":request.GET,"estadisticas":estadisticas})
 
 def registrarPagoDeFacturaVenta(request):
     if "nroPedido" in request.GET:
@@ -247,7 +240,7 @@ def facturacionCompras(request):
         'filtrados': listPedidos.count()
     }
 
-    return render(request,"Proveedores/facturacionCompras.html",{"listPedidos": listPedidos,"formFactura": form,"erroresEnElForm":erroresEnElForm,"nroPedidoAlab":nroPedidoAlab})
+    return render(request,"Proveedores/facturacionCompras.html",{"listPedidos": listPedidos,"formFactura": form,"erroresEnElForm":erroresEnElForm,"nroPedidoAlab":nroPedidoAlab,"filtros": request.GET,"estadisticas":estadisticas})
 
 
 
@@ -306,6 +299,8 @@ def facturasRegistradasCompras(request):
             "pieDeFactura":pieDeFactura,
             "formEstadoDelPago":formEstadoDelPago,
             "nroPedidoAlab":nroPedidoAlab,
+            "filtros": request.GET,
+            "estadisticas":estadisticas
         })
     else:
         encabezadoFactura=None
@@ -320,6 +315,8 @@ def facturasRegistradasCompras(request):
             "pieDeFactura":pieDeFactura,
             "formEstadoDelPago":formEstadoDelPago,
             "nroPedidoAlab":nroPedidoAlab,
+            "filtros": request.GET,
+            "estadisticas":estadisticas
         })
 
 
