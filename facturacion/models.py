@@ -5,8 +5,7 @@ from pedidos import config
 from pedidos import models as pLabModel
 from pedidos.models import PedidoAlaboratorio
 from pedidos.models import PedidoDeClinica
-
-
+from django.db.models import Avg, Max, Min, Sum
 
 
 class Factura(models.Model):
@@ -68,6 +67,74 @@ class DetalleFacturaDeProveedor(DetalleFactura):
 
 class pieDeFacturaDeProveedor(PieDeFactura):
     factura = models.OneToOneField('FacturaDeProveedor',null=True)
+
+    #Facturas que se pagaron entre dos fechas determinadas.
+    #Precondicion las fechas deben tener el formato 'xxxx-xx-xx'.
+    def facturasPagadas(self,fechaInicial,fechaFinal):
+        return pieDeFacturaDeProveedor.objects.filter(
+            factura__fecha__range=[fechaInicial,fechaFinal],
+            factura__pagada=True)
+
+    def cantidad_facturasPagadas(self,fechaInicial,fechaFinal):
+        return pieDeFacturaDeProveedor.objects.filter(
+            factura__fecha__range=[fechaInicial,fechaFinal],
+            factura__pagada=True).count()
+
+    def facturasImpagas(self,fechaInicial,fechaFinal):
+        return pieDeFacturaDeProveedor.objects.filter(
+            factura__fecha__range=[fechaInicial,fechaFinal],
+            factura__pagada=False)
+
+    def cantidad_facturasImpagas(self,fechaInicial,fechaFinal):
+        return pieDeFacturaDeProveedor.objects.filter(
+            factura__fecha__range=[fechaInicial,fechaFinal],
+            factura__pagada=False).count()
+
+    def totalFacturasPagadas(self):
+        return pieDeFacturaDeProveedor.objects.filter(factura__pagada=True)
+
+    def totalFacturasImpagas(self):
+        return pieDeFacturaDeProveedor.objects.filter(factura__pagada=False)
+
+    def monto_pagado_entre(self,fechaInicial,fechaFinal):
+        resultDic=pieDeFacturaDeProveedor.objects.filter(
+            factura__fecha__range=[fechaInicial,fechaFinal],
+            factura__pagada=True).aggregate(Sum('total'))
+        return resultDic['total__sum']
+
+    def monto_a_pagar(self):
+        resultDic=pieDeFacturaDeProveedor.objects.filter(factura__pagada=False).aggregate(Sum('total'))
+        return resultDic['total__sum']
+
+    #Cuanto se le pago a un proovedor entre dos fechas determinadas
+    def monto_pagados_aProv_entre(self,proveedor,fechaInicial,fechaFinal):
+        resultDic = pieDeFacturaDeProveedor.objects.filter(
+                       factura__fecha__range=[fechaInicial,fechaFinal],
+                       factura__pagada=True,
+                       factura__pedidoRel__laboratorio__razonSocial=proveedor
+                    ).aggregate(Sum('total'))
+        return resultDic['total__sum']
+
+    #Ranking de montos pagados a proveedores entre dos fechas determinadas.
+    def rank_montosPagos_aProv_entre(self,fechaInicial,fechaFinal):
+         pagadas = pieDeFacturaDeProveedor.objects.filter(
+                       factura__fecha__range=[fechaInicial,fechaFinal],
+                       factura__pagada=True
+                   )
+         resumen={}
+         for pagada in pagadas:
+            proveedor=pagada.factura.pedidoRel.laboratorio.razonSocial
+            if not proveedor in resumen:
+                resumen[proveedor]=self.monto_pagados_aProv_entre(proveedor,fechaInicial,fechaFinal)
+
+         ranking=resumen.items()
+         ranking.sort(key=lambda x: x[1],reverse=True)#Ordenado de mayor a menor segun monto que se le pago
+         return ranking
+
+    #Proveedor al que mas se le pago entre dos fechas determinadas
+    def max_montoPagado_aProv_entre(self,fechaInicial,fechaFinal):
+         ranking = self.rank_montosPagos_aProv_entre(fechaInicial,fechaFinal)
+         return ranking[0]
 
 
 
