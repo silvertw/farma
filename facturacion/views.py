@@ -370,6 +370,12 @@ def factProveedFooterModal(request):
     pieDeFactura = factmodels.pieDeFacturaDeProveedor.objects.get(factura=encabezadoFactura)
     request.session['nroPedidoAlab'] = nroPedidoAlab
 
+
+    #monto_pagados_aProv_entre(self,proveedor,fechaInicial,fechaFinal)
+    print "---->",pieDeFactura.max_montoPagado_aProv_entre("2016-11-29","2016-11-30")
+
+
+
     return render(request, "Proveedores/_factProveedFooterModal.html",{
         "pieDeFactura":pieDeFactura,
         "nroPedidoAlab":nroPedidoAlab,
