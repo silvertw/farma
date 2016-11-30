@@ -37,7 +37,8 @@
         Factura "A" <br>
     {% endif %}
     Clinica: {{pedido.clinica.razonSocial}} Cuit:{{pedido.clinica.cuit}}<br>
-    Obra Social Interviniente: {{pedido.obraSocial.razonSocial}}
+    Obra Social Interviniente: {{pedido.obraSocial.razonSocial}}<br>
+    Medico Auditor: {{pedido.medicoAuditor}}
 {% endblock %}
 
 {% block remito-cabecera %}

@@ -32,6 +32,7 @@ INSTALLED_APPS = (
     'django_bootstrap_dynamic_formsets',
     'easy_pdf',
     'reportlab',
+    'django_extensions',
 
     'stockDistFarmacias',
     'medicamentos',
