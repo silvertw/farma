@@ -358,3 +358,4 @@ INSERT INTO "organizaciones_laboratorio" VALUES(5,'Bayer','23-44233654-4','Bueno
 
 /* OS */
 INSERT INTO "organizaciones_obrasocial" VALUES(1,'OSDE','23-44333654-6','Trelew','Pellegrini 234','osde@osde.com','3453465546','Susana Ferranti');
+
