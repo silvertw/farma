@@ -71,16 +71,24 @@ class pieDeFacturaDeProveedor(PieDeFactura):
     #Facturas que se pagaron entre dos fechas determinadas.
     #Precondicion las fechas deben tener el formato 'xxxx-xx-xx'.
     def facturasPagadas(self,fechaInicial,fechaFinal):
-        return pieDeFacturaDeProveedor.objects.filter(factura__fecha__range=[fechaInicial,fechaFinal],factura__pagada=True)
+        return pieDeFacturaDeProveedor.objects.filter(
+            factura__fecha__range=[fechaInicial,fechaFinal],
+            factura__pagada=True)
 
     def cantidad_facturasPagadas(self,fechaInicial,fechaFinal):
-        return pieDeFacturaDeProveedor.objects.filter(factura__fecha__range=[fechaInicial,fechaFinal],factura__pagada=True).count()
+        return pieDeFacturaDeProveedor.objects.filter(
+            factura__fecha__range=[fechaInicial,fechaFinal],
+            factura__pagada=True).count()
 
     def facturasImpagas(self,fechaInicial,fechaFinal):
-        return pieDeFacturaDeProveedor.objects.filter(factura__fecha__range=[fechaInicial,fechaFinal],factura__pagada=False)
+        return pieDeFacturaDeProveedor.objects.filter(
+            factura__fecha__range=[fechaInicial,fechaFinal],
+            factura__pagada=False)
 
     def cantidad_facturasImpagas(self,fechaInicial,fechaFinal):
-        return pieDeFacturaDeProveedor.objects.filter(factura__fecha__range=[fechaInicial,fechaFinal],factura__pagada=False).count()
+        return pieDeFacturaDeProveedor.objects.filter(
+            factura__fecha__range=[fechaInicial,fechaFinal],
+            factura__pagada=False).count()
 
     def totalFacturasPagadas(self):
         return pieDeFacturaDeProveedor.objects.filter(factura__pagada=True)
@@ -89,7 +97,9 @@ class pieDeFacturaDeProveedor(PieDeFactura):
         return pieDeFacturaDeProveedor.objects.filter(factura__pagada=False)
 
     def monto_pagado_entre(self,fechaInicial,fechaFinal):
-        resultDic=pieDeFacturaDeProveedor.objects.filter(factura__fecha__range=[fechaInicial,fechaFinal],factura__pagada=True).aggregate(Sum('total'))
+        resultDic=pieDeFacturaDeProveedor.objects.filter(
+            factura__fecha__range=[fechaInicial,fechaFinal],
+            factura__pagada=True).aggregate(Sum('total'))
         return resultDic['total__sum']
 
     def monto_a_pagar(self):
@@ -125,9 +135,6 @@ class pieDeFacturaDeProveedor(PieDeFactura):
     def max_montoPagado_aProv_entre(self,fechaInicial,fechaFinal):
          ranking = self.rank_montosPagos_aProv_entre(fechaInicial,fechaFinal)
          return ranking[0]
-
-
-
 
 
 
