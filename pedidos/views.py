@@ -31,7 +31,6 @@ def get_filtros(get, modelo):#las llamada es-->get_filtros(request.GET, models.P
             attr = filtro
             value = get[filtro]
 
-
             if hasattr(modelo, "FILTERMAPPER") and filtro in modelo.FILTERMAPPER:
                 attr = modelo.FILTERMAPPER[filtro]
             if hasattr(value, "isdigit") and value.isdigit():
@@ -46,14 +45,24 @@ def get_filtros(get, modelo):#las llamada es-->get_filtros(request.GET, models.P
             else:
                 mfilter[attr] = value
 
+
+
     if "fecha__lte" in mfilter and mfilter["fecha__lte"]:
-        fecha1 = utils.formatearFecha(mfilter["fecha__lte"])
-        mfilter["fecha__lte"]=fecha1
+        if type(mfilter['fecha__lte'])== unicode:
+            fecha1 = utils.formatearFecha(mfilter["fecha__lte"])
+            mfilter["fecha__lte"]=fecha1
+        else:#por problema de formato desde los reportes de estadisticas
+            fecha1=str(mfilter["fecha__lte"])
+            mfilter["fecha__lte"]=fecha1
+
 
     if "fecha__gte" in mfilter and mfilter["fecha__gte"]:
-        fecha2 = utils.formatearFecha(mfilter["fecha__gte"])
-        mfilter["fecha__gte"]=fecha2
-
+         if type(mfilter['fecha__gte'])== unicode:
+            fecha2 = utils.formatearFecha(mfilter["fecha__gte"])
+            mfilter["fecha__gte"]=fecha2
+         else:#por problema de formato desde los reportes de estadisticas
+            fecha2=str(mfilter["fecha__gte"])
+            mfilter["fecha__gte"]=fecha2
 
     return mfilter
 
@@ -981,6 +990,9 @@ class remitoDevolucion(PDFTemplateView):
             totalVencidos=totalVencidos
         )
 
+#=================================ESTADISTICAS FACTURACION PROVEEDORES==================================================
+
+#=======================================================================================================================
 
 # ESTADISTICAS PEDIDOS DE FARMACIA
 
