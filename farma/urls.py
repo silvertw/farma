@@ -211,6 +211,8 @@ urlpatterns = [
     url(r'^obSocialesYclinicas/(?P<id>\d+)/$', fviews.imprimirFactura.as_view(), name="imprimirFactura"),
 
     url(r'^registrarPagoDeFacturaVenta/$', fviews.registrarPagoDeFacturaVenta, name="registrarPagoDeFacturaVenta"),
+    url(r'^Proveedores/estadisticasCompras/$', fviews.estadisticasCompras, name="estadisticasCompras"),
+
     #*****************************************Stock Distribuido********************************************
     url(r'^buscarEnFarm/$', pviews.buscarEnFarmacias, name="buscarEnFarm"),
     url(r'^stockDistribuido/$', distviews.stockDistribuido, name="stockDistribuido"),

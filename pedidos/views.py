@@ -990,10 +990,6 @@ class remitoDevolucion(PDFTemplateView):
             totalVencidos=totalVencidos
         )
 
-#=================================ESTADISTICAS FACTURACION PROVEEDORES==================================================
-
-#=======================================================================================================================
-
 # ESTADISTICAS PEDIDOS DE FARMACIA
 
 @permission_required('usuarios.encargado_general', login_url='login')

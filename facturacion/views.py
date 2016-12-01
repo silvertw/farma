@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import permission_required
 from easy_pdf.views import PDFTemplateView
 from organizaciones.views import hubo_alta
 from pedidos import models as pmodels
+from pedidos import views as pviews
 from django.db import transaction
 from medicamentos import models as medmodels
 import models as factmodels
@@ -446,3 +447,24 @@ def cancelarPago(request):
     response = HttpResponse(msj)
 
     return response
+
+
+
+#=================================ESTADISTICAS FACTURACION PROVEEDORES==================================================
+def estadisticasCompras(request):
+    form = forms.RangoFechasForm(request.GET)
+    estadistica = None
+    if form.is_valid():
+        estadistica = putils.estadisticasCompras(pviews.get_filtros, form.clean())
+        request.session['estadistica'] = estadistica
+    else:
+        estadistica = request.session['estadistica']
+    columnChart = estadistica['columnChart']
+    pieChart = estadistica['pieChart']
+    return render(request, "Proveedores/estadisticasCompras.html", {'columnChart':
+            json.dumps(columnChart), 'pieChart': json.dumps(pieChart), 'form': form})
+
+#=======================================================================================================================
+
+
+
