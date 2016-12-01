@@ -508,9 +508,6 @@ def estadisticasComprasExcel(request):
 
 
 
-
-
-
 #=================================ESTADISTICAS FACTURACION VENTAS===============================================
 
 def estadisticasVentas(request):
@@ -526,3 +523,44 @@ def estadisticasVentas(request):
     return render(request, "obSocialesYclinicas/estadisticasVentas.html", {'columnChart':
             json.dumps(columnChart), 'pieChart': json.dumps(pieChart), 'form': form})
 
+
+
+def estadisticasVentasExcel(request):
+    datos = request.session['estadistica']['excel']
+    excel = io.BytesIO()
+    workbook = Workbook(excel, {'in_memory': True})
+    worksheet = workbook.add_worksheet()
+    titulo = workbook.add_format({
+        'font_name':'Arial',
+        'font_size': 12,
+        'font_color': 'navy',
+        'bold': True
+    })
+    encabezado = workbook.add_format({
+        'font_name':'Arial',
+        'bold': True
+    })
+    alignLeft = workbook.add_format({
+        'align':'left',
+    })
+    worksheet.write('A1:B1', 'Montos de Ventas Realizas a Clientes', titulo)
+
+    worksheet.set_column('B:B', 40)
+    worksheet.set_column('C:C', 20)
+    worksheet.write('A2', '#', encabezado)
+    worksheet.write('B2', 'Cliente', encabezado)
+    worksheet.write('C2', 'Monto', encabezado)
+    fila = 2
+    tope = len(datos)
+    for i in range(0, tope):
+        worksheet.write(fila, 0, i + 1, alignLeft)
+        worksheet.write(fila, 1, datos[i]['cliente'], alignLeft)
+        worksheet.write(fila, 2, datos[i]['cantidad'], alignLeft)
+        fila += 1
+    workbook.close()
+
+    excel.seek(0)
+
+    response = HttpResponse(excel.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = "attachment; filename=estadisticasVentas.xlsx"
+    return response

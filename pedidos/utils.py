@@ -713,7 +713,7 @@ def estadisticasVentas(get_filtros, get):
         avg = float("%.2f" % (numero / float(totalVentas)))
         estadisticas['pieChart'].append({'name': cliente, 'y': avg})
 
-        estadisticas['excel'].append({'proveedor': cliente, 'cantidad': float(cantidad)})
+        estadisticas['excel'].append({'cliente': cliente, 'cantidad': float(cantidad)})
 
         resto -= cantidad
 
