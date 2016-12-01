@@ -212,6 +212,7 @@ urlpatterns = [
 
     url(r'^registrarPagoDeFacturaVenta/$', fviews.registrarPagoDeFacturaVenta, name="registrarPagoDeFacturaVenta"),
     url(r'^Proveedores/estadisticasCompras/$', fviews.estadisticasCompras, name="estadisticasCompras"),
+    url(r'^obSocialesYclinicas/estadisticasVentas/$', fviews.estadisticasVentas, name="estadisticasVentas"),
 
     #*****************************************Stock Distribuido********************************************
     url(r'^buscarEnFarm/$', pviews.buscarEnFarmacias, name="buscarEnFarm"),

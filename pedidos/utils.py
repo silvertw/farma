@@ -629,7 +629,7 @@ def hay_medicamentos_con_stock():
             return True     
     return False
 
-
+#==========================================ESTADISTICAS COMPRAS====================================
 def estadisticasCompras(get_filtros, get):
 
     mfilters = get_filtros(get, factmodels.pieDeFacturaDeProveedor)
@@ -676,8 +676,55 @@ def estadisticasCompras(get_filtros, get):
 
     return estadisticas
 
+#==========================================ESTADISTICAS VENTAS====================================
+def estadisticasVentas(get_filtros, get):
+
+    mfilters = get_filtros(get, factmodels.pieDeFacturaAclinica)
+    ventas = factmodels.pieDeFacturaAclinica.objects.filter(**mfilters)
+    estadisticas = {}
+
+    totalVentas = 0
+
+    for venta in ventas:
+        if venta.factura.pedidoRel.clinica.razonSocial in estadisticas:
+            estadisticas[venta.factura.pedidoRel.clinica.razonSocial] += venta.total
+        else:
+            estadisticas[venta.factura.pedidoRel.clinica.razonSocial] = venta.total
+
+        totalVentas += venta.total
+    # ordeno y selecciono top10
+    top = OrderedDict(sorted(estadisticas.items(), key=lambda t: t[1], reverse=True))
+    top10 = dict(itertools.islice(top.items(), 10))
+    top10 = OrderedDict(sorted(top10.items(), key=lambda t: t[1], reverse=True))
+
+    estadisticas = {
+        'columnChart': {'clientes': [], 'cantidades': []},
+        'pieChart': [],
+        'excel': []
+    }
+    resto = totalVentas
+    for cliente, cantidad in top10.items():
+
+        estadisticas['columnChart']['clientes'].append(cliente)
+        estadisticas['columnChart']['cantidades'].append(float(cantidad))
+
+        numero=float("%.2f" % (cantidad * 100))
+
+        avg = float("%.2f" % (numero / float(totalVentas)))
+        estadisticas['pieChart'].append({'name': cliente, 'y': avg})
+
+        estadisticas['excel'].append({'proveedor': cliente, 'cantidad': float(cantidad)})
+
+        resto -= cantidad
+
+    if resto > 0:
+        avg = float("%.2f" % ((resto * 100) / float(totalVentas)))
+        estadisticas['pieChart'].append({'name': u'otros', 'y': avg})
+
+    return estadisticas
 
 
+#==========================================================================================================
 
 
 def top_por_cantidad_medicamentos_farmacia(get_filtros, get):

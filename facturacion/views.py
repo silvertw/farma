@@ -450,7 +450,7 @@ def cancelarPago(request):
 
 
 
-#=================================ESTADISTICAS FACTURACION PROVEEDORES==================================================
+#=================================ESTADISTICAS FACTURACION PROVEEDORES==========================================
 def estadisticasCompras(request):
     form = forms.RangoFechasForm(request.GET)
     estadistica = None
@@ -464,7 +464,18 @@ def estadisticasCompras(request):
     return render(request, "Proveedores/estadisticasCompras.html", {'columnChart':
             json.dumps(columnChart), 'pieChart': json.dumps(pieChart), 'form': form})
 
-#=======================================================================================================================
+#=================================ESTADISTICAS FACTURACION VENTAS===============================================
 
-
+def estadisticasVentas(request):
+    form = forms.RangoFechasForm(request.GET)
+    estadistica = None
+    if form.is_valid():
+        estadistica = putils.estadisticasVentas(pviews.get_filtros, form.clean())
+        request.session['estadistica'] = estadistica
+    else:
+        estadistica = request.session['estadistica']
+    columnChart = estadistica['columnChart']
+    pieChart = estadistica['pieChart']
+    return render(request, "obSocialesYclinicas/estadisticasVentas.html", {'columnChart':
+            json.dumps(columnChart), 'pieChart': json.dumps(pieChart), 'form': form})
 

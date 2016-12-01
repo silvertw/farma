@@ -1,0 +1,51 @@
+{% extends "base/estadisticas.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title %} Compras a Laboratorios (por pedido) {% endblock %}
+
+{% block more-breadcrumb-items %}
+    <li><a href="{% url 'farmacias' %}">Pedidos De Farmacia</a></li>
+    <li class="active">Top 10 Monto Ventas</li>
+{% endblock %}
+
+{% block header-title %} Top 10 Ventas {% endblock%}
+
+{% block url-volver %}{% url 'pedidosDeFarmacia' %}{% endblock %}
+
+{% block fields-form %}
+	{% bootstrap_form form layout='inline' %}
+{% endblock %}
+
+{% block url-excel %}{% url 'pedidosDeFarmacia_topFarmaciasConMasPedidosExcel' %}{% endblock %}
+
+{% block more-scripts %}
+	<script>
+		(function() {
+
+			var columnChart = JSON.parse("{{ columnChart }}".replace(/&quot;/g, '\"')),
+				pieChart = JSON.parse("{{ pieChart }}".replace(/&quot;/g, '\"')),
+				settingsColumnChart = {
+					'categories': columnChart.clientes,
+					'yAxisTitle': 'Ventas (cantidad)',
+					'pointFormat': '<tr><td style="color:{series.color};padding:0"></td>' + '<td style="padding:0"><b>{point.y:1f} Ventas</b></td></tr>',
+					'series': [{colorByPoint: true, name:' ', 'data': columnChart.cantidades }]
+				},
+				settingsPieChart = {
+					'pointFormat': '<b>{point.percentage:.2f}%</b>',
+					'series': [{colorByPoint: true, data: pieChart}]
+				};
+
+			if(columnChart.clientes.length > 0 && pieChart.length > 0) {
+				// COLUMN CHART
+				charts.initColumnChart("#column-chart", settingsColumnChart);
+				// PIE CHART
+				charts.initPieChart("#pie-chart", settingsPieChart);
+			} else {
+				$("#charts").addClass("hidden");
+				$("#sin-resultados").closest(".row").removeClass("hidden");
+				$(".download-excel").addClass("hidden");
+			}
+		})();
+	</script>
+{% endblock %}

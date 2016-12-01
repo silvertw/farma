@@ -164,6 +164,11 @@ class DetalleFacturaAclinica(DetalleFactura):
     factura = models.ForeignKey('FacturaAclinica', null=True, on_delete=models.CASCADE)
 
 class pieDeFacturaAclinica(PieDeFactura):
+    FILTROS = ["desde", "hasta"]
+    FILTERMAPPER = {
+        'desde': "factura__fecha__gte",
+        'hasta': "factura__fecha__lte",
+    }
     factura = models.OneToOneField('FacturaAclinica',null=True)
 
 #==================================================================================================
