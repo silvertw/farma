@@ -16,6 +16,8 @@ from pedidos.views import get_filtros as get_filtros_pedidos
 from pedidos import utils as putils
 from django.http import HttpResponse
 from django import utils
+from xlsxwriter import Workbook
+import io
 import json
 
 # Create your views here.
@@ -463,6 +465,51 @@ def estadisticasCompras(request):
     pieChart = estadistica['pieChart']
     return render(request, "Proveedores/estadisticasCompras.html", {'columnChart':
             json.dumps(columnChart), 'pieChart': json.dumps(pieChart), 'form': form})
+
+def estadisticasComprasExcel(request):
+    datos = request.session['estadistica']['excel']
+    excel = io.BytesIO()
+    workbook = Workbook(excel, {'in_memory': True})
+    worksheet = workbook.add_worksheet()
+    titulo = workbook.add_format({
+        'font_name':'Arial',
+        'font_size': 12,
+        'font_color': 'navy',
+        'bold': True
+    })
+    encabezado = workbook.add_format({
+        'font_name':'Arial',
+        'bold': True
+    })
+    alignLeft = workbook.add_format({
+        'align':'left',
+    })
+    worksheet.write('A1:B1', 'Montos de Compras Realizas a Proveedores', titulo)
+
+    worksheet.set_column('B:B', 40)
+    worksheet.set_column('C:C', 20)
+    worksheet.write('A2', '#', encabezado)
+    worksheet.write('B2', 'Proveedor', encabezado)
+    worksheet.write('C2', 'Monto', encabezado)
+    fila = 2
+    tope = len(datos)
+    for i in range(0, tope):
+        worksheet.write(fila, 0, i + 1, alignLeft)
+        worksheet.write(fila, 1, datos[i]['proveedor'], alignLeft)
+        worksheet.write(fila, 2, datos[i]['cantidad'], alignLeft)
+        fila += 1
+    workbook.close()
+
+    excel.seek(0)
+
+    response = HttpResponse(excel.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = "attachment; filename=estadisticasCompras.xlsx"
+    return response
+
+
+
+
+
 
 #=================================ESTADISTICAS FACTURACION VENTAS===============================================
 
