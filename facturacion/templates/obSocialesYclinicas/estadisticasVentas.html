@@ -5,13 +5,13 @@
 {% block title %} Compras a Laboratorios (por pedido) {% endblock %}
 
 {% block more-breadcrumb-items %}
-    <li><a href="{% url 'farmacias' %}">Pedidos De Farmacia</a></li>
+    <li><a href="{% url 'facturasEmitidas' %}">Facturas Emitidas</a></li>
     <li class="active">Top 10 Monto Ventas</li>
 {% endblock %}
 
 {% block header-title %} Top 10 Ventas {% endblock%}
 
-{% block url-volver %}{% url 'pedidosDeFarmacia' %}{% endblock %}
+{% block url-volver %}{% url 'facturacionVentas' %}{% endblock %}
 
 {% block fields-form %}
 	{% bootstrap_form form layout='inline' %}
