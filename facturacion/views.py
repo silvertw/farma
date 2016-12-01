@@ -285,14 +285,31 @@ def facturasRegistradasCompras(request):
     filters = get_filtros_pedidos(request.GET, pmodels.PedidoAlaboratorio)
     listPedidos = pmodels.PedidoAlaboratorio.objects.filter(**filters).filter(estado="Completo",facturaAsociada=True)
 
-    listLaboConPedCompleto=[]
-    for laboConPedCompleto in listPedidos:
-        listLaboConPedCompleto.append(laboConPedCompleto.laboratorio)
-
     estadisticas = {
         'total': listPedidos.count(),
         'filtrados': listPedidos.count()
     }
+
+    if "nroFactura" in request.GET:
+        nroFacturaAbuscar = request.GET["nroFactura"]
+        if nroFacturaAbuscar:
+            try:
+               facturaDeProv = factmodels.FacturaDeProveedor.objects.get(identificador=nroFacturaAbuscar)
+               if facturaDeProv:
+                   listPedidos=[]
+                   pedidoAlabo = facturaDeProv.pedidoRel
+                   listPedidos.append(pedidoAlabo)
+                   estadisticas = {
+                      'total': 1,
+                      'filtrados': 1,
+                   }
+            except:
+                listPedidos = []
+
+
+    listLaboConPedCompleto=[]
+    for laboConPedCompleto in listPedidos:
+        listLaboConPedCompleto.append(laboConPedCompleto.laboratorio)
 
     if request.GET.items():#Si get tiene valores se debe devolver la factura
         return render(request,"Proveedores/facturasRegistradasDeCompras.html",{
