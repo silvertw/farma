@@ -186,6 +186,11 @@ El usuario tendra la opción de visualizar un remito en PDF, presionanado el bot
 
 Si se desea generar el remito en un pdf, el usuario deberá seleccionar el botón asociado al remito correspondiente y el sistema se encargará de generar el mismo.
 
+Se vera algo como lo siguiente:
+
+.. image:: _static/remitopedidoclinica.png
+   :align: center
+
 .. _formulario-busqueda-pc:
 
 Formulario de Búsqueda

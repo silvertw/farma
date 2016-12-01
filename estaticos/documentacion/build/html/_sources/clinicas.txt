@@ -58,7 +58,7 @@ Si el usuario desea ver las obras sociales asociadas a una *Clínica*, deberá s
 .. image:: _static/btnobrasclin.png
    :align: center
 
-Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):
+Una vez realizado el paso anterior aparecerá en pantalla el listado con las Obras Sociales que posee:
 
 .. image:: _static/obrasclin.png
    :align: center

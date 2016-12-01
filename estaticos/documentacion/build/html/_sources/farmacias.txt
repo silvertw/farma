@@ -2,7 +2,7 @@ Farmacias
 =========
 Se presentará una pantalla que contendrá un listado con todas las *Farmacias* que se encuentren registradas en el sistema hasta la fecha. 
 
-.. image:: _static/monodrogas.png
+.. image:: _static/farmacias.png
    :align: center
 
 Junto con el listado, se presentarán un conjunto de funcionalidades que permitirán manipular estas *Farmacias*.

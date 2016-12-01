@@ -3,7 +3,7 @@ Agregar Usuario
 
 Si el usuario desea crear un nuevo *Usuario*, deberá presionar el sub-item ``Agregar Usuario``. 
 
-.. image:: _static/menuagregarusuario.jpg
+.. image:: _static/menuagregarusuario.png
    :align: center
 
 A continuación el sistema lo redirigirá a la siguiente pantalla:
