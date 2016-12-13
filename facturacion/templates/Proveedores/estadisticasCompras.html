@@ -1,0 +1,51 @@
+{% extends "base/estadisticas.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title %} Compras a Laboratorios (por pedido) {% endblock %}
+
+{% block more-breadcrumb-items %}
+    <li><a href="{% url 'facturasRegistradasCompras' %}">Facturas Registradas</a></li>
+    <li class="active">Top 10 Monto compras a Laboratorios</li>
+{% endblock %}
+
+{% block header-title %} Top 10 Monto compras a Laboratorios {% endblock%}
+
+{% block url-volver %}{% url 'facturasRegistradasCompras' %}{% endblock %}
+
+{% block fields-form %}
+	{% bootstrap_form form layout='inline' %}
+{% endblock %}
+
+{% block url-excel %}{% url 'estadisticasComprasExcel' %}{% endblock %}
+
+{% block more-scripts %}
+	<script>
+		(function() {
+
+			var columnChart = JSON.parse("{{ columnChart }}".replace(/&quot;/g, '\"')),
+				pieChart = JSON.parse("{{ pieChart }}".replace(/&quot;/g, '\"')),
+				settingsColumnChart = {
+					'categories': columnChart.proveedores,
+					'yAxisTitle': 'Compras (cantidad)',
+					'pointFormat': '<tr><td style="color:{series.color};padding:0"></td>' + '<td style="padding:0"><b>{point.y:1f} Pedidos recibidos</b></td></tr>',
+					'series': [{colorByPoint: true, name:' ', 'data': columnChart.cantidades }]
+				},
+				settingsPieChart = {
+					'pointFormat': '<b>{point.percentage:.2f}%</b>',
+					'series': [{colorByPoint: true, data: pieChart}]
+				};
+
+			if(columnChart.proveedores.length > 0 && pieChart.length > 0) {
+				// COLUMN CHART
+				charts.initColumnChart("#column-chart", settingsColumnChart);
+				// PIE CHART
+				charts.initPieChart("#pie-chart", settingsPieChart);
+			} else {
+				$("#charts").addClass("hidden");
+				$("#sin-resultados").closest(".row").removeClass("hidden");
+				$(".download-excel").addClass("hidden");
+			}
+		})();
+	</script>
+{% endblock %}

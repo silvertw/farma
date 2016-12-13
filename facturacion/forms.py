@@ -108,7 +108,9 @@ class Pago(PagoGenerico):
     )
 
 
-
+class RangoFechasForm(forms.Form):
+    desde = forms.DateField(label='Fecha Desde', required=False, widget=forms.TextInput(attrs={'class':'datepicker'}))
+    hasta = forms.DateField(label='Fecha Hasta', widget=forms.TextInput(attrs={'class':'datepicker'}), required=False)
 
 
 

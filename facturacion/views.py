@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import permission_required
 from easy_pdf.views import PDFTemplateView
 from organizaciones.views import hubo_alta
 from pedidos import models as pmodels
+from pedidos import views as pviews
 from django.db import transaction
 from medicamentos import models as medmodels
 import models as factmodels
@@ -15,6 +16,8 @@ from pedidos.views import get_filtros as get_filtros_pedidos
 from pedidos import utils as putils
 from django.http import HttpResponse
 from django import utils
+from xlsxwriter import Workbook
+import io
 import json
 
 # Create your views here.
@@ -282,14 +285,31 @@ def facturasRegistradasCompras(request):
     filters = get_filtros_pedidos(request.GET, pmodels.PedidoAlaboratorio)
     listPedidos = pmodels.PedidoAlaboratorio.objects.filter(**filters).filter(estado="Completo",facturaAsociada=True)
 
-    listLaboConPedCompleto=[]
-    for laboConPedCompleto in listPedidos:
-        listLaboConPedCompleto.append(laboConPedCompleto.laboratorio)
-
     estadisticas = {
         'total': listPedidos.count(),
         'filtrados': listPedidos.count()
     }
+
+    if "nroFactura" in request.GET:
+        nroFacturaAbuscar = request.GET["nroFactura"]
+        if nroFacturaAbuscar:
+            try:
+               facturaDeProv = factmodels.FacturaDeProveedor.objects.get(identificador=nroFacturaAbuscar)
+               if facturaDeProv:
+                   listPedidos=[]
+                   pedidoAlabo = facturaDeProv.pedidoRel
+                   listPedidos.append(pedidoAlabo)
+                   estadisticas = {
+                      'total': 1,
+                      'filtrados': 1,
+                   }
+            except:
+                listPedidos = []
+
+
+    listLaboConPedCompleto=[]
+    for laboConPedCompleto in listPedidos:
+        listLaboConPedCompleto.append(laboConPedCompleto.laboratorio)
 
     if request.GET.items():#Si get tiene valores se debe devolver la factura
         return render(request,"Proveedores/facturasRegistradasDeCompras.html",{
@@ -445,4 +465,119 @@ def cancelarPago(request):
     msj="El pago ha sido cancelado"
     response = HttpResponse(msj)
 
+    return response
+
+
+
+#=================================ESTADISTICAS FACTURACION PROVEEDORES==========================================
+def estadisticasCompras(request):
+    form = forms.RangoFechasForm(request.GET)
+    estadistica = None
+    if form.is_valid():
+        estadistica = putils.estadisticasCompras(pviews.get_filtros, form.clean())
+        request.session['estadistica'] = estadistica
+    else:
+        estadistica = request.session['estadistica']
+    columnChart = estadistica['columnChart']
+    pieChart = estadistica['pieChart']
+    return render(request, "Proveedores/estadisticasCompras.html", {'columnChart':
+            json.dumps(columnChart), 'pieChart': json.dumps(pieChart), 'form': form})
+
+def estadisticasComprasExcel(request):
+    datos = request.session['estadistica']['excel']
+    excel = io.BytesIO()
+    workbook = Workbook(excel, {'in_memory': True})
+    worksheet = workbook.add_worksheet()
+    titulo = workbook.add_format({
+        'font_name':'Arial',
+        'font_size': 12,
+        'font_color': 'navy',
+        'bold': True
+    })
+    encabezado = workbook.add_format({
+        'font_name':'Arial',
+        'bold': True
+    })
+    alignLeft = workbook.add_format({
+        'align':'left',
+    })
+    worksheet.write('A1:B1', 'Montos de Compras Realizas a Proveedores', titulo)
+
+    worksheet.set_column('B:B', 40)
+    worksheet.set_column('C:C', 20)
+    worksheet.write('A2', '#', encabezado)
+    worksheet.write('B2', 'Proveedor', encabezado)
+    worksheet.write('C2', 'Monto', encabezado)
+    fila = 2
+    tope = len(datos)
+    for i in range(0, tope):
+        worksheet.write(fila, 0, i + 1, alignLeft)
+        worksheet.write(fila, 1, datos[i]['proveedor'], alignLeft)
+        worksheet.write(fila, 2, datos[i]['cantidad'], alignLeft)
+        fila += 1
+    workbook.close()
+
+    excel.seek(0)
+
+    response = HttpResponse(excel.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = "attachment; filename=estadisticasCompras.xlsx"
+    return response
+
+
+
+#=================================ESTADISTICAS FACTURACION VENTAS===============================================
+
+def estadisticasVentas(request):
+    form = forms.RangoFechasForm(request.GET)
+    estadistica = None
+    if form.is_valid():
+        estadistica = putils.estadisticasVentas(pviews.get_filtros, form.clean())
+        request.session['estadistica'] = estadistica
+    else:
+        estadistica = request.session['estadistica']
+    columnChart = estadistica['columnChart']
+    pieChart = estadistica['pieChart']
+    return render(request, "obSocialesYclinicas/estadisticasVentas.html", {'columnChart':
+            json.dumps(columnChart), 'pieChart': json.dumps(pieChart), 'form': form})
+
+
+
+def estadisticasVentasExcel(request):
+    datos = request.session['estadistica']['excel']
+    excel = io.BytesIO()
+    workbook = Workbook(excel, {'in_memory': True})
+    worksheet = workbook.add_worksheet()
+    titulo = workbook.add_format({
+        'font_name':'Arial',
+        'font_size': 12,
+        'font_color': 'navy',
+        'bold': True
+    })
+    encabezado = workbook.add_format({
+        'font_name':'Arial',
+        'bold': True
+    })
+    alignLeft = workbook.add_format({
+        'align':'left',
+    })
+    worksheet.write('A1:B1', 'Montos de Ventas Realizas a Clientes', titulo)
+
+    worksheet.set_column('B:B', 40)
+    worksheet.set_column('C:C', 20)
+    worksheet.write('A2', '#', encabezado)
+    worksheet.write('B2', 'Cliente', encabezado)
+    worksheet.write('C2', 'Monto', encabezado)
+    fila = 2
+    tope = len(datos)
+    for i in range(0, tope):
+        worksheet.write(fila, 0, i + 1, alignLeft)
+        worksheet.write(fila, 1, datos[i]['cliente'], alignLeft)
+        worksheet.write(fila, 2, datos[i]['cantidad'], alignLeft)
+        fila += 1
+    workbook.close()
+
+    excel.seek(0)
+
+    response = HttpResponse(excel.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = "attachment; filename=estadisticasVentas.xlsx"
     return response
