@@ -1,5 +1,5 @@
 Compras
-===============
+=======
 
 Si el usuario desea registrar la *Compra de medicamentos a un Laboratorio*, deberá presionar el sub-item ``Compras``.
 
@@ -10,9 +10,6 @@ A continuación el sistema lo redirigirá a la siguiente pantalla:
 
 .. image:: _static/compras.png
    :align: center
-
-
-
 
 En esta parte el usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta un nuevo *Usuario*.
 
