@@ -45,6 +45,7 @@ def crear_detalle_json(detalle, renglon):
 # **********************
 
 def procesar_pedido_de_farmacia(pedido):#ENTRADA FARMACIA
+
     detalles = models.DetallePedidoDeFarmacia.objects.filter(pedidoDeFarmacia=pedido.nroPedido)  # obtengo todos los detalles del pedido
     if not es_pendiente(pedido):
         remito = models.RemitoDeFarmacia(pedidoFarmacia=pedido, fecha=pedido.fecha)
@@ -52,7 +53,6 @@ def procesar_pedido_de_farmacia(pedido):#ENTRADA FARMACIA
         esEnviado = True
         for detalle in detalles:
             esEnviado = esEnviado and procesar_detalle_de_farmacia(detalle, remito, pedido)
-
         pedido.estado = "Enviado" if esEnviado else "Parcialmente Enviado"
     else:
         pedido.estado = "Pendiente"
@@ -60,6 +60,7 @@ def procesar_pedido_de_farmacia(pedido):#ENTRADA FARMACIA
             detalle.cantidadPendiente = detalle.cantidad
             detalle.save()
     pedido.save()
+
 
 # FUNCIONES INTERNAS PEDIDO DE FARMACIA
 
@@ -90,7 +91,6 @@ def procesar_detalle_de_farmacia(detalle, remito, pedido):
         cantidadNecesaria = detalle.cantidad
         i = 0
         while cantidadNecesaria > 0:
-
             lote = lotes[i]
             if lote.stock:  # Solo uso lotes que no esten vacios
                 stockFyF = lote.stockFarmaYfarmacias
@@ -109,7 +109,6 @@ def procesar_detalle_de_farmacia(detalle, remito, pedido):
                     lote.stock = 0
                 else:
                     lote.stock = lote.stock - cantidadNecesaria
-
                     #===================INSERCIONES PARA STOCK DISTRIBUIDO===================
                     stockEnFarma = stockEnFarma - cantidadNecesaria
                     stockFyF.stockFarma=stockEnFarma
@@ -117,15 +116,12 @@ def procesar_detalle_de_farmacia(detalle, remito, pedido):
                     idFarmacia=pedido.farmacia.pk
                     farmacia=Omodels.Farmacia.objects.get(pk=idFarmacia)
                     idLote=lote.pk
-
                     #si la farmacia y lote ya estan en la lista de distribuidos debe recuperarse:
                     farmaciaYLoteEnStockDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote=lote,farmacia=pedido.farmacia)
-
                     if farmaciaYLoteEnStockDist:
                         existeStockDist=True
                     else:
                         existeStockDist=False
-
                     if existeStockDist:
                         stocDist=farmaciaYLoteEnStockDist[0]#Se recupera farmacia con lote en la lista de stock distribuido
                     else:

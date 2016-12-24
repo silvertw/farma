@@ -83,7 +83,6 @@
 		url={% url 'pedidoDesdeMobilFarmacia' %};
 		data={'pkMedicamento':medicamentoApedir,'cantidadApedir':cantidadApedir,'farmaciaSolicitante':farmaciaSolicitante,'finalizar':estado};
 		enviarPedidoDesdeMobil(url,data);
-		alert('Añadido al pedido')
     });
 
     $("[name='finalizar']").on("click", function(e){
@@ -94,7 +93,6 @@
 		url={% url 'pedidoDesdeMobilFarmacia' %};
 		data={'pkMedicamento':medicamentoApedir,'cantidadApedir':cantidadApedir,'farmaciaSolicitante':farmaciaSolicitante,'finalizar':estado};
 		enviarPedidoDesdeMobil(url,data);
-		alert("El pedido se realizo correctamente");
     });
 
 	function enviarPedidoDesdeMobil(url,data){
@@ -104,6 +102,14 @@
 			type: 'get',
 			url: url,
 			success:function(response){
+				alert(response);
+				var msj = response
+				if (msj == 'El pedido fue cerrado correctamente'){
+					window.location.assign("{% url 'inicio' %}");
+				}
+				if (msj == 'Error esta intentando cerrar un pedido que ya esta cerrado'){
+					window.location.assign("{% url 'inicio' %}");
+				}
             }
 		});
 	}

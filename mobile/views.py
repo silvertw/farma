@@ -68,11 +68,4 @@ def PedirMedicamento(request, id_medicamento):
 
 
 
-def CrearPedido(request):
-    print "VOY A CREAR!"
-    return render(request, "pedir_medicamento_mobile.html", {})
-
-
-
-
 

@@ -7,6 +7,7 @@ from .models import RemitoMedicamentosVencidos
 from .models import DetalleRemitoMedicamentosVencido
 from .models import PedidoDeFarmacia
 from .models import DetallePedidoDeFarmacia
+from .models import PedidoFarmaciaMobile
 from .models import RemitoDeFarmacia
 from .models import DetalleRemitoDeFarmacia
 from .models import PedidoDeClinica
@@ -54,3 +55,5 @@ admin.site.register(DetalleRemitoLaboratorio)
 
 
 admin.site.register(movimientosDeStockDistribuido)
+
+admin.site.register(PedidoFarmaciaMobile)

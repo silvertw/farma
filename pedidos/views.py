@@ -11,7 +11,7 @@ from jsonview.decorators import json_view
 from crispy_forms.utils import render_crispy_form
 import datetime
 import re
-from medicamentos import models as mmodels
+from django.contrib.sessions.models import Session
 from organizaciones import models as omodels
 from pedidos import forms, models, utils
 from django.http import HttpResponse
@@ -21,7 +21,7 @@ import json
 from xlsxwriter import Workbook
 import io
 import time
-
+from pedidos.models import PedidoFarmaciaMobile
 
 def get_filtros(get, modelo):#las llamada es-->get_filtros(request.GET, models.PedidoAlaboratorio)
     mfilter = {}
@@ -81,9 +81,11 @@ def update_csrf(r):
 
 @login_required(login_url='login')
 def pedidosDeFarmacia(request):
-
     mfilters = get_filtros(request.GET, models.PedidoDeFarmacia)
-    pedidos = models.PedidoDeFarmacia.objects.filter(**mfilters)
+    pedidos = models.PedidoDeFarmacia.objects.filter(**mfilters).exclude(pedidofarmaciamobile__pedidoCerrado=False)
+    pedidosMobiles = models.PedidoFarmaciaMobile.objects.all().exclude(pedidoCerrado=False).exclude(notificado=True)
+    cantSinNotificar=pedidosMobiles.count()
+
     max = utils.parametros.MAX_A_QUITAR
     haySuficiente=False#Para que trabaje correctamente la busqueda en farmacias
 
@@ -91,7 +93,23 @@ def pedidosDeFarmacia(request):
         'total': models.PedidoDeFarmacia.objects.all().count(),
         'filtrados': pedidos.count()
     }
-    return render(request, "pedidoDeFarmacia/pedidos.html", {"pedidos": pedidos, "filtros": request.GET, 'estadisticas': estadisticas, 'haySuficiente':haySuficiente,'max':max})
+    return render(request, "pedidoDeFarmacia/pedidos.html", {
+                   "pedidos": pedidos, "filtros": request.GET,
+                   'estadisticas': estadisticas,
+                   'haySuficiente':haySuficiente,
+                   'max':max,
+                   'cantSinNotificar':cantSinNotificar,
+                   'pedidosMobiles':pedidosMobiles
+                  }
+    )
+
+def notificarPedidosMobiles(request):
+    #Una vez recuperados los pedidos cerrados sin notificar para informar al usuario de las novedades
+    #estos deben setearse como notificados.
+    pedidosMobiles = models.PedidoFarmaciaMobile.objects.all().exclude(pedidoCerrado=False).exclude(notificado=True)
+    for pedidoMobile in pedidosMobiles:
+        pedidoMobile.notificado=True
+        pedidoMobile.save()
 
 
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
@@ -141,43 +159,79 @@ def pedidoDeFarmacia_verRemitos(request, id_pedido):
 
 
 #==================================LOGICA PARA ATENDER PETICIONES DESDE MOBIL================================
-
 def pedidoDesdeMobilFarmacia(request):
-    farmaciaSolicitanteRs=request.GET["farmaciaSolicitante"]
+    farmaciaSolicitanteRs=request.GET["farmaciaSolicitante"]#Razon social de la farmacia solicitante
     pkMedicamento = request.GET["pkMedicamento"]
     cantidadApedir = request.GET["cantidadApedir"]
     fechaMobile = time.strftime("%d/%m/%Y")
+    fecha = datetime.datetime.strptime(fechaMobile, '%d/%m/%Y').date()
     farmaciaSolicitante = omodels.Farmacia.objects.get(razonSocial=farmaciaSolicitanteRs)
     medicamento = mmodels.Medicamento.objects.get(pk=pkMedicamento)
-    fecha = datetime.datetime.strptime(fechaMobile, '%d/%m/%Y').date()
-    estado = "CR"
+    def crearPedido():
+        pedidoDeFarmaciaMobile = models.PedidoFarmaciaMobile(
+            farmacia=farmaciaSolicitante,
+            fecha=fecha,
+        )
+        pedidoDeFarmaciaMobile.save()
+        detallePedFarmMobile = models.DetallePedidoDeFarmacia(
+            pedidoDeFarmacia=pedidoDeFarmaciaMobile,
+            medicamento=medicamento,
+            cantidad=cantidadApedir
+        )
+        detallePedFarmMobile.save()
+        msj="El medicamento fue agregado correctamente al pedido"
+        return msj
 
-    if request.GET["finalizar"]=="false":#Se agregan detalles al pedido.
-        if not(models.PedidoDeFarmacia.objects.filter(mobile=True,farmacia__razonSocial=farmaciaSolicitanteRs).exists()):
-            pedidoDeFarmaciaMobile = models.PedidoDeFarmacia(farmacia=farmaciaSolicitante, fecha=fecha, mobile=True)
-            pedidoDeFarmaciaMobile.save()
-            detallePedFarmMobile = models.DetallePedidoDeFarmacia(#Se agrega el primer medicamento
-                pedidoDeFarmacia=pedidoDeFarmaciaMobile,
-                medicamento=medicamento,
-                cantidad=cantidadApedir
-            )
-            detallePedFarmMobile.save()
-        else:
-           pedidoDeFarmaciaMobile=models.PedidoDeFarmacia.objects.get(mobile=True,farmacia__razonSocial=farmaciaSolicitante)
-           detallePedFarmMobile = models.DetallePedidoDeFarmacia(
-                pedidoDeFarmacia=pedidoDeFarmaciaMobile,
-                medicamento=medicamento,
-                cantidad=cantidadApedir
-           )
-           detallePedFarmMobile.save()
+    if request.GET["finalizar"]=="false":
+        #Si el pedido no existe se crea y se agrega el primer detalle
+        if not(models.PedidoFarmaciaMobile.objects.filter(farmacia__razonSocial=farmaciaSolicitanteRs).exists()):
+            msj = crearPedido()
+
+        else:#Si el pedido existe debe recuperarse
+            pedidoDeFarmaciaMobile=models.PedidoFarmaciaMobile.objects.get(farmacia__razonSocial=farmaciaSolicitanteRs)
+
+            #Si el pedido no fue cerrado pero la fecha actual no es igual a la fecha del pedido, el pedido debe
+            #destruirse por ser un pedido antiguo y sin cerrarse y se crea el nuevo del dia.
+            if not (pedidoDeFarmaciaMobile.pedidoCerrado) and not (pedidoDeFarmaciaMobile.fecha == fecha):
+                pedidoDeFarmaciaMobile.delete()
+                msj = crearPedido()
+
+            #Si el pedido no fue cerrado pero la fecha del pedido es igual a la actual, se agrega el detalle
+            #al pedido.
+            elif not (pedidoDeFarmaciaMobile.pedidoCerrado) and (pedidoDeFarmaciaMobile.fecha == fecha):
+                detallePedFarmMobile = models.DetallePedidoDeFarmacia(
+                    pedidoDeFarmacia=pedidoDeFarmaciaMobile,
+                    medicamento=medicamento,
+                    cantidad=cantidadApedir
+                )
+                detallePedFarmMobile.save()
+                msj="El medicamento fue agregado correctamente al pedido"
+
+            #Si el pedido fue cerrado pero la fecha del pedido es distinta a la actual, se crea un nuevo
+            #pedido y se agrega el primer detalle
+            elif (pedidoDeFarmaciaMobile.pedidoCerrado) and not (pedidoDeFarmaciaMobile.fecha == fecha):
+                msj = crearPedido()
+
+            #Si el pedido fue cerrado pero la fecha del pedido es igual a la actual, significa que
+            #se quiere continuar agregando detalles a un pedido que ya fue cerrado.
+            elif (pedidoDeFarmaciaMobile.pedidoCerrado) and (pedidoDeFarmaciaMobile.fecha == fecha):
+                msj="Error al agregar, el pedido diario ya fue cerrado"
 
     elif request.GET["finalizar"]=="true":#Se cierra o finaliza el pedido
-        pedidoDeFarmaciaMobile=models.PedidoDeFarmacia.objects.get(mobile=True,farmacia__razonSocial=farmaciaSolicitante)
-        utils.procesar_pedido_de_farmacia(pedidoDeFarmaciaMobile)
+        pedidoDeFarmaciaMobile=models.PedidoFarmaciaMobile.objects.get(farmacia__razonSocial=farmaciaSolicitanteRs)
+        if not(pedidoDeFarmaciaMobile.pedidoCerrado):
+            pedidoDeFarmaciaMobile.pedidoCerrado=True
+            pedidoDeFarmaciaMobile.save()
+            utils.procesar_pedido_de_farmacia(pedidoDeFarmaciaMobile)
+            msj="El pedido fue cerrado correctamente"
+        else:
+            msj="Error esta intentando cerrar un pedido que ya esta cerrado"
 
+    response = HttpResponse(msj)
+
+    return response
 
 #============================================================================================================
-
 
 @json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')

@@ -61,8 +61,8 @@
         {% for pedido in pedidos %}
             <tr class="clickeable" data-id="{{ pedido.nroPedido }}">
                 <td>{{ pedido.nroPedido }}</td>
-                {% if pedido.mobile %}
-                    <td>{{ pedido.farmacia }} <p style = "color:green;">Mobile</p></td>
+                {% if pedido.pedidofarmaciamobile.get_instancia_es_mobile == "mobile" and pedido.pedidofarmaciamobile.pedidoCerrado %}
+                    <td>{{ pedido.farmacia }}<p style = "color:green;">Mobile</p></td>
                 {% else %}
                     <td>{{ pedido.farmacia }}</p></td>
                 {% endif %}
@@ -214,6 +214,46 @@
     </div>
 <!--===================================FIN MI MODAL==============================================-->
 
+    <div class="modal fade" id="novedadesMobile" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+			<div class="modal-content">
+                <!--INICIO CONTENIDO MODAL-->
+                <div class="modal-header">
+                    <!--inicio header-->
+                   <h1>Novedades Pedidos de Farmacia desde Moviles:</h1>
+                    <!--fin header-->
+                </div>
+
+                <div class="modal-body">
+                   <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Farmacia</th>
+                          <th>Fecha</th>
+                        </tr>
+                      </thead>
+                      <tbody class="listadoFact">
+                        {% for pedidoMobil in pedidosMobiles %}
+                            <tr>
+                              <td>{{ pedidoMobil.farmacia }}</td>
+                              <td>{{ pedidoMobil.fecha }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                   </table>
+				</div>
+
+                <div class="modal-footer">
+                  <!--inicio footer-->
+
+
+                    <!--fin footer-->
+				</div>
+                <!--FIN CONTENIDO MODAL-->
+			</div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block more-scripts %}
@@ -221,15 +261,40 @@
     <script>
 
         (function() {
+
+            var cantidad = '{{ cantSinNotificar }}';
+
+            if (cantidad > 0) {
+                Push.create("HAY PEDIDOS MOVILES NUEVOS", {/*logica para manejar la notificacion*/
+                    body: "VER",
+                    timeout: 80000,
+                    icon: "{% static 'mobile/images/telefono.gif' %}",
+                    onClick: function () {
+                        $('#novedadesMobile').modal('toggle')
+                        notificar();
+                    }
+                });
+            }
+
             var modal = modalAjax();
             modal.init();
-
             $(document).on("keyup", function(e){
                 if(e.keyCode == 112){
                     window.open("{% static 'documentacion/build/html/pedidosfarmacia.html' %}");
-                }
-            });
+            }
+        });
+
         })();
+
+        function notificar(){
+            $.ajax({
+                contentType: 'text',
+                data: '',
+                type: 'get',
+                url: {% url 'notificarPedidosMobiles' %}
+            });
+        }
+
         var id
         var farmaciaPk
         $("[name='findFarm']").on("click", function(e){
