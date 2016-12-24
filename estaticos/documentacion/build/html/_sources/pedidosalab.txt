@@ -207,6 +207,9 @@ Esta ventana mostrará todos los remitos vinculados al *Pedido a Laboratorio* se
 
 El usuario tendra la opción de visualizar un remito en PDF, presionanado el boton ``Descargar`` asociado a él.
 
+.. image:: _static/remitopedidolab.png
+   :align: center
+
 .. _formulario-busqueda-pl:
 
 Formulario de Búsqueda

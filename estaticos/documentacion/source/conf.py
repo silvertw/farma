@@ -42,9 +42,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Farma'
-copyright = u'2016, Murua, Federico - Castro, Lucas Matias - Vergara, Marcos'
-author = u'Murua, Federico - Castro, Lucas Matias - Vergara, Marcos'
+project = u'Farma Plus'
+copyright = u'2017, Conti, Martin - Williams, Adrian'
+author = u'Conti, Martin - Williams, Adrian'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -221,8 +221,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'Farma.tex', u'Grupo Farma - Manual de Usuario',
-     u'Murua, Federico - Castro, Lucas Matias - Vergara, Marcos', 'manual'),
+    (master_doc, 'Farma.tex', u'Farma Plus - Manual de Usuario',
+     u'Conti, Martin - Williams, Adrian', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -251,7 +251,7 @@ latex_logo = '_static/logopequeno2.png'
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'Farma', u'Grupo Farma - Manual de Usuario',
+    (master_doc, 'Farma', u'Farma Plus - Manual de Usuario',
      [author], 1)
 ]
 
@@ -265,7 +265,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'Farma', u'Grupo Farma - Manual de Usuario',
+    (master_doc, 'Farma', u'Farma Plus - Manual de Usuario',
      author, 'Farma', 'One line description of project.',
      'Miscellaneous'),
 ]

@@ -3,7 +3,7 @@ Entrar al sistema
 
 Se presentará una pantalla que contendrá un formulario de logueo en el que el usuario deberá ingresar los datos de su cuenta.
 
-.. image:: _static/pantallalogin.jpg
+.. image:: _static/pantallalogin.png
    :align: center
 
 .. ATTENTION::
@@ -16,5 +16,5 @@ Se presentará una pantalla que contendrá un formulario de logueo en el que el 
 
 Una vez completado el formulario, el usuario tendrá que presionar el botón ``Acceder`` y será redirigido a la pantalla principal del sistema.
 
-.. image:: _static/pantallaprincipal.jpg
+.. image:: _static/pantallaprincipal.png
    :align: center

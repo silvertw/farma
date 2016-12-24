@@ -178,6 +178,9 @@ Esta ventana mostrará todos los remitos vinculados al *Pedido de Farmacia* sele
 
 El usuario tendra la opción de visualizar un remito en PDF, presionanado el boton ``Descargar`` asociado a él.
 
+.. image:: _static/remitopedidofarmacia.png
+   :align: center
+
 .. _formulario-busqueda-pf:
 
 Formulario de Búsqueda

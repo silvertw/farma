@@ -1,9 +1,9 @@
-FarmaPlus
+Farma Plus
 ===========
 
 .. toctree::
    :maxdepth: 2
-   
+
    pantallaprincipal
    usuarios
    medicamentos

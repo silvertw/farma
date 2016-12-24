@@ -8,3 +8,4 @@ Luego de hacer “click” en  la leyenda "Organizaciones", el sistema muestra u
    farmacias
    clinicas
    laboratorios
+   obrassociales
