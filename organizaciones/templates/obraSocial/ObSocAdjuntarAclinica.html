@@ -27,7 +27,7 @@
                         AGREGAR OBRA SOCIAL
                     </button>
                 </span>
-                <input class="form-control form-field form-field-simple" type="text" id="razonSocialAgr" name="razonSocialAgr" value="{{filtros.razonSocial}}" placeholder="Razon Social"/>
+                <input class="form-control form-field form-field-simple" type="text" id="razonSocialAgr" name="razonSocialAgr" placeholder="Razon Social"/>
             </div>
 
     {% endif %}
@@ -60,24 +60,12 @@
                         Acción
                         <span class="caret"></span>
                         </button>
-
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-
                             <li>
-
-                                <a class="action-link btn-eliminar-ajax" href="#">
-                                    <span class="action-link-icon animated glyphicon glyphicon-edit"></span> Cobertura
-                                </a>
-
-                            </li>
-                            <li>
-
-                                <a class="action-link btn-desvincular" id="{{ obrasSocial.id }}" name="desvinculacion" href="">
+                                <a class="btn btn-default button-hover dropdown-toggle" id="{{ obrasSocial.id }}" name="desvinculacion">
                                     <span class="action-link-icon animated glyphicon glyphicon-trash"></span> Desvincular
                                 </a>
-
                             </li>
-
                         </ul>
                     </div>
                 </td>
@@ -101,9 +89,9 @@
     <script>
        
 
-        $(document).on("keyup", function(e){
+       $(document).on("keyup", function(e){
             if(e.keyCode == 112){
-                window.open("{% static 'documentacion/build/html/obrassociales.html' %}");
+                window.open("{% static 'documentacion/build/html/farmacias.html' %}");
             }
         });
 
@@ -161,12 +149,15 @@
                 url: {% url 'ObSocAdjuntarAclinicaR' %},
 
                 success:function(response){
-                    alert(response);
+                    if (response != '--'){
+                        alert(response);
+                    }
                     /*$('#tbl').html(response);*/
                     window.location.assign("{% url 'ObSocAdjuntarAclinica' clinica.pk %}");
                     /*location.reload()*/
                 }
             });
         }
+
     </script>
 {% endblock %}

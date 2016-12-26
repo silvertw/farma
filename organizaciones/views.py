@@ -320,6 +320,7 @@ def ObSocAdjuntarAclinicaR (request):
                 IdObraSocial = decoded_json["idDeObraSocial"]
                 ObSocRemov = models.ObraSocial.objects.get(pk=IdObraSocial)
                 clinicaObject.obraSocial.remove(ObSocRemov)
+                msj="--"
             else:
                 msj = "La obra social ya esta vinculada a esta Clinica"
             #----------------------------------------------------------
@@ -335,10 +336,6 @@ def ObSocAdjuntarAclinicaR (request):
     response = HttpResponse(msj)
 
     return response
-
-
-
-
 
 
 
