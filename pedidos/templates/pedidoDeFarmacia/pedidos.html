@@ -267,7 +267,6 @@
             if (cantidad > 0) {
                 Push.create("HAY PEDIDOS MOVILES NUEVOS", {/*logica para manejar la notificacion*/
                     body: "VER",
-                    timeout: 80000,
                     icon: "{% static 'mobile/images/telefono.gif' %}",
                     onClick: function () {
                         $('#novedadesMobile').modal('toggle')

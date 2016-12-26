@@ -135,7 +135,6 @@ urlpatterns = [
     url(r'^pedidosDeClinica/estadisticas/topPorCantidadMedicamentos/downloadExcel/$', pviews.pedidosDeClinica_topClinicasConMasMedicamentosExcel, name="pedidosDeClinica_topClinicasConMasMedicamentosExcel"),
     url(r'^pedidosDeClinica/estadisticas/topPorCantidadPedidos/$', pviews.pedidosDeClinica_topClinicasConMasPedidos, name="pedidosDeClinica_topClinicasConMasPedidos"),
     url(r'^pedidosDeClinica/estadisticas/topPorCantidadPedidos/downloadExcel/$', pviews.pedidosDeClinica_topClinicasConMasPedidosExcel, name="pedidosDeClinica_topClinicasConMasPedidosExcel"),
-
     url(r'^getObrasSociales/(?P<id_clinica>\d+)/$', pviews.get_obrasSociales, name="get_obrasSociales"),
 
     # ************************************** Pedido a Laboratorio ***************************************
