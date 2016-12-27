@@ -11,7 +11,7 @@
 {% block header-title %} Listado de Obras Sociales que trabajan con Clinica: {{clinica}} {% endblock%}
 
 {% block form-field-simple %} 
-    <input class="form-control form-field form-field-simple" id="razonSocial" name="razonSocial" value="{{filtros.razonSocial}}" placeholder="Razon Social" type="text" />
+    <input class="form-control form-field form-field-simple" id="razonSocial" name="razonSocial"  placeholder="Razon Social" type="text" />
 {% endblock %}
 
 {% block form-fields-avanzados %} 
@@ -22,12 +22,17 @@
     {% if perms.usuarios.encargado_general %}
 
             <div class="input-group">
-                <span class="input-group-btn">
+
+
+                <div class="ui-widget">
                     <button class="btn btn-default" id="agregaOSid" name="campoOS">
                         AGREGAR OBRA SOCIAL
                     </button>
-                </span>
-                <input class="form-control form-field form-field-simple" type="text" id="razonSocialAgr" name="razonSocialAgr" placeholder="Razon Social"/>
+                    <label for="razonSocialAgr">: </label>
+                    <input id="razonSocialAgr" name="razonSocialAgr" value="{{filtros.razonSocial}}" placeholder="Razon Social">
+                </div>
+
+
             </div>
 
     {% endif %}
@@ -87,14 +92,30 @@
 {% block more-scripts %}
 
     <script>
-       
 
-       $(document).on("keyup", function(e){
+        $( function() {
+           var availableTags = [];
+           var obSocRs='{{listOsParaAdjuntarRs}}';
+           var split1 = obSocRs.split(';');
+           for(i=0;i<split1.length;i++){
+               var split2 = split1[i].split('&');
+               for(j=0;j<split2.length;j++){
+                   if((split2[j].indexOf('[')==-1) && (split2[j].indexOf('#')==-1) && (split2[j].indexOf(']')==-1) && (split2[j].indexOf('u')==-1)){
+                        availableTags.push(String(split2[j]));
+                   }
+               }
+           }
+
+           $( "#razonSocialAgr" ).autocomplete({
+                source:availableTags
+           });
+        });
+
+        $(document).on("keyup", function(e){
             if(e.keyCode == 112){
                 window.open("{% static 'documentacion/build/html/farmacias.html' %}");
             }
         });
-
 
         $(document).on("click",function(e){
             identificadorDeID = e.target.id; /*obtiene el id del elemento del DOM que fue clickeado*/
@@ -158,6 +179,8 @@
                 }
             });
         }
+
+
 
     </script>
 {% endblock %}

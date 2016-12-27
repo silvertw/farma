@@ -256,12 +256,16 @@ def ObSocAdjuntarAclinica(request, id_clinica):
     filters = get_filtros(request.GET, models.ObraSocial)
     mfilters = dict(filter(lambda v: v[0] in models.ObraSocial.FILTROS, filters.items()))
     lObrasSociales = lObSoc.filter(**mfilters)
+    listOsParaAdjuntar = models.ObraSocial.objects.all()
+    listOsParaAdjuntarRs=[]
+    for osList in listOsParaAdjuntar:
+        listOsParaAdjuntarRs.append(osList.razonSocial)
 
     estadisticas = {
         'total': models.ObraSocial.objects.all().count(),
         'filtrados': lObrasSociales.count()
     }
-    return render(request, "obraSocial/ObSocAdjuntarAclinica.html", {"ObrasSociales": lObrasSociales, "filtros": filters, 'estadisticas': estadisticas, "clinica":clinica})
+    return render(request, "obraSocial/ObSocAdjuntarAclinica.html", {"ObrasSociales": lObrasSociales, "filtros": filters, 'estadisticas': estadisticas, "clinica":clinica,"listOsParaAdjuntarRs":listOsParaAdjuntarRs})
 
 @permission_required('usuarios.encargado_general', login_url='login')
 @login_required(login_url='login')
