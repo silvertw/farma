@@ -50,9 +50,9 @@
     <tbody>
         {% for detalle in detallesRemito %}
         <tr>
-            <td class="text-left">{{ detalle.detallePedidoDeFarmacia.medicamento }}</td>
-            <td class="text-right">{{ detalle.cantidad }}</td>
-            <td class="text-right">{{ detalle.lote }}</td>
+            <td class="text-center">{{ detalle.detallePedidoDeFarmacia.medicamento }}</td>
+            <td class="text-center">{{ detalle.cantidad }}</td>
+            <td class="text-center">{{ detalle.lote }}</td>
         </tr>
         {% endfor %}
     </tbody>

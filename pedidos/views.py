@@ -363,7 +363,9 @@ def buscarEnFarmacias(request):
             renglones=[{'totalq': 0, 'farmacia': 'No se puede cubrir pedido', 'lote': 'No se puede cubrir pedido'}]
         else:
             renglones=utils.buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar)
-
+            if not renglones:#Cuando renglones es vacio es por que no se puede realizar el movimiento sin
+                             #dejar a las farmacias con un minimo establecido mayor a cero.
+                renglones=[{'totalq': 0, 'farmacia': 'No se puede dejar el minimo en farmacias', 'lote': 'No se puede cubrir pedido'}]
      if verificar:
         return render(request, "pedidoDeFarmacia/_detalleInforme.html", {"renglones": renglones})
      else:
