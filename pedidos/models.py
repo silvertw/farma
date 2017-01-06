@@ -394,7 +394,6 @@ class DetallePedidoAlaboratorio(models.Model):
         return response
 
 class movimientosDeStockDistribuido(models.Model):
-    movimiento=models.TextField()
     farmaciaDeDestino = models.CharField(max_length=50)
     fecha=models.DateField(default=utils.timezone.now)
     pedidoMov=models.ForeignKey('PedidoDeFarmacia')
@@ -406,19 +405,10 @@ class movimientosDeStockDistribuido(models.Model):
     def __str__(self):
         return 'Farmacia de Destino: %s' % (self.farmaciaDeDestino)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+class detalleDeMovimientos(models.Model):
+    movimiento = models.ForeignKey('movimientosDeStockDistribuido', null=True, on_delete=models.CASCADE)
+    farmacia = models.CharField(max_length=50)
+    lote = models.PositiveIntegerField()
+    cantidadQuitada = models.PositiveIntegerField()
 
 

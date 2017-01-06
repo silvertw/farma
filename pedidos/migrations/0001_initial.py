@@ -10,10 +10,19 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('medicamentos', '__first__'),
-        ('organizaciones', '0005_obrasocial_nombregerente'),
+        ('organizaciones', '__first__'),
     ]
 
     operations = [
+        migrations.CreateModel(
+            name='detalleDeMovimientos',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('farmacia', models.CharField(max_length=50)),
+                ('lote', models.PositiveIntegerField()),
+                ('cantidadQuitada', models.PositiveIntegerField()),
+            ],
+        ),
         migrations.CreateModel(
             name='DetallePedidoAlaboratorio',
             fields=[
@@ -82,7 +91,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('cantidad', models.PositiveIntegerField()),
-                ('dependencia', models.CharField(unique=True, max_length=50)),
+                ('dependencia', models.CharField(max_length=50)),
                 ('lote', models.ForeignKey(to='medicamentos.Lote')),
                 ('medicamento', models.ForeignKey(to='medicamentos.Medicamento')),
             ],
@@ -128,8 +137,6 @@ class Migration(migrations.Migration):
                 ('fecha', models.DateField()),
                 ('estado', models.CharField(max_length=25, blank=True)),
                 ('tieneMovimientos', models.BooleanField(default=False)),
-                ('mobile', models.BooleanField(default=False)),
-                ('farmacia', models.ForeignKey(to='organizaciones.Farmacia')),
             ],
             options={
                 'abstract': False,
@@ -150,7 +157,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('fecha', models.DateField()),
-                ('pedidoFarmacia', models.ForeignKey(to='pedidos.PedidoDeFarmacia')),
             ],
         ),
         migrations.CreateModel(
@@ -170,6 +176,33 @@ class Migration(migrations.Migration):
                 ('fecha', models.DateField()),
                 ('laboratorio', models.ForeignKey(to='organizaciones.Laboratorio')),
             ],
+        ),
+        migrations.CreateModel(
+            name='PedidoFarmaciaMobile',
+            fields=[
+                ('pedidodefarmacia_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='pedidos.PedidoDeFarmacia')),
+                ('pedidoCerrado', models.BooleanField(default=False)),
+                ('notificado', models.BooleanField(default=False)),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('pedidos.pedidodefarmacia',),
+        ),
+        migrations.AddField(
+            model_name='remitodefarmacia',
+            name='pedidoFarmacia',
+            field=models.ForeignKey(to='pedidos.PedidoDeFarmacia'),
+        ),
+        migrations.AddField(
+            model_name='pedidodefarmacia',
+            name='farmacia',
+            field=models.ForeignKey(to='organizaciones.Farmacia'),
+        ),
+        migrations.AddField(
+            model_name='pedidoalaboratorio',
+            name='remitoVencidosAsociado',
+            field=models.OneToOneField(null=True, blank=True, to='pedidos.RemitoMedicamentosVencidos'),
         ),
         migrations.AddField(
             model_name='movimientosdestockdistribuido',
@@ -220,5 +253,10 @@ class Migration(migrations.Migration):
             model_name='detallepedidoalaboratorio',
             name='pedido',
             field=models.ForeignKey(to='pedidos.PedidoAlaboratorio', null=True),
+        ),
+        migrations.AddField(
+            model_name='detalledemovimientos',
+            name='movimiento',
+            field=models.ForeignKey(to='pedidos.movimientosDeStockDistribuido', null=True),
         ),
     ]

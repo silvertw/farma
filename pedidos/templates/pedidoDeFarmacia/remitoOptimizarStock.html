@@ -47,11 +47,11 @@
         </tr>
     </thead>
     <tbody>
-       {% for json in detallesRemito %}
+       {% for detalle in detallesRemito %}
         <tr>
-            <td class="text-center">{{ json.totalq}}</td>
-            <td class="text-center">{{ json.farmacia }}</td>
-            <td class="text-center">{{ json.lote }}</td>
+            <td class="text-center">{{ detalle.cantidadQuitada}}</td>
+            <td class="text-center">{{ detalle.farmacia }}</td>
+            <td class="text-center">{{ detalle.lote }}</td>
         </tr>
         {% endfor %}
     </tbody>

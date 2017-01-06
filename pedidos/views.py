@@ -347,38 +347,34 @@ def buscarEnFarmacias(request):
 
         nroPedido = request.GET['nroPedido']
         farmaciaPk = request.GET['farmacia']
-
         pedido = pmodels.PedidoDeFarmacia.objects.get(pk=nroPedido)
         detalles = pmodels.DetallePedidoDeFarmacia.objects.filter(pedidoDeFarmacia__nroPedido=nroPedido)
         farmacia = omodels.Farmacia.objects.get(pk=farmaciaPk)
-        fecha = pedido.fecha
-        cantidadAobtener=0
-
-        for detalle in detalles:
-            cantidadAobtener += detalle.cantidadPendiente
-
-        haySuficientePedido = utils.verificarCantidad(cantidadAobtener,detalle)
+        haySuficientePedido = utils.verificarCantidad(detalles)
 
         if not haySuficientePedido:
             renglones=[{'totalq': 0, 'farmacia': 'No se puede cubrir pedido', 'lote': 'No se puede cubrir pedido'}]
         else:
             renglones=utils.buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar)
-            if not renglones:#Cuando renglones es vacio es por que no se puede realizar el movimiento sin
-                             #dejar a las farmacias con un minimo establecido mayor a cero.
-                renglones=[{'totalq': 0, 'farmacia': 'No se puede dejar el minimo en farmacias', 'lote': 'No se puede cubrir pedido'}]
+
      if verificar:
         return render(request, "pedidoDeFarmacia/_detalleInforme.html", {"renglones": renglones})
      else:
-        dataMovimiento=""
-        for renglon in renglones:
-            dataMovimiento = dataMovimiento +'_'+ str(renglon)
-
         movimiento = pmodels.movimientosDeStockDistribuido(
-            movimiento=dataMovimiento,
             farmaciaDeDestino=farmacia.razonSocial,
             pedidoMov=pedido,
         )
         movimiento.save()
+        for renglon in renglones:
+
+            detalleMovimiento = pmodels.detalleDeMovimientos(
+                movimiento = movimiento,
+                farmacia=renglon['farmacia'],
+                lote=renglon['lote'],
+                cantidadQuitada=renglon['totalq']
+            )
+            detalleMovimiento.save()
+
         pedido.tieneMovimientos=True
         pedido.save()
 
@@ -393,37 +389,13 @@ class remitoOptimizarStock(PDFTemplateView):
 
         movimiento=models.movimientosDeStockDistribuido.objects.get(pedidoMov__pk=id)
         pedido=models.PedidoDeFarmacia.objects.get(pk=id)
-        actividadMovimiento=movimiento.movimiento
-        #===============LOGICA COMPLEJA POR PROBLEMAS DE CONVERSION DE STRING A JSON===========
-        renglones=[]
-        filtro1=str(actividadMovimiento)
-        filtro2=filtro1.replace("}_{","} {")
-        filtro3=filtro2.replace("_","")
-        filtro4=filtro3.replace("} {","}_{")
-        filtro5=filtro4.replace("u","")
-        filtro6=filtro5.replace("{","")
-        actividadMovimiento=filtro6.replace("}","")
-        jsones=actividadMovimiento.split("_")
-        for json in jsones:
-            renglon={}
-            dataClaveValores = json.split(",")
-            for dataClaveValor in dataClaveValores:
-                claveValor=dataClaveValor.split(":")
-                if "'totalq'" in claveValor:
-                    renglon["totalq"]=claveValor[1]
-                elif " 'farmacia'" in claveValor:
-                    renglon["farmacia"]=claveValor[1]
-                elif " 'lote'" in claveValor:
-                    renglon["lote"]=claveValor[1]
-            renglones.append(renglon)
-        #====================================FIN CONVERSION==================================
+        detalleMovimientos=models.detalleDeMovimientos.objects.filter(movimiento=movimiento)
 
         return super(remitoOptimizarStock, self).get_context_data(
             pagesize="A4",
             remito=pedido,
-            detallesRemito=renglones
+            detallesRemito=detalleMovimientos
         )
-
 # ******************************* PEDIDOS DE CLINICA ******************************* #
 
 @login_required(login_url='login')
