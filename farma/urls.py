@@ -55,6 +55,7 @@ urlpatterns = [
     url(r'^medicamentos/delete/(?P<id_medicamento>\d+)/$', mviews.medicamento_delete, name="medicamento_delete"),
     url(r'^medicamentos/tryDelete/(?P<id_medicamento>\d+)/$', mviews.medicamento_try_delete, name="medicamento_try_delete"),
     url(r'^medicamentos/verLotes/(?P<id_medicamento>\d+)/$', mviews.medicamento_verLotes, name="medicamento_verLotes"),
+    url(r'^verStockGlobalMed/$', mviews.medicamentoVerStockGlobalMed, name="verStockGlobalMed"),
     url(r'^medicamentos/estadisticas/topPorCantidad/$', mviews.medicamentos_topPorCantidad, name="medicamentos_topPorCantidad"),
     url(r'^medicamentos/estadisticas/topPorCantidad/downloadExcel/$', mviews.medicamentos_topPorCantidadExcel, name="medicamentos_topPorCantidadExcel"),
     url(r'^medicamentos/estadisticas/topPorPedido/$', mviews.medicamentos_topPorPedido, name="medicamentos_topPorPedido"),
