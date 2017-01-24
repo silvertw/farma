@@ -14,7 +14,13 @@ Estas funcionalidades son:
     - :ref:`Modificar Precio Venta <modificar-precio-venta>`
     - :ref:`Eliminar Medicamento <eliminar-medicamento>`
     - :ref:`Ver Lotes <ver-lotes>`
+    - :ref:`Stock Global <stock-global>`
     - :ref:`Formulario de Búsqueda <formulario-busqueda-medicamento>`
+    - :ref:`Reportes <reportes-pc>`
+        - :ref:`Medicamentos mas solicitados por cantidad <meds-cant-pc>`
+        - :ref:`Medicamentos mas solicitados por pedido <meds-ped-pc>`
+        - :ref:`Organizaciones mas demandantes de un medicamento por cantidad <org-cant-pc>`
+        - :ref:`Organizaciones mas demandantes de un medicamento por pedido <org-ped-pc>`
 
 .. _alta-medicamento:
 
@@ -152,6 +158,7 @@ Esta ventana mostrará todos los lotes que estén asociados al *Medicamento*.
     .. image:: _static/nolotes.png
        :align: center
 
+.. _stock-global:
 
 Stock Global
 ------------
@@ -174,7 +181,7 @@ Si el usuario desea visualizar y/o generar reportes de estadisticas en relacion 
 .. image:: _static/reportesMedicamentos.png
    :align: center
 
-Esta funcionalidad cuenta con 2 modalidades:
+Esta funcionalidad cuenta con 4 modalidades:
 
     - :ref:`Medicamentos mas solicitados por cantidad <meds-cant-pc>`
     - :ref:`Medicamentos mas solicitados por pedido <meds-ped-pc>`
@@ -187,12 +194,15 @@ Medicamentos mas solicitados por cantidad
 +++++++++++++++++++++++++++++++++++++++++
 Si el usuario desea que los reportes se generen en base al volumen de medicamentos pedidos por cantidad, debera presionar la opcion ``Medicamentos mas solicitados por cantidad``.
 
-.. image:: _static/top10medsclin.png
+.. image:: _static/reportesMedicamentos1.png
    :align: center
 
 Al hacerlo, se mostrara la siguiente pantalla:
 
-.. image:: _static/pantallatop10medsclin.png
+.. image:: _static/pantallatop10medsCant1.png
+   :align: center
+
+.. image:: _static/pantallatop10medsCant2.png
    :align: center
 
 Si el usuario desea ajustar el rango de fecha sobre el cual se genera el reporte puede hacerlo utilizando la modalidad de filtrado por fechas:
@@ -201,31 +211,34 @@ El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y
 .. NOTE::
     Todos los campos son opcionales, de no especificarse ningún criterio de búsqueda el sistema mostrará la informacion historica completa.
 
-.. image:: _static/fechastop10medsclin.png
+.. image:: _static/fechastop10meds1.png
    :align: center
 
 Si el usuario desea exportar el resultado generado a una planilla de Excel, debera presionar el ícono de excel.
 
-.. image:: _static/xlstop10medsclin.png
+.. image:: _static/xlstop10meds2.png
    :align: center
 
 Si el usuario desea exportar el resultado en un formato de imagen PNG, JPEG, PDF o SVG, debera presionar el boton de herramientas de exportacion y seleccionar la opcion correspondiente.
 
-.. image:: _static/btnexptop10medsclin.png
+.. image:: _static/btnexptop10meds3.png
    :align: center
 
 .. _meds-ped-pc:
 
 Medicamentos mas solicitados por pedido
 +++++++++++++++++++++++++++++++++++++++
-Si el usuario desea que los reportes se generen en base a la cantidad de pedidos realizados por cada clínica, debera presionar la opcion ``Medicamentos mas solicitados por pedido``.
+Si el usuario desea que los reportes se generen en base a la cantidad de Medicamentos mas solicitados por pedidos realizados, debera presionar la opcion ``Medicamentos mas solicitados por pedido``.
 
-.. image:: _static/top10pedsclin.png
+.. image:: _static/reportesMedicamentos2.png
    :align: center
 
 Al hacerlo, se mostrara la siguiente pantalla:
 
-.. image:: _static/pantallatop10pedsclin.png
+.. image:: _static/pantallatop10medsPed1.png
+   :align: center
+
+.. image:: _static/pantallatop10medsPed2.png
    :align: center
 
 Si el usuario desea ajustar el rango de fecha sobre el cual se genera el reporte puede hacerlo utilizando la modalidad de filtrado por fechas:
@@ -234,73 +247,91 @@ El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y
 .. NOTE::
     Todos los campos son opcionales, de no especificarse ningún criterio de búsqueda el sistema mostrará la informacion historica completa.
 
-.. image:: _static/fechastop10pedsclin.png
+.. image:: _static/fechastop10meds1.png
    :align: center
 
 Si el usuario desea exportar el resultado generado a una planilla de Excel, debera presionar el ícono de excel.
 
-.. image:: _static/xlstop10pedsclin.png
+.. image:: _static/xlstop10meds2.png
    :align: center
 
 Si el usuario desea exportar el resultado en un formato de imagen PNG, JPEG, PDF o SVG, debera presionar el boton de herramientas de exportacion y seleccionar la opcion correspondiente.
 
-.. image:: _static/btnexptop10pedsclin.png
+.. image:: _static/btnexptop10meds3.png
    :align: center
 
 .. _org-cant-pc:
 
 Organizaciones mas demandantes de un medicamento por cantidad
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Si el usuario desea que los reportes se generen en base a la cantidad de pedidos realizados por cada clínica, debera presionar la opcion ``Organizaciones mas demandantes de un medicamento por cantidad``.
+Si el usuario desea que los reportes se generen en base a la cantidad de Organizaciones mas demandantes de un medicamento, debera presionar la opcion ``Organizaciones mas demandantes de un medicamento por cantidad``.
 
-.. image:: _static/top10pedsclin.png
+.. image:: _static/reportesMedicamentos3.png
    :align: center
 
 Al hacerlo, se mostrara la siguiente pantalla:
 
-.. image:: _static/pantallatop10pedsclin.png
+.. image:: _static/pantallaOrgMedCant.png
    :align: center
 
 Si el usuario desea ajustar el rango de fecha sobre el cual se genera el reporte puede hacerlo utilizando la modalidad de filtrado por fechas:
 El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y presionar el botón ``Filtrar``.
 
+.. image:: _static/pantallaOrgMedCant2.png
+   :align: center
+.. image:: _static/pantallaOrgMedCant3.png
+   :align: center
+.. image:: _static/pantallaOrgMedCant4.png
+   :align: center
+.. image:: _static/pantallaOrgMedCant5.png
+   :align: center
+
 .. NOTE::
     Todos los campos son opcionales, de no especificarse ningún criterio de búsqueda el sistema mostrará la informacion historica completa.
 
-.. image:: _static/fechastop10pedsclin.png
+.. image:: _static/fechastop10meds1.png
    :align: center
 
 Si el usuario desea exportar el resultado generado a una planilla de Excel, debera presionar el ícono de excel.
 
-.. image:: _static/xlstop10pedsclin.png
+.. image:: _static/xlstop10meds2.png
    :align: center
 
 Si el usuario desea exportar el resultado en un formato de imagen PNG, JPEG, PDF o SVG, debera presionar el boton de herramientas de exportacion y seleccionar la opcion correspondiente.
 
-.. image:: _static/btnexptop10pedsclin.png
+.. image:: _static/btnexptop10meds3.png
    :align: center
 
 .. _org-ped-pc:
 
 Organizaciones mas demandantes de un medicamento por pedido
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Si el usuario desea que los reportes se generen en base a la cantidad de pedidos realizados por cada clínica, debera presionar la opcion ``Organizaciones mas demandantes de un medicamento por pedido``.
+Si el usuario desea que los reportes se generen en base a la cantidad de pedidos segun Organizaciones mas demandantes de un medicamento por pedido, debera presionar la opcion ``Organizaciones mas demandantes de un medicamento por pedido``.
 
-.. image:: _static/top10pedsclin.png
+.. image:: _static/reportesMedicamentos4.png
    :align: center
 
 Al hacerlo, se mostrara la siguiente pantalla:
 
-.. image:: _static/pantallatop10pedsclin.png
+.. image:: _static/pantallaOrgMedPed.png
    :align: center
 
 Si el usuario desea ajustar el rango de fecha sobre el cual se genera el reporte puede hacerlo utilizando la modalidad de filtrado por fechas:
 El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y presionar el botón ``Filtrar``.
 
+.. image:: _static/pantallaOrgMedCant2.png
+   :align: center
+.. image:: _static/pantallaOrgMedCant3.png
+   :align: center
+.. image:: _static/pantallaOrgMedCant4.png
+   :align: center
+.. image:: _static/pantallaOrgMedCant5.png
+   :align: center
+
 .. NOTE::
     Todos los campos son opcionales, de no especificarse ningún criterio de búsqueda el sistema mostrará la informacion historica completa.
 
-.. image:: _static/fechastop10pedsclin.png
+.. image:: _static/fechastop10meds1.png
    :align: center
 
 Si el usuario desea exportar el resultado generado a una planilla de Excel, debera presionar el ícono de excel.

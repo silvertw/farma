@@ -169,13 +169,32 @@
 <p>Junto con el listado, se ofrecerán un conjunto de funcionalidades que permitirán manipular estos <em>Medicamentos</em></p>
 <p>Estas funcionalidades son:</p>
 <blockquote>
-<div><ul class="simple">
-<li><a class="reference internal" href="#alta-medicamento"><span class="std std-ref">Alta Medicamento</span></a></li>
-<li><a class="reference internal" href="#modificar-stock-minimo"><span class="std std-ref">Modificar Stock Mínimo</span></a></li>
-<li><a class="reference internal" href="#modificar-precio-venta"><span class="std std-ref">Modificar Precio Venta</span></a></li>
-<li><a class="reference internal" href="#eliminar-medicamento"><span class="std std-ref">Eliminar Medicamento</span></a></li>
-<li><a class="reference internal" href="#ver-lotes"><span class="std std-ref">Ver Lotes</span></a></li>
-<li><a class="reference internal" href="#formulario-busqueda-medicamento"><span class="std std-ref">Formulario de Búsqueda</span></a></li>
+<div><ul>
+<li><p class="first"><a class="reference internal" href="#alta-medicamento"><span class="std std-ref">Alta Medicamento</span></a></p>
+</li>
+<li><p class="first"><a class="reference internal" href="#modificar-stock-minimo"><span class="std std-ref">Modificar Stock Mínimo</span></a></p>
+</li>
+<li><p class="first"><a class="reference internal" href="#modificar-precio-venta"><span class="std std-ref">Modificar Precio Venta</span></a></p>
+</li>
+<li><p class="first"><a class="reference internal" href="#eliminar-medicamento"><span class="std std-ref">Eliminar Medicamento</span></a></p>
+</li>
+<li><p class="first"><a class="reference internal" href="#ver-lotes"><span class="std std-ref">Ver Lotes</span></a></p>
+</li>
+<li><p class="first"><a class="reference internal" href="#stock-global"><span class="std std-ref">Stock Global</span></a></p>
+</li>
+<li><p class="first"><a class="reference internal" href="#formulario-busqueda-medicamento"><span class="std std-ref">Formulario de Búsqueda</span></a></p>
+</li>
+<li><dl class="first docutils">
+<dt><a class="reference internal" href="#reportes-pc"><span class="std std-ref">Reportes</span></a></dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#meds-cant-pc"><span class="std std-ref">Medicamentos mas solicitados por cantidad</span></a></li>
+<li><a class="reference internal" href="#meds-ped-pc"><span class="std std-ref">Medicamentos mas solicitados por pedido</span></a></li>
+<li><a class="reference internal" href="#org-cant-pc"><span class="std std-ref">Organizaciones mas demandantes de un medicamento por cantidad</span></a></li>
+<li><a class="reference internal" href="#org-ped-pc"><span class="std std-ref">Organizaciones mas demandantes de un medicamento por pedido</span></a></li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 </div></blockquote>
 <div class="section" id="alta-medicamento">
@@ -283,7 +302,7 @@ En este punto, las posibles causas de errores son:</p>
 </div>
 </div>
 <div class="section" id="stock-global">
-<h2>Stock Global<a class="headerlink" href="#stock-global" title="Enlazar permanentemente con este título">¶</a></h2>
+<span id="id5"></span><h2>Stock Global<a class="headerlink" href="#stock-global" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Si el usuario desea ver el Stock de un <em>Medicamento</em>, deberá seleccionar el botón de <strong>Acción</strong> asociado al <em>Medicamento</em> y presionar la pestaña <code class="docutils literal"><span class="pre">Stock</span> <span class="pre">Global</span></code>, el cual es el Stock de la Drogueria mas el de las sucursales.</p>
 <img alt="_images/btnStockGlobal.png" class="align-center" src="_images/btnStockGlobal.png" />
 <p>Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):</p>
@@ -292,8 +311,8 @@ En este punto, las posibles causas de errores son:</p>
 <div class="section" id="reportes">
 <span id="reportes-pc"></span><h2>Reportes<a class="headerlink" href="#reportes" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Si el usuario desea visualizar y/o generar reportes de estadisticas en relacion a los <em>Medicamentos</em>, debera seleccionar el boton de <strong>Reportes</strong>.</p>
-<img alt="_images/reportesclin.png" class="align-center" src="_images/reportesclin.png" />
-<p>Esta funcionalidad cuenta con 2 modalidades:</p>
+<img alt="_images/reportesMedicamentos.png" class="align-center" src="_images/reportesMedicamentos.png" />
+<p>Esta funcionalidad cuenta con 4 modalidades:</p>
 <blockquote>
 <div><ul class="simple">
 <li><a class="reference internal" href="#meds-cant-pc"><span class="std std-ref">Medicamentos mas solicitados por cantidad</span></a></li>
@@ -304,71 +323,81 @@ En este punto, las posibles causas de errores son:</p>
 </div></blockquote>
 <div class="section" id="medicamentos-mas-solicitados-por-cantidad">
 <span id="meds-cant-pc"></span><h3>Medicamentos mas solicitados por cantidad<a class="headerlink" href="#medicamentos-mas-solicitados-por-cantidad" title="Enlazar permanentemente con este título">¶</a></h3>
-<p>Si el usuario desea que los reportes se generen en base al volumen de medicamentos pedidos por cada clínica, debera presionar la opcion <code class="docutils literal"><span class="pre">Medicamentos</span> <span class="pre">mas</span> <span class="pre">solicitados</span> <span class="pre">por</span> <span class="pre">cantidad</span></code>.</p>
-<img alt="_images/top10medsclin.png" class="align-center" src="_images/top10medsclin.png" />
+<p>Si el usuario desea que los reportes se generen en base al volumen de medicamentos pedidos por cantidad, debera presionar la opcion <code class="docutils literal"><span class="pre">Medicamentos</span> <span class="pre">mas</span> <span class="pre">solicitados</span> <span class="pre">por</span> <span class="pre">cantidad</span></code>.</p>
+<img alt="_images/reportesMedicamentos1.png" class="align-center" src="_images/reportesMedicamentos1.png" />
 <p>Al hacerlo, se mostrara la siguiente pantalla:</p>
-<img alt="_images/pantallatop10medsclin.png" class="align-center" src="_images/pantallatop10medsclin.png" />
+<img alt="_images/pantallatop10medsCant1.png" class="align-center" src="_images/pantallatop10medsCant1.png" />
+<img alt="_images/pantallatop10medsCant2.png" class="align-center" src="_images/pantallatop10medsCant2.png" />
 <p>Si el usuario desea ajustar el rango de fecha sobre el cual se genera el reporte puede hacerlo utilizando la modalidad de filtrado por fechas:
 El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y presionar el botón <code class="docutils literal"><span class="pre">Filtrar</span></code>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Nota</p>
 <p class="last">Todos los campos son opcionales, de no especificarse ningún criterio de búsqueda el sistema mostrará la informacion historica completa.</p>
 </div>
-<img alt="_images/fechastop10medsclin.png" class="align-center" src="_images/fechastop10medsclin.png" />
+<img alt="_images/fechastop10meds1.png" class="align-center" src="_images/fechastop10meds1.png" />
 <p>Si el usuario desea exportar el resultado generado a una planilla de Excel, debera presionar el ícono de excel.</p>
-<img alt="_images/xlstop10medsclin.png" class="align-center" src="_images/xlstop10medsclin.png" />
+<img alt="_images/xlstop10meds2.png" class="align-center" src="_images/xlstop10meds2.png" />
 <p>Si el usuario desea exportar el resultado en un formato de imagen PNG, JPEG, PDF o SVG, debera presionar el boton de herramientas de exportacion y seleccionar la opcion correspondiente.</p>
-<img alt="_images/btnexptop10medsclin.png" class="align-center" src="_images/btnexptop10medsclin.png" />
+<img alt="_images/btnexptop10meds3.png" class="align-center" src="_images/btnexptop10meds3.png" />
 </div>
 <div class="section" id="medicamentos-mas-solicitados-por-pedido">
 <span id="meds-ped-pc"></span><h3>Medicamentos mas solicitados por pedido<a class="headerlink" href="#medicamentos-mas-solicitados-por-pedido" title="Enlazar permanentemente con este título">¶</a></h3>
-<p>Si el usuario desea que los reportes se generen en base a la cantidad de pedidos realizados por cada clínica, debera presionar la opcion <code class="docutils literal"><span class="pre">Medicamentos</span> <span class="pre">mas</span> <span class="pre">solicitados</span> <span class="pre">por</span> <span class="pre">pedido</span></code>.</p>
-<img alt="_images/top10pedsclin.png" class="align-center" src="_images/top10pedsclin.png" />
+<p>Si el usuario desea que los reportes se generen en base a la cantidad de Medicamentos mas solicitados por pedidos realizados, debera presionar la opcion <code class="docutils literal"><span class="pre">Medicamentos</span> <span class="pre">mas</span> <span class="pre">solicitados</span> <span class="pre">por</span> <span class="pre">pedido</span></code>.</p>
+<img alt="_images/reportesMedicamentos2.png" class="align-center" src="_images/reportesMedicamentos2.png" />
 <p>Al hacerlo, se mostrara la siguiente pantalla:</p>
-<img alt="_images/pantallatop10pedsclin.png" class="align-center" src="_images/pantallatop10pedsclin.png" />
+<img alt="_images/pantallatop10medsPed1.png" class="align-center" src="_images/pantallatop10medsPed1.png" />
+<img alt="_images/pantallatop10medsPed2.png" class="align-center" src="_images/pantallatop10medsPed2.png" />
 <p>Si el usuario desea ajustar el rango de fecha sobre el cual se genera el reporte puede hacerlo utilizando la modalidad de filtrado por fechas:
 El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y presionar el botón <code class="docutils literal"><span class="pre">Filtrar</span></code>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Nota</p>
 <p class="last">Todos los campos son opcionales, de no especificarse ningún criterio de búsqueda el sistema mostrará la informacion historica completa.</p>
 </div>
-<img alt="_images/fechastop10pedsclin.png" class="align-center" src="_images/fechastop10pedsclin.png" />
+<img alt="_images/fechastop10meds1.png" class="align-center" src="_images/fechastop10meds1.png" />
 <p>Si el usuario desea exportar el resultado generado a una planilla de Excel, debera presionar el ícono de excel.</p>
-<img alt="_images/xlstop10pedsclin.png" class="align-center" src="_images/xlstop10pedsclin.png" />
+<img alt="_images/xlstop10meds2.png" class="align-center" src="_images/xlstop10meds2.png" />
 <p>Si el usuario desea exportar el resultado en un formato de imagen PNG, JPEG, PDF o SVG, debera presionar el boton de herramientas de exportacion y seleccionar la opcion correspondiente.</p>
-<img alt="_images/btnexptop10pedsclin.png" class="align-center" src="_images/btnexptop10pedsclin.png" />
+<img alt="_images/btnexptop10meds3.png" class="align-center" src="_images/btnexptop10meds3.png" />
 </div>
 <div class="section" id="organizaciones-mas-demandantes-de-un-medicamento-por-cantidad">
 <span id="org-cant-pc"></span><h3>Organizaciones mas demandantes de un medicamento por cantidad<a class="headerlink" href="#organizaciones-mas-demandantes-de-un-medicamento-por-cantidad" title="Enlazar permanentemente con este título">¶</a></h3>
-<p>Si el usuario desea que los reportes se generen en base a la cantidad de pedidos realizados por cada clínica, debera presionar la opcion <code class="docutils literal"><span class="pre">Organizaciones</span> <span class="pre">mas</span> <span class="pre">demandantes</span> <span class="pre">de</span> <span class="pre">un</span> <span class="pre">medicamento</span> <span class="pre">por</span> <span class="pre">cantidad</span></code>.</p>
-<img alt="_images/top10pedsclin.png" class="align-center" src="_images/top10pedsclin.png" />
+<p>Si el usuario desea que los reportes se generen en base a la cantidad de Organizaciones mas demandantes de un medicamento, debera presionar la opcion <code class="docutils literal"><span class="pre">Organizaciones</span> <span class="pre">mas</span> <span class="pre">demandantes</span> <span class="pre">de</span> <span class="pre">un</span> <span class="pre">medicamento</span> <span class="pre">por</span> <span class="pre">cantidad</span></code>.</p>
+<img alt="_images/reportesMedicamentos3.png" class="align-center" src="_images/reportesMedicamentos3.png" />
 <p>Al hacerlo, se mostrara la siguiente pantalla:</p>
-<img alt="_images/pantallatop10pedsclin.png" class="align-center" src="_images/pantallatop10pedsclin.png" />
+<img alt="_images/pantallaOrgMedCant.png" class="align-center" src="_images/pantallaOrgMedCant.png" />
 <p>Si el usuario desea ajustar el rango de fecha sobre el cual se genera el reporte puede hacerlo utilizando la modalidad de filtrado por fechas:
 El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y presionar el botón <code class="docutils literal"><span class="pre">Filtrar</span></code>.</p>
+<img alt="_images/pantallaOrgMedCant2.png" class="align-center" src="_images/pantallaOrgMedCant2.png" />
+<img alt="_images/pantallaOrgMedCant3.png" class="align-center" src="_images/pantallaOrgMedCant3.png" />
+<img alt="_images/pantallaOrgMedCant4.png" class="align-center" src="_images/pantallaOrgMedCant4.png" />
+<img alt="_images/pantallaOrgMedCant5.png" class="align-center" src="_images/pantallaOrgMedCant5.png" />
 <div class="admonition note">
 <p class="first admonition-title">Nota</p>
 <p class="last">Todos los campos son opcionales, de no especificarse ningún criterio de búsqueda el sistema mostrará la informacion historica completa.</p>
 </div>
-<img alt="_images/fechastop10pedsclin.png" class="align-center" src="_images/fechastop10pedsclin.png" />
+<img alt="_images/fechastop10meds1.png" class="align-center" src="_images/fechastop10meds1.png" />
 <p>Si el usuario desea exportar el resultado generado a una planilla de Excel, debera presionar el ícono de excel.</p>
-<img alt="_images/xlstop10pedsclin.png" class="align-center" src="_images/xlstop10pedsclin.png" />
+<img alt="_images/xlstop10meds2.png" class="align-center" src="_images/xlstop10meds2.png" />
 <p>Si el usuario desea exportar el resultado en un formato de imagen PNG, JPEG, PDF o SVG, debera presionar el boton de herramientas de exportacion y seleccionar la opcion correspondiente.</p>
-<img alt="_images/btnexptop10pedsclin.png" class="align-center" src="_images/btnexptop10pedsclin.png" />
+<img alt="_images/btnexptop10meds3.png" class="align-center" src="_images/btnexptop10meds3.png" />
 </div>
 <div class="section" id="organizaciones-mas-demandantes-de-un-medicamento-por-pedido">
 <span id="org-ped-pc"></span><h3>Organizaciones mas demandantes de un medicamento por pedido<a class="headerlink" href="#organizaciones-mas-demandantes-de-un-medicamento-por-pedido" title="Enlazar permanentemente con este título">¶</a></h3>
-<p>Si el usuario desea que los reportes se generen en base a la cantidad de pedidos realizados por cada clínica, debera presionar la opcion <code class="docutils literal"><span class="pre">Organizaciones</span> <span class="pre">mas</span> <span class="pre">demandantes</span> <span class="pre">de</span> <span class="pre">un</span> <span class="pre">medicamento</span> <span class="pre">por</span> <span class="pre">pedido</span></code>.</p>
-<img alt="_images/top10pedsclin.png" class="align-center" src="_images/top10pedsclin.png" />
+<p>Si el usuario desea que los reportes se generen en base a la cantidad de pedidos segun Organizaciones mas demandantes de un medicamento por pedido, debera presionar la opcion <code class="docutils literal"><span class="pre">Organizaciones</span> <span class="pre">mas</span> <span class="pre">demandantes</span> <span class="pre">de</span> <span class="pre">un</span> <span class="pre">medicamento</span> <span class="pre">por</span> <span class="pre">pedido</span></code>.</p>
+<img alt="_images/reportesMedicamentos4.png" class="align-center" src="_images/reportesMedicamentos4.png" />
 <p>Al hacerlo, se mostrara la siguiente pantalla:</p>
-<img alt="_images/pantallatop10pedsclin.png" class="align-center" src="_images/pantallatop10pedsclin.png" />
+<img alt="_images/pantallaOrgMedPed.png" class="align-center" src="_images/pantallaOrgMedPed.png" />
 <p>Si el usuario desea ajustar el rango de fecha sobre el cual se genera el reporte puede hacerlo utilizando la modalidad de filtrado por fechas:
 El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y presionar el botón <code class="docutils literal"><span class="pre">Filtrar</span></code>.</p>
+<img alt="_images/pantallaOrgMedCant2.png" class="align-center" src="_images/pantallaOrgMedCant2.png" />
+<img alt="_images/pantallaOrgMedCant3.png" class="align-center" src="_images/pantallaOrgMedCant3.png" />
+<img alt="_images/pantallaOrgMedCant4.png" class="align-center" src="_images/pantallaOrgMedCant4.png" />
+<img alt="_images/pantallaOrgMedCant5.png" class="align-center" src="_images/pantallaOrgMedCant5.png" />
 <div class="admonition note">
 <p class="first admonition-title">Nota</p>
 <p class="last">Todos los campos son opcionales, de no especificarse ningún criterio de búsqueda el sistema mostrará la informacion historica completa.</p>
 </div>
-<img alt="_images/fechastop10pedsclin.png" class="align-center" src="_images/fechastop10pedsclin.png" />
+<img alt="_images/fechastop10meds1.png" class="align-center" src="_images/fechastop10meds1.png" />
 <p>Si el usuario desea exportar el resultado generado a una planilla de Excel, debera presionar el ícono de excel.</p>
 <img alt="_images/xlstop10pedsclin.png" class="align-center" src="_images/xlstop10pedsclin.png" />
 <p>Si el usuario desea exportar el resultado en un formato de imagen PNG, JPEG, PDF o SVG, debera presionar el boton de herramientas de exportacion y seleccionar la opcion correspondiente.</p>
