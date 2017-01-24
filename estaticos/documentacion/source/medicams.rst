@@ -152,13 +152,26 @@ Esta ventana mostrará todos los lotes que estén asociados al *Medicamento*.
     .. image:: _static/nolotes.png
        :align: center
 
+
+Stock Global
+------------
+Si el usuario desea ver el Stock de un *Medicamento*, deberá seleccionar el botón de **Acción** asociado al *Medicamento* y presionar la pestaña ``Stock Global``, el cual es el Stock de la Drogueria mas el de las sucursales.
+
+.. image:: _static/btnStockGlobal.png
+   :align: center
+
+Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):
+
+.. image:: _static/modalStockGlobal.png
+   :align: center
+
 .. _reportes-pc:
 
 Reportes
 --------
 Si el usuario desea visualizar y/o generar reportes de estadisticas en relacion a los *Medicamentos*, debera seleccionar el boton de **Reportes**.
 
-.. image:: _static/reportesclin.png
+.. image:: _static/reportesMedicamentos.png
    :align: center
 
 Esta funcionalidad cuenta con 2 modalidades:
@@ -172,7 +185,7 @@ Esta funcionalidad cuenta con 2 modalidades:
 
 Medicamentos mas solicitados por cantidad
 +++++++++++++++++++++++++++++++++++++++++
-Si el usuario desea que los reportes se generen en base al volumen de medicamentos pedidos por cada clínica, debera presionar la opcion ``Medicamentos mas solicitados por cantidad``.
+Si el usuario desea que los reportes se generen en base al volumen de medicamentos pedidos por cantidad, debera presionar la opcion ``Medicamentos mas solicitados por cantidad``.
 
 .. image:: _static/top10medsclin.png
    :align: center

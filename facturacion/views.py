@@ -45,7 +45,6 @@ def facturacionVentas(request):
 
 
 def facturasEmitidas(request):
-
     filters = get_filtros_pedidos(request.GET, pmodels.PedidoDeClinica)
     listPedidosClinicas = pmodels.PedidoDeClinica.objects.filter(**filters).filter(facturaAsociada=True)
 
@@ -69,8 +68,6 @@ def facturasEmitidas(request):
                    }
             except:
                 listPedidosClinicas = []
-
-
     return render(request,"obSocialesYclinicas/facturasEmitidas.html",{"listPedidosClinicas":listPedidosClinicas,"filtros":request.GET,"estadisticas":estadisticas})
 
 def registrarPagoDeFacturaVenta(request):

@@ -152,6 +152,19 @@ Esta ventana mostrará todos los lotes que estén asociados al *Medicamento*.
     .. image:: _static/nolotes.png
        :align: center
 
+
+Stock Global
+------------
+Si el usuario desea ver el Stock de un *Medicamento*, deberá seleccionar el botón de **Acción** asociado al *Medicamento* y presionar la pestaña ``Stock Global``, el cual es el Stock de la Drogueria mas el de las sucursales.
+
+.. image:: _static/btnStockGlobal.png
+   :align: center
+
+Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (modal):
+
+.. image:: _static/modalStockGlobal.png
+   :align: center
+
 .. _reportes-pc:
 
 Reportes

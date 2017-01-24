@@ -181,6 +181,21 @@ El usuario tendra la opción de visualizar un remito en PDF, presionanado el bot
 .. image:: _static/remitopedidofarmacia.png
    :align: center
 
+Notificaciones
+--------------
+En el caso de que se halla producido un pedido desde un mobile, mientras el sistema no estaba siendo atendido, se producira una notificacion como la siguiente:
+
+.. image:: _static/notificacionDePedidoMobile.png
+   :align: center
+
+
+.. image:: _static/notificacionDePedidoMobileMini.png
+   :align: center
+
+Al presionar en el boton ``Ver`` se desplegaran los nuevos pedidos:
+
+.. image:: _static/notificacionDePedidoMobileVer.png
+   :align: center
 
 Reportes
 --------
@@ -276,6 +291,16 @@ Este formulario cuenta con dos modalidades:
 
 .. NOTE::
     Todos los campos son opcionales, de no especificarse ningún criterio de búsqueda el sistema mostrará todos los *Pedidos de Farmacia*.
+
+Podremos seleccionar desde el siguiente boton los posibles estados a buscar:
+
+.. image:: _static/btnEstadosBusq1.png
+   :align: center
+
+Al presionar veremos algo como lo siguiente:
+
+.. image:: _static/btnEstadosBusq2.png
+   :align: center
 
 El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y presionar el botón ``Buscar``. El sistema visualizará aquellos *Pedidos de Farmacia* que cumplan con todas las condiciones especificadas.
 
