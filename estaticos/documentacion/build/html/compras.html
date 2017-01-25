@@ -96,10 +96,14 @@
 <li class="toctree-l1 current"><a class="reference internal" href="facturacion.html">Facturacion</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="ventas.html">Ventas</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Compras</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#generar-factura-de-compra">Generar Factura de Compra</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver-facturados">Ver Facturados</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#reportes">Reportes</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#top-10-monto-de-compras-a-laboratorio">Top 10 Monto de Compras a Laboratorio</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#formulario-de-busqueda-de-compras">Formulario de Búsqueda de Compras</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#formulario-de-busqueda-facturas-emitidas">Formulario de Búsqueda Facturas Emitidas</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="formasdepago.html">Formas de Pago</a></li>
@@ -157,23 +161,37 @@
 <img alt="_images/btncompras.png" class="align-center" src="_images/btncompras.png" />
 <p>A continuación el sistema lo redirigirá a la siguiente pantalla:</p>
 <img alt="_images/compras.png" class="align-center" src="_images/compras.png" />
-<p>En esta parte el usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta un nuevo <em>Usuario</em>.</p>
-<div class="admonition attention">
-<p class="first admonition-title">Atención</p>
-<p>El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
-En este punto, las posibles causas de errores son:</p>
-<blockquote class="last">
-<div><ul class="simple">
-<li>Uno o más campos vacíos.</li>
-<li>Uno o más campos con un formato incorrecto.</li>
-<li>El nombre de usuario ya existe.</li>
-<li>Las contraseñas no coinciden.</li>
+<p>En esta pantalla se vera un listado de las <em>Compras</em> a <code class="docutils literal"><span class="pre">Laboratorios</span> <span class="pre">que</span> <span class="pre">aun</span> <span class="pre">no</span> <span class="pre">esten</span> <span class="pre">facturadas</span></code>:</p>
+<img alt="_images/pantallaCompras1.png" class="align-center" src="_images/pantallaCompras1.png" />
+<p>Junto con el listado, se presentarán un conjunto de funcionalidades que permitirán manipular estas <em>Facturas de Compras</em>.</p>
+<dl class="docutils">
+<dt>Estas funcionalidades son:</dt>
+<dd><ul class="first last simple">
+<li><span class="xref std std-ref">Registrar Factura de Compra</span></li>
+<li><a class="reference internal" href="#ver-facturados"><span class="std std-ref">Ver Facturados</span></a></li>
+<li><a class="reference internal" href="#reportes"><span class="std std-ref">Reportes</span></a></li>
+<li><a class="reference internal" href="#formulario-busqueda-ventas"><span class="std std-ref">Formulario de Búsqueda Ventas</span></a></li>
+<li><a class="reference internal" href="#formulario-busqueda-factemit"><span class="std std-ref">Formulario de Búsqueda Facturas Emitidas</span></a></li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
+<div class="section" id="generar-factura-de-compra">
+<span id="generar-factura-compra"></span><h2>Generar Factura de Compra<a class="headerlink" href="#generar-factura-de-compra" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Para realizar la factura correspondiente de la <em>Compra</em>, debera presionar en el boton de <code class="docutils literal"><span class="pre">Accion</span></code>, la pestaña de <code class="docutils literal"><span class="pre">Registrar</span> <span class="pre">Factura</span></code>.</p>
+<img alt="_images/btnAccionRegistrarFactura0.png" class="align-center" src="_images/btnAccionRegistrarFactura0.png" />
+<p>Automaticamente se presentara en pantalla un cartel para completarlos datos correspondientes de <code class="docutils literal"><span class="pre">La</span> <span class="pre">Factura</span> <span class="pre">de</span> <span class="pre">Compra</span></code>.</p>
+<img alt="_images/btnAccionRegistrarFactura1.png" class="align-center" src="_images/btnAccionRegistrarFactura1.png" />
+<img alt="_images/btnAccionRegistrarFactura2.png" class="align-center" src="_images/btnAccionRegistrarFactura2.png" />
 </div>
-<p>Una vez completado el formulario, el usuario tendrá que presionar el boton <code class="docutils literal"><span class="pre">Registrar</span></code> y el sistema se encargará de dar de alta el nuevo usuario.</p>
+<div class="section" id="ver-facturados">
+<span id="id1"></span><h2>Ver Facturados<a class="headerlink" href="#ver-facturados" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Para ver las facturas que fueron <em>Facturadas</em> debemos presionar en el boton de <code class="docutils literal"><span class="pre">Ver</span> <span class="pre">Facturados</span></code>.</p>
+<img alt="_images/btnVerFacturados.png" class="align-center" src="_images/btnVerFacturados.png" />
+<p>El mismo, nos conducira a otra pantalla la cual nos mostrara las <code class="docutils literal"><span class="pre">*Facturas</span> <span class="pre">Emitidas*</span></code>.</p>
+<img alt="_images/pantallaVerFacturasEmitidasFacturadas.png" class="align-center" src="_images/pantallaVerFacturasEmitidasFacturadas.png" />
+</div>
 <div class="section" id="reportes">
-<h2>Reportes<a class="headerlink" href="#reportes" title="Enlazar permanentemente con este título">¶</a></h2>
+<span id="id2"></span><h2>Reportes<a class="headerlink" href="#reportes" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Si el usuario desea visualizar y/o generar reportes de estadisticas en relacion a las <em>Ventas</em>, debera seleccionar el boton de <strong>Reportes</strong>.</p>
 <img alt="_images/reportespedfar.png" class="align-center" src="_images/reportespedfar.png" />
 <p>Esta funcionalidad cuenta con la modalidad de:</p>
@@ -202,6 +220,44 @@ El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y
 <p>Si el usuario desea exportar el resultado en un formato de imagen PNG, JPEG, PDF o SVG, debera presionar el boton de herramientas de exportacion y seleccionar la opcion correspondiente.</p>
 <img alt="_images/btnexptop10medspedfar.png" class="align-center" src="_images/btnexptop10medspedfar.png" />
 </div>
+</div>
+<div class="section" id="formulario-de-busqueda-de-compras">
+<span id="formulario-busqueda-ventas"></span><h2>Formulario de Búsqueda de Compras<a class="headerlink" href="#formulario-de-busqueda-de-compras" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Si el usuario desea visualizar sólo aquellas <em>Compras</em> que cumplan con algunos criterios en específico, deberá utilizar el formulario de búsqueda.</p>
+<img alt="_images/formBusqFacturasCompras.png" class="align-center" src="_images/formBusqFacturasCompras.png" />
+<p>Este formulario cuenta con dos modalidades:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Búsqueda simple: permite buscar las <em>Compras</em> por proveedor.</li>
+<li>Búsqueda avanzada: permite buscar las <em>Compras</em> por fechas desde y hasta.</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p class="last">Todos los campos son opcionales, de no especificarse ningún criterio de búsqueda el sistema mostrará todos las <em>Compras</em>.</p>
+</div>
+<p>El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y presionar el botón <code class="docutils literal"><span class="pre">Buscar</span></code>. El sistema visualizará aquellas <em>Compras</em> que cumplan con todas las condiciones especificadas.</p>
+<p>Si el usuario desea limpiar los filtros activos, deberá presionar el boton <code class="docutils literal"><span class="pre">Limpiar</span></code>.</p>
+<img alt="_images/formBusqFacturasCompras2.png" class="align-center" src="_images/formBusqFacturasCompras2.png" />
+</div>
+<div class="section" id="formulario-de-busqueda-facturas-emitidas">
+<span id="formulario-busqueda-factemit"></span><h2>Formulario de Búsqueda Facturas Emitidas<a class="headerlink" href="#formulario-de-busqueda-facturas-emitidas" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Si el usuario desea visualizar sólo aquellas <em>Facturas Emitidas</em> que cumplan con algunos criterios en específico, deberá utilizar el formulario de búsqueda.</p>
+<img alt="_static/pantallaVerFacturasEmitidasFacturadasBusq.png" class="align-center" src="_static/pantallaVerFacturasEmitidasFacturadasBusq.png" />
+<p>Este formulario cuenta con dos modalidades:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Búsqueda simple: permite buscar las <em>Facturas Emitidas</em> por proveedor.</li>
+<li>Búsqueda avanzada: permite buscar las <em>Facturas Emitidas</em> por numero de factura, fechas desde y hasta.</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p class="last">Todos los campos son opcionales, de no especificarse ningún criterio de búsqueda el sistema mostrará todos las <em>Facturas Emitidas</em>.</p>
+</div>
+<p>El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y presionar el botón <code class="docutils literal"><span class="pre">Buscar</span></code>. El sistema visualizará aquellas <em>Facturas Emitidas</em> que cumplan con todas las condiciones especificadas.</p>
+<p>Si el usuario desea limpiar los filtros activos, deberá presionar el boton <code class="docutils literal"><span class="pre">Limpiar</span></code>.</p>
+<img alt="_static/pantallaVerFacturasEmitidasFacturadasBusq2.png" class="align-center" src="_static/pantallaVerFacturasEmitidasFacturadasBusq2.png" />
 </div>
 </div>
 

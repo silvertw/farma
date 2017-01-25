@@ -1,12 +1,13 @@
 Vista Movil
 ===============
 
-Si el usuario desea crear un nuevo *Usuario*, deberá presionar el sub-item ``Vista Movil``.
+Si el usuario desea utilizar la *Vista Movil*, deberá hacerlo desde un celular o dispositivo movil. Y vera la siguiente pantalla:
 
-.. image:: _static/mobilepantallaprincipal.jpg
+.. image:: _static/MOBILpantallaPrincipal2.png
    :align: center
 
-A continuación el sistema lo redirigirá a la siguiente pantalla:
+.. image:: _static/MOBILpantallaPrincipal.png
+   :align: center
 
 En esta parte el usuario se le presentará un formulario y deberá ingresar los datos solicitados para dar de alta un nuevo *Usuario*.
 
