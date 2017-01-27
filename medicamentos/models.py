@@ -4,6 +4,7 @@ from organizaciones.models import Laboratorio
 from organizaciones.models import Farmacia
 from django.core.validators import MaxValueValidator, MinValueValidator
 from pedidos import config as pconfig
+from django.db.models import Avg, Max, Min, Sum
 from . import config
 import datetime
 
@@ -144,6 +145,7 @@ class StockDistribuidoEnFarmacias(models.Model):
     lote=models.ForeignKey(Lote, null=True)
     cantidad=models.PositiveIntegerField(default=0)
     farmacia=models.ForeignKey(Farmacia,null=True)
+
 
     def miNombreFantasia(self):
         return self.lote.medicamento.nombreFantasia.nombreF
