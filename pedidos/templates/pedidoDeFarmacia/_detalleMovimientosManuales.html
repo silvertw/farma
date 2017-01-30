@@ -1,0 +1,175 @@
+    <div class="table-responsive">
+
+          <h1>Seleccione las cantidades manualmente:</h1>
+
+          <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Farmacia</th>
+              <th>Lote</th>
+              <th>Nombre Fantasia</th>
+              <th>Cantidad Disponible</th>
+              <th>Cantidad a Quitar</th>
+            </tr>
+          </thead>
+          <tbody class="listadoFact">
+            {% for renglon in renglones %}
+                <tr name="listado" class="disponible" >
+                  <td>{{ renglon.farmacia }}</td>
+                  <td>{{ renglon.lote.numero }}</td>
+                  <td>{{renglon.lote.medicamento}}</td>
+                  <td>{{ renglon.cantidad }}</td>
+                  <td>
+                      <form class="form-inline" role="form" id="form">
+                          <div class="form-group">
+
+                            <input type="number" min = 0 max = {{ renglon.cantidad }} class="form-control"
+                            placeholder="Ingrese cantidad a quitar">
+                          </div>
+                      </form>
+                  </td>
+                </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+
+
+        <table class="table table-bordered">
+            <thead>
+                <h3>Farmacia solicitante: {{farmSolicitante}}</h3>
+                <tr>
+                    <th>Cantidad total a Quitar</th>
+                    <th>Medicamento</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for inf in info%}
+                    <tr class="solicitud">
+                        <td id="{{forloop.counter0}}">{{inf.cantidadPendiente}}</td>
+                        <td>{{inf.medicamento}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button name="registrar" id='btnRegM' class='btn btn-default'>REGISTRAR</button>
+
+    </div>
+
+    <script type="text/javascript">
+
+        /*Disponibles*/
+        var filaActual = [];//Arreglo donde se guardara la cantidad quitada en cada renglon su indice sera el numero de
+                            //fila o renglon de la tabla html.
+
+        var filaActualIndice = [];//Arreglo donde se guardaran los indices de lor renglones de la tabla html 'disponibles'.
+
+        var cantidadConst = 0;//Este valor representa la cantidad disponible inicial que tienen las farmacias, valor que no va a cambiar
+                              //a lo largo del proceso.
+
+        /*Requeridos*/
+        var filaActualCantReq = [];//Arreglo deonde se insertan las cantidades requeridas.
+        var filaMedActualReq = [];//Arreglo donde se insertan los medicamentos requeridos.
+
+        $(".disponible").on("mouseup",function(e) {
+
+            var nroFilaTbl = e.target.id//En base a la infomacion del evento se obiente el numero de renglon o fila de la tabla html 'disponibles'.
+            var cantidadQuitada = e.target.value;//Se otiene la cantidad que se decidio quitar a la farmacia.
+            var cantidadDisponible = $(this).find("td").eq(3).html();//Se obtiene la cantidad disponible que posee la farmacia.
+
+            if (filaActualIndice.indexOf(nroFilaTbl) == -1){//Se verifica si el indie de renglon se encuentra en el arreglo.
+
+                filaActualIndice.push(nroFilaTbl);//Si el indice no esta en el arreglo este indice se inserta en el mismo.
+
+                cantidadConst = parseInt(cantidadDisponible);//Se inicializa la cantidad disponible inicial que tiene la farmacia todo este proceso
+                                                             //se realiza por unica vez para cada uno de los renglones de la tabla html 'disponibles'.
+            }
+
+            var medicamentoDisponible = $(this).find("td").eq(2).html();//Se obtiene el medicamento el cual estoy quitando o solicitando.
+            var cantidadDisponibleInt = parseInt(cantidadDisponible);//Se convierte a integer la cantidad disponible.
+
+            var valor = cantidadConst - cantidadQuitada;//Se calcula la nueva cantidad disponible a cambiar en el html en base a la resta
+                                                        //como se ve aqui entra en juego la cantidad constante (cantidad disponible inicial de la farmacia).
+
+
+            $(this).find("td").eq(3).replaceWith('<td>' + valor + '</td>');//Se cambia el valor de cantidad disponible para la farmacia actual.
+
+
+
+            //===========================================================//
+
+            $(".solicitud").each(function(){// Se recorre la tabla 'solicitud'
+
+                var medicamentoRequerido = $(this).find("td").eq(1).html();//Se obtiene el medicamento requerido.
+                var cantRequerida = $(this).find("td").eq(0).html();//Se obtiene la cantidad requerida.
+
+               //Se inertan en los arreglos correspondientes controlando insertarlos solo una vez.
+                if (filaMedActualReq.indexOf(medicamentoRequerido) == -1){
+                    filaMedActualReq.push(medicamentoRequerido);//Esto se usa simplemente para controlar no insertar el medicamento dos veces.
+                    filaActualCantReq.push(cantRequerida);//Valor inicial requerido esto queda constante a lo largo del proceso por que se
+                                                          //setea solo una vez con el primer valor obtenido.
+                }
+
+            });
+
+            var totalQ = 0;//Se utiliza en el acumulador simpre a cero en cada 'mouseup'.
+            var totalQuitado = 0;//Se utiliza para realizar la resta a la cantidad requerida.
+            $(".disponible").each(function(){//Se recorre la tabla 'disponibles'.
+
+                var medDispEnRenglon = $(this).find("td").eq(2).html();//Se obtiene el medicamento del renglon de la tabla 'disponibles'.
+
+                if( medicamentoDisponible == medDispEnRenglon ){//Se compara con 'medicamentoDisponible' valor que devuelve el evento 'mouseup'
+                                                                //el efecto que se logra con este 'each' es: se hace click en un renglon que tiene
+                                                                //un medicamento disponible, se recupera dicho medicamento y se compara con todos los
+                                                                //medicamentos de los renglones (incluso el mismo) que se recorren uno por uno
+                                                                //con el objetivo de obtener las cantidades que se quitaron a dicho medicamento
+                                                                //y sumarlas.
+
+                    var cantQ = $(this).find("input").val();//Se obtiene la cantidad quitada
+
+
+                    if(cantQ != ''){//Como inicialmente esas cantidades pueden no tener valor se hace esta comparacion para que no hayan problemas
+                        totalQ =  totalQ + parseInt(cantQ);//Se acumulan dichas cantidades
+                        totalQuitado = totalQ;//Finalmente se obtiene el acumulado
+                    }
+                }
+            });
+
+            var i = 0
+            $(".solicitud").each(function(){//Se recorren nuevamente los renglones de la tabla 'solicitud'.
+
+                var medicamentoRequerido = $(this).find("td").eq(1).html();//Se obtiene el medicamento
+
+                if(medicamentoDisponible==medicamentoRequerido){//Se compara con el medicamento disponible si son iguales
+
+                    var valor = filaActualCantReq[i] - totalQuitado;//Si los med son iguales de realiza el descuento.
+                    if (valor == 0){
+                        $(this).find("td").eq(0).replaceWith('<td style="color:#FFFFFF;background:green;">' + valor + '</td>');//alerta ok
+                    }else if(valor < 0){
+                        $(this).find("td").eq(0).replaceWith('<td style="color:#FFFFFF;background:red;">' + valor + '</td>');//alerta incorrecto
+                    }else{
+                        $(this).find("td").eq(0).replaceWith('<td>' + valor + '</td>');//Se actualiza en el html.
+                    }
+                }
+                i=i+1;//Con esta variable recorremos todos las solicitudes (cantidades requeridas).
+            });
+
+        });
+
+        $( "#btnRegM" ).on("click",function(e) {
+
+            $(".disponible").each(function(){//Se recorre la tabla 'disponibles'.
+
+                var farmacia = $(this).find("td").eq(0).html();
+                var lote = $(this).find("td").eq(1).html();
+                var medicameto = $(this).find("td").eq(2).html();
+                var cantQuitada = $(this).find("input").val();
+
+
+            });
+
+        });
+
+    </script>

@@ -118,6 +118,7 @@ urlpatterns = [
     url(r'^pedidosDeFarmacia/remitoOptimizarStock/(?P<id>\d+)/$', pviews.remitoOptimizarStock.as_view(), name="remitoOptimizarStock"),
     url(r'^pedidoDesdeMobilFarmacia/$', pviews.pedidoDesdeMobilFarmacia, name="pedidoDesdeMobilFarmacia"),
     url(r'^notificarPedidosMobiles/$', pviews.notificarPedidosMobiles, name="notificarPedidosMobiles"),
+    url(r'^mostrarDetalleMovManual/$', pviews.busquedaManualOptStock, name="mostrarDetalleMovManual"),
 
     # ************************************** Pedido de Clinica ***************************************
     url(r'^pedidosDeClinica/$', pviews.pedidosDeClinica, name="pedidosDeClinica"),

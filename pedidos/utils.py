@@ -1013,6 +1013,7 @@ class parametros():
 
 def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
 
+    renglones=[]
     for detalle in detalles:#Se recorrern los detalles del pedido
         medicamento = detalle.medicamento
         cantidadAobtener=detalle.cantidadPendiente
@@ -1050,8 +1051,9 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
 
                     informe_cantidadQuitada = porcion#**********
                     informe_lote=dist.lote.numero#**********
+                    informe_nombreFantasia=dist.lote.medicamento#**********
 
-                    informe_listFarmacias.append(informe_farmaciaRs + ';' + str(informe_lote) + ';' + str(informe_cantidadQuitada))
+                    informe_listFarmacias.append(informe_farmaciaRs + ';' + str(informe_lote) + ';' + str(informe_cantidadQuitada) + ';' + str(informe_nombreFantasia))
                     cantidadAobtener -= porcion
 
                     if not verificar:
@@ -1064,14 +1066,15 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
 
                 i += 1
 
-    renglones=[]
-    for inf in informe_listFarmacias:
-        data = inf.split(';')
-        renglon={}
-        renglon["farmacia"]=data[0]
-        renglon["lote"]=data[1]
-        renglon["totalq"]=data[2]
-        renglones.append(renglon)#Informe final a presentarse al usuario.
+        for inf in informe_listFarmacias:
+            data = inf.split(';')
+            renglon={}
+            renglon["farmacia"]=data[0]
+            renglon["lote"]=data[1]
+            renglon["totalq"]=data[2]
+            renglon["nombreF"]=data[3]
+
+            renglones.append(renglon)#Informe final a presentarse al usuario.
     if not verificar:
         pedido.estado="Enviado"
         pedido.save()

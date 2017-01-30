@@ -381,6 +381,26 @@ def buscarEnFarmacias(request):
         return render(request, "pedidoDeFarmacia/_detalleInforme.html", {})
 
 
+def busquedaManualOptStock(request):
+
+    nroPedido = request.GET['nroPedido']
+    pedidoDeFarmacia = pmodels.PedidoDeFarmacia.objects.get(nroPedido=nroPedido)
+    detallePedido = pedidoDeFarmacia.get_detalles()
+    detallesDist = mmodels.StockDistribuidoEnFarmacias.objects.all()
+    renglones=[]
+    info=[]
+    farmSolicitante=pedidoDeFarmacia.farmacia
+
+    for detalle in detallePedido:
+        if detalle.cantidadPendiente > 0:#Puede ser que algunos detalles esten completos y otros no
+            info.append(detalle)
+
+            for detalleDist in detallesDist:
+                if detalleDist.lote.medicamento == detalle.medicamento:
+                    renglones.append(detalleDist)
+    return render(request, "pedidoDeFarmacia/_detalleMovimientosManuales.html", {"renglones": renglones,"info":info,"farmSolicitante":farmSolicitante})
+
+
 
 class remitoOptimizarStock(PDFTemplateView):
     template_name = "pedidoDeFarmacia/remitoOptimizarStock.html"

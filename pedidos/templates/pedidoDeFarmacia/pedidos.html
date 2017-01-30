@@ -1,6 +1,8 @@
 {% extends "base/base-listado.html" %}
 {% load staticfiles %}
 
+
+
 {% block title %} Pedidos de Farmacia {% endblock %}
 
 {% block breadcrumb-items %}
@@ -215,7 +217,7 @@
 
                 <div class="modal-footer" id="modalFooter">
                   <!--inicio footer-->
-
+                     <button name="manual" id='manual' data-toggle="modal" data-target="#manualMov" class='btn btn-default'>ELEGIR MOVIMIENTOS</button>
                      <button name="registrar" id='btnReg' class='btn btn-default'>REGISTRAR</button>
                      <!--a class="action-link btn-ver-detalles" name="imprimir">
                          <span class="action-link-icon animated glyphicon glyphicon-eye-open"></span> IMPRIMIR
@@ -227,6 +229,41 @@
         </div>
     </div>
 <!--===================================FIN MI MODAL==============================================-->
+
+
+<!--======================================MODAL MOV DE FORMA MANUAL===============================================-->
+    <div class="modal fade" id="manualMov" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+			<div class="modal-content" id="contenedorModalM">
+                <!--INICIO CONTENIDO MODAL-->
+                <div class="modal-header" id="modalHeaderM">
+                    <!--inicio header-->
+
+                    <!--fin header-->
+                </div>
+
+                <div class="modal-body" id="modalBodyM">
+                   <!--inicio body-->
+
+                    <!--fin body-->
+				</div>
+
+                <div class="modal-footer" id="modalFooterM">
+                  <!--inicio footer-->
+
+                     <!--a class="action-link btn-ver-detalles" name="imprimir">
+                         <span class="action-link-icon animated glyphicon glyphicon-eye-open"></span> IMPRIMIR
+                     </a-->
+                    <!--fin footer-->
+				</div>
+                <!--FIN CONTENIDO MODAL-->
+			</div>
+        </div>
+    </div>
+<!--===================================FIN MODAL==============================================-->
+
+
+
 
     <div class="modal fade" id="novedadesMobile" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -278,8 +315,10 @@
 
             var cantidad = '{{ cantSinNotificar }}';
 
+            /*Logica para manejar la notificacion*/
+
             if (cantidad > 0) {
-                Push.create("HAY PEDIDOS MOVILES NUEVOS", {/*logica para manejar la notificacion*/
+                Push.create("HAY PEDIDOS MOVILES NUEVOS", {
                     body: "VER",
                     icon: "{% static 'mobile/images/telefono.gif' %}",
                     onClick: function () {
@@ -288,6 +327,30 @@
                     }
                 });
             }
+
+            /*--------------------------------------------------------------------------------------------------------*/
+
+            $( "#manual" ).on("click",function(e) {
+
+                var url={% url 'mostrarDetalleMovManual' %};
+                var data = {'nroPedido':id};/*numero de pedido*/
+                movManual(url,data)
+
+            });
+
+            function movManual(url,data){
+                $.ajax({
+                    contentType: 'json',
+                    data: data,
+                    type: 'get',
+                    url: url,
+                    success:function(response){
+                        $('#modalBodyM').html(response);
+                    }
+                });
+            }
+
+            /*--------------------------------------------------------------------------------------------------------*/
 
             var modal = modalAjax();
             modal.init();
@@ -308,6 +371,8 @@
             });
         }
 
+        /*------------------------------------------------------------------------------------------------------------*/
+
         var id
         var farmaciaPk
         $("[name='findFarm']").on("click", function(e){
@@ -326,10 +391,17 @@
                 url: url,
                 success:function(response){
                     //data = JSON.parse(response);/*decodificacion de JSON a un object*/
+                    var html =  $(response).find('#totalq');
+                    var cantidad = html[0].innerText
+                    if (cantidad == '0'){
+                        $('#btnReg').hide();/*oculta el boton registrar por que no se pueden hacer movimientos*/
+                    }
                     $('#modalBody').html(response);
                 }
             });
         }
+
+        /*------------------------------------------------------------------------------------------------------------*/
 
         $("[name='registrar']").on("click", function(e){
             confirmar = confirm("Realmente desea realizar el movimiento?");
@@ -352,6 +424,8 @@
                 }
             });
         }
+
+        /*--------------------------------------------------------------------------------*/
 
         $("[name='imprimir']").on("click", function(e){
            var nroPedido=id;

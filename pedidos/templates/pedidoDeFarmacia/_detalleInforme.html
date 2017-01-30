@@ -1,6 +1,6 @@
                     <div class="table-responsive">
 
-                            <h1>Para cubrir la cantidad solicitada se puede hacer lo siguiente:</h1>
+                          <h1>Para cubrir la cantidad solicitada se puede hacer lo siguiente:</h1>
 
                           <table class="table table-bordered">
                           <thead>
@@ -8,14 +8,16 @@
                               <th>Cantidad a Quitar</th>
                               <th>Farmacia</th>
                               <th>Lote</th>
+                              <th>Nombre Fantasia</th>
                             </tr>
                           </thead>
                           <tbody class="listadoFact">
                             {% for renglon in renglones %}
-                                <tr>
+                                <tr name="listado">
                                   <td id="totalq">{{ renglon.totalq }}</td>
                                   <td>{{ renglon.farmacia }}</td>
                                   <td>{{ renglon.lote }}</td>
+                                  <td>{{ renglon.nombreF }}</td>
                                 </tr>
                             {% endfor %}
                           </tbody>
