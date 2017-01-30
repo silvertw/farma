@@ -176,7 +176,7 @@ INSERT INTO "medicamentos_monodroga" VALUES(9,'Etinilestradiol');
 
 INSERT INTO "medicamentos_monodroga" VALUES(10,'Hedera helix');
 
-INSERT INTO "medicamentos_monodroga" VALUES(11,'Acetilsalicílico, c.');
+INSERT INTO "medicamentos_monodroga" VALUES(11,'Acetilsalicilico');
 
 INSERT INTO "medicamentos_monodroga" VALUES(12,'Alendronato');
 

@@ -10,6 +10,7 @@ import json
 from xlsxwriter import Workbook
 import io
 
+from medicamentos import models as mmodels
 
 def get_filtros(get, modelo):
     mfilter = {}
@@ -305,6 +306,18 @@ def medicamento_verLotes(request, id_medicamento):
 
     return {'lotes': lotes_json}
 
+def medicamentoVerStockGlobalMed(request):
+    totalEnFarma = 0
+    totalEnFarmacias = 0
+    pkMedicamento=request.GET["id"]
+    medicamento=mmodels.Medicamento.objects.get(pk=pkMedicamento)
+    lotes = medicamento.get_lotes_con_stock()
+    for lote in lotes:
+        totalEnFarma = lote.stockFarmaYfarmacias.stockFarma + totalEnFarma
+        totalEnFarmacias = lote.stockFarmaYfarmacias.stockFarmacias + totalEnFarmacias
+    sumaTotalMedicamento = totalEnFarmacias + totalEnFarma
+
+    return render(request, "medicamento/_modalVerStockGlobal.html", {'totalEnFarma': totalEnFarma, 'totalEnFarmacias': totalEnFarmacias, 'sumaTotalMedicamento': sumaTotalMedicamento})
 
 @json_view
 @permission_required('usuarios.encargado_general', login_url='login')

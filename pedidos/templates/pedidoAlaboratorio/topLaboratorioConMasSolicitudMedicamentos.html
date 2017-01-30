@@ -48,4 +48,13 @@
 			}
 		})();
 	</script>
+	<script>
+        $(document).on("keyup", function(e){
+            if(e.keyCode == 112){
+                var url = "{% static 'documentacion/build/html/pedidosalab.html' %}";
+                url += "#top10-meds-pl";
+                window.open(url);
+            }
+        });
+    </script>
 {% endblock %}

@@ -210,6 +210,87 @@ El usuario tendra la opción de visualizar un remito en PDF, presionanado el bot
 .. image:: _static/remitopedidolab.png
    :align: center
 
+.. _reportes-pl:
+
+Reportes
+--------
+Si el usuario desea visualizar y/o generar reportes de estadisticas en relacion a los *Pedidos a Laboratorio*, debera seleccionar el boton de **Reportes**.
+
+.. image:: _static/reporteslab.png
+   :align: center
+
+Esta funcionalidad cuenta con 2 modalidades:
+
+    - :ref:`Top 10 Laboratorios con mayor solicitud de medicamentos <top10-meds-pl>`
+    - :ref:`Top 10 Laboratorios con mayor solicitud de pedidos <top10-peds-pl>`
+
+.. _top10-meds-pl:
+
+Top 10 Laboratorios con mayor solicitud de medicamentos
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Si el usuario desea que los reportes se generen en base al volumen de medicamentos pedidos a cada laboratorio, debera presionar la opcion ``Top 10 clínicas con mayor demanda de medicamentos``.
+
+.. image:: _static/top10medslab.png
+   :align: center
+
+Al hacerlo, se mostrara la siguiente pantalla:
+
+.. image:: _static/pantallatop10medslab.png
+   :align: center
+
+Si el usuario desea ajustar el rango de fecha sobre el cual se genera el reporte puede hacerlo utilizando la modalidad de filtrado por fechas:
+El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y presionar el botón ``Filtrar``.
+
+.. NOTE::
+    Todos los campos son opcionales, de no especificarse ningún criterio de búsqueda el sistema mostrará la informacion historica completa.
+
+.. image:: _static/fechastop10medslab.png
+   :align: center
+
+Si el usuario desea exportar el resultado generado a una planilla de Excel, debera presionar el ícono de excel.
+
+.. image:: _static/xlstop10medslab.png
+   :align: center
+
+Si el usuario desea exportar el resultado en un formato de imagen PNG, JPEG, PDF o SVG, debera presionar el boton de herramientas de exportacion y seleccionar la opcion correspondiente.
+
+.. image:: _static/btnexptop10medslab.png
+   :align: center
+
+.. _top10-peds-pl:
+
+Top 10 Laboratorios con mayor solicitud de pedidos
+++++++++++++++++++++++++++++++++++++++++++++++++++
+Si el usuario desea que los reportes se generen en base a la cantidad de pedidos realizados por cada clínica, debera presionar la opcion ``Top 10 clínicas con mayor demanda de pedidos``.
+
+.. image:: _static/top10pedslab.png
+   :align: center
+
+Al hacerlo, se mostrara la siguiente pantalla:
+
+.. image:: _static/pantallatop10pedslab.png
+   :align: center
+
+Si el usuario desea ajustar el rango de fecha sobre el cual se genera el reporte puede hacerlo utilizando la modalidad de filtrado por fechas:
+El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y presionar el botón ``Filtrar``.
+
+.. NOTE::
+    Todos los campos son opcionales, de no especificarse ningún criterio de búsqueda el sistema mostrará la informacion historica completa.
+
+.. image:: _static/fechastop10pedslab.png
+   :align: center
+
+Si el usuario desea exportar el resultado generado a una planilla de Excel, debera presionar el ícono de excel.
+
+.. image:: _static/xlstop10pedslab.png
+   :align: center
+
+Si el usuario desea exportar el resultado en un formato de imagen PNG, JPEG, PDF o SVG, debera presionar el boton de herramientas de exportacion y seleccionar la opcion correspondiente.
+
+.. image:: _static/btnexptop10pedslab.png
+   :align: center
+
+
 .. _formulario-busqueda-pl:
 
 Formulario de Búsqueda

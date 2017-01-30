@@ -39,8 +39,9 @@
 {% endblock %}
 
 {% block form-fields-avanzados %}
-
-    <input class="form-control form-field form-field-simple" id="nroFacturaId" name="nroFactura" value="" placeholder="Nro. Factura" type="text" />
+    <div>
+        <input class="form-control form-field form-field-simple" id="nroFacturaId" name="nroFactura" value="" placeholder="Nro. Factura" type="text" />
+    </div>
 
     <div>
         <input class="datepicker form-control form-field"  id="desde" name="desde" value="{{filtros.desde}}" placeholder="Desde" type="text" />
@@ -49,6 +50,12 @@
     <div>
         <input class="datepicker form-control form-field" id="hasta" name="hasta" value="{{filtros.hasta}}" placeholder="Hasta" type="text" />
     </div>
+
+    <select id="selectEstado" class="form-control form-field" name="estado">
+        <option value = "">-----</option>
+        <option value= "Pagadas" {% if filtros.estado = 'Pagadas' %} selected="selected" {% endif %}>Pagadas</option>
+        <option value = "Impagas" {%  if filtros.estado = 'Impagas' %} selected="selected" {% endif %}>No Pagadas</option>
+    </select>
 
 {% endblock %}
 
@@ -161,6 +168,11 @@
                 }
             });
         }
-
+        $(document).on("keyup", function(e){
+            if(e.keyCode == 112){
+                var url = "{% static 'documentacion/build/html/ventas.html' %}";
+                window.open(url);
+            }
+        });
     </script>
 {% endblock %}

@@ -53,7 +53,7 @@
                 <td>{{medicamento.laboratorio}}</td>
                 <td class="action">
                     <div class="dropdown">
-                        <button class="btn btn-default button-hover dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <button class="btn btn-default button-hover dropdown-toggle" type="button" id="{{medicamento.pk}}" name="stockGlobal"   data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Acción
                         <span class="caret"></span>
                         </button>
@@ -75,6 +75,12 @@
                             <li>
                                 <a class="action-link btn-ver-lotes" href="#" data-url="{% url 'medicamento_verLotes' medicamento.pk %}">
                                     <span class="action-link-icon animated glyphicon glyphicon-eye-open"></span> Ver Lotes
+                                </a>
+                            </li>
+                            <li>
+                                <a class="action-link btn-ver-stock" href="#" >
+
+                                    <a data-toggle="modal" name="verGlobal" data-target="#verGlobal" class="btn btn-primary center-block">Stock Global</a>
                                 </a>
                             </li>
                             {% if perms.usuarios.encargado_general %}
@@ -130,6 +136,49 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modal-ver-stock" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Stock</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nº Lote</th>
+                                <th>Fecha de Vencimiento</th>
+                                <th>Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="mensaje-sin-lotes">
+                        <p>Este medicamento no posee lotes activos</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--======================================MI MODAL===============================================-->
+    <div class="modal fade" id="verGlobal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+			<div class="modal-content" id="contenedorModal">
+                <div class="modal-body" id="modalBody">
+				</div>
+			</div>
+        </div>
+    </div>
+<!--===================================FIN MI MODAL==============================================-->
+
 {% endblock %}
 
 {% block more-scripts %}
@@ -201,5 +250,27 @@
                 });
             }
         })();
+
+        $("[name='stockGlobal']").on("click",function(e){
+            var idMedicamento = e.target.id;
+            var id = {'id': idMedicamento};
+            var url = {% url 'verStockGlobalMed' %};
+            enviarStockGlobalMed(url, id);
+
+        });
+
+        function enviarStockGlobalMed(url, id){
+            $.ajax({
+                contentType: 'json',
+                data: id,
+                type: 'get',
+                url: url,
+                success:function(response){
+                    //data = JSON.parse(response);/*decodificacion de JSON a un object*/
+                    $('#modalBody').html(response);
+                }
+            });
+        }
+
     </script>
 {% endblock %}
