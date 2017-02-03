@@ -214,6 +214,8 @@ class PedidoDeFarmacia(PedidoVenta):
     def get_instancia_es_mobile(self):
         return "no_mobile"
 
+
+
 class DetallePedidoDeFarmacia(DetallePedidoVenta):
     pedidoDeFarmacia = models.ForeignKey('PedidoDeFarmacia', on_delete=models.CASCADE)
     cantidadPendiente = models.PositiveIntegerField(default=0)
@@ -401,6 +403,9 @@ class movimientosDeStockDistribuido(models.Model):
     def ultimoPk(self):
         ultimo = len(self)
         return ultimo
+
+    def get_detalles_movimientos(self):
+        return self.detalledemovimientos
 
     def __str__(self):
         return 'Farmacia de Destino: %s' % (self.farmaciaDeDestino)

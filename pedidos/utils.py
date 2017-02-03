@@ -1095,10 +1095,13 @@ def verificarCantidad(detalles):
      for detalle in detalles:
          medicamento = detalle.medicamento
          cantidadAobtener=detalle.cantidadPendiente
-         stockTotalDistDic = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__medicamento__pk=medicamento.pk).aggregate(Sum('cantidad'))
+         farmacia=detalle.pedidoDeFarmacia.farmacia#*******
+         #El exclude esta por que la farmacia de destino no debe incluirse ella misma en la cuenta
+         stockTotalDistDic = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__medicamento__pk=medicamento.pk).exclude(farmacia=farmacia).aggregate(Sum('cantidad'))
          cantidadFarmaciasConElMed = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__medicamento__pk=medicamento.pk).count()
          stockTotalDist = stockTotalDistDic['cantidad__sum']#Esto es por que aggregate devuelve un diccionario.
          totalMinimoAdejar = cantidadFarmaciasConElMed * parametros.MIN_A_DEJAR
+
          if (stockTotalDist - cantidadAobtener) >= totalMinimoAdejar:
             respetaMinimo = True
          else:

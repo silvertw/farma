@@ -14,6 +14,7 @@
           </thead>
           <tbody class="listadoFact">
             {% for renglon in renglones %}
+                {% if renglon.farmacia != farmSolicitante %}
                 <tr name="listado" class="disponible" >
                   <td>{{ renglon.farmacia }}</td>
                   <td>{{ renglon.lote.numero }}</td>
@@ -29,6 +30,7 @@
                       </form>
                   </td>
                 </tr>
+                {% endif %}
             {% endfor %}
 
           </tbody>
@@ -65,6 +67,7 @@
                             //fila o renglon de la tabla html.
 
         var filaActualIndice = [];//Arreglo donde se guardaran los indices de lor renglones de la tabla html 'disponibles'.
+        var medDisonibles = [];//Arreglo donde se insertan los medicamentos disponibles.
 
         var cantidadConst = 0;//Este valor representa la cantidad disponible inicial que tienen las farmacias, valor que no va a cambiar
                               //a lo largo del proceso.
@@ -73,7 +76,7 @@
         var filaActualCantReq = [];//Arreglo deonde se insertan las cantidades requeridas.
         var filaMedActualReq = [];//Arreglo donde se insertan los medicamentos requeridos.
 
-        $(".disponible").on("mouseup",function(e) {
+        $(".disponible").on("change",function(e) {
 
             var nroFilaTbl = e.target.id//En base a la infomacion del evento se obiente el numero de renglon o fila de la tabla html 'disponibles'.
             var cantidadQuitada = e.target.value;//Se otiene la cantidad que se decidio quitar a la farmacia.
@@ -82,7 +85,6 @@
             if (filaActualIndice.indexOf(nroFilaTbl) == -1){//Se verifica si el indie de renglon se encuentra en el arreglo.
 
                 filaActualIndice.push(nroFilaTbl);//Si el indice no esta en el arreglo este indice se inserta en el mismo.
-
                 cantidadConst = parseInt(cantidadDisponible);//Se inicializa la cantidad disponible inicial que tiene la farmacia todo este proceso
                                                              //se realiza por unica vez para cada uno de los renglones de la tabla html 'disponibles'.
             }
@@ -158,18 +160,74 @@
 
         });
 
+        var totalesArray = {};
+        var paqueteJson
+        var i=0;
         $( "#btnRegM" ).on("click",function(e) {
 
             $(".disponible").each(function(){//Se recorre la tabla 'disponibles'.
 
                 var farmacia = $(this).find("td").eq(0).html();
                 var lote = $(this).find("td").eq(1).html();
-                var medicameto = $(this).find("td").eq(2).html();
+                var medicamento = $(this).find("td").eq(2).html();
                 var cantQuitada = $(this).find("input").val();
+                var farmaciaSolicitante = '{{farmSolicitante}}';
+                var nroPedido = '{{nroPedido}}';
 
+
+                var paquete = new Object();
+                paquete.farmacia = farmacia;
+                paquete.lote = lote;
+                paquete.medicamento = medicamento;
+                paquete.cantQuitada = cantQuitada;
+                paquete.farmaciaSolicitante=farmaciaSolicitante;
+                paquete.nroPedido = nroPedido;
+
+                paqueteJson = JSON.stringify(paquete);
+
+                if (paquete.cantQuitada != ''){
+                    totalesArray[i]=paqueteJson;
+                }
+                i++;
+
+            });
+            var url = {% url 'actualizarStockManual' %};
+
+            var error = 'false';
+
+            $(".solicitud").each(function(){
+
+                var cantidadActual = $(this).find("td").eq(0).html();
+
+                if(parseInt(cantidadActual) < 0){
+                    error = 'true';
+                }
 
             });
 
+            if(error == 'false'){
+                actualizarStock(url,totalesArray);
+            }else{
+                alert('Error en los valores a entregar verificar error en color rojo');
+            }
+
+
         });
 
+        function actualizarStock(url,data){
+            $.ajax({
+                contentType: 'json',
+                data: data,
+                type: 'get',
+                url: url,
+                success:function(response){
+                    alert(response);
+                    window.location.assign("{% url 'pedidosDeFarmacia'  %}");
+                }
+            });
+        }
+
     </script>
+
+
+

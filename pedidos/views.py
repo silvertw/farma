@@ -351,7 +351,6 @@ def buscarEnFarmacias(request):
         detalles = pmodels.DetallePedidoDeFarmacia.objects.filter(pedidoDeFarmacia__nroPedido=nroPedido)
         farmacia = omodels.Farmacia.objects.get(pk=farmaciaPk)
         haySuficientePedido = utils.verificarCantidad(detalles)
-
         if not haySuficientePedido:
             renglones=[{'totalq': 0, 'farmacia': 'No se puede cubrir pedido', 'lote': 'No se puede cubrir pedido'}]
         else:
@@ -398,7 +397,7 @@ def busquedaManualOptStock(request):
             for detalleDist in detallesDist:
                 if detalleDist.lote.medicamento == detalle.medicamento:
                     renglones.append(detalleDist)
-    return render(request, "pedidoDeFarmacia/_detalleMovimientosManuales.html", {"renglones": renglones,"info":info,"farmSolicitante":farmSolicitante})
+    return render(request, "pedidoDeFarmacia/_detalleMovimientosManuales.html", {"renglones": renglones,"info":info,"farmSolicitante":farmSolicitante,"nroPedido":nroPedido})
 
 
 
@@ -416,6 +415,83 @@ class remitoOptimizarStock(PDFTemplateView):
             remito=pedido,
             detallesRemito=detalleMovimientos
         )
+
+def actualizarStockManual(request):
+
+    farmaciasADescontar = request.GET#Se recuperan todos los renglones que indican la cantidad que hay que quitar a cada farmacia con determinado lote.
+    #Actualiza Distribuidos
+    for farm in farmaciasADescontar:#Se recorren los renglones
+        decodedJsonfarmaciasADescontar = json.loads(farmaciasADescontar[farm])#Se decodifica el formato json
+        stockDist = mmodels.StockDistribuidoEnFarmacias.objects.get(farmacia__razonSocial=decodedJsonfarmaciasADescontar['farmacia'],
+                                                                    lote__numero=decodedJsonfarmaciasADescontar['lote'])#Se obtiene el stock distribuido en base al lote y a la farmacia a quitar.
+        stockDist.cantidad = stockDist.cantidad - int(decodedJsonfarmaciasADescontar['cantQuitada'])#Se descuenta la cantidad solicitada.
+        farmSolicitanteRs=decodedJsonfarmaciasADescontar['farmaciaSolicitante']#Se obtiene la farmacia solicitante
+
+        if not(mmodels.StockDistribuidoEnFarmacias.objects.filter(farmacia__razonSocial=farmSolicitanteRs,
+                                                                  lote__numero=decodedJsonfarmaciasADescontar['lote']).exists()):
+            stockDistSolicitante = mmodels.StockDistribuidoEnFarmacias()#Si no existe un stock distribuido con el numero de lote de destino este se crea.
+            loteObj=mmodels.Lote.objects.get(numero=decodedJsonfarmaciasADescontar['lote'])
+            farmaciaObj=omodels.Farmacia.objects.get(razonSocial=farmSolicitanteRs)#Se obtiene la farmacia en base a su razon social *(el sistema
+                                                                                   #asegura que no se puedan cargar dos iguales).
+            stockDistSolicitante.farmacia = farmaciaObj
+            stockDistSolicitante.cantidad += int(decodedJsonfarmaciasADescontar['cantQuitada'])
+            stockDistSolicitante.lote=loteObj
+        #Si ya existe solo se recupera
+        else:
+            stockDistSolicitante = mmodels.StockDistribuidoEnFarmacias.objects.get(farmacia__razonSocial=farmSolicitanteRs,
+                                                                                   lote__numero=decodedJsonfarmaciasADescontar['lote'])
+            stockDistSolicitante.cantidad += int(decodedJsonfarmaciasADescontar['cantQuitada'])
+        stockDist.save()
+        stockDistSolicitante.save()
+
+#=======================================================================================================================
+
+    #Actualiza info de pedido, su detalle y movimientos
+    pedidoDeFarmacia=pmodels.PedidoDeFarmacia.objects.get(nroPedido=decodedJsonfarmaciasADescontar['nroPedido'])
+    detalles = pmodels.DetallePedidoDeFarmacia.objects.filter(pedidoDeFarmacia=pedidoDeFarmacia)
+    estado="Enviado"
+
+    if pedidoDeFarmacia.tieneMovimientos:
+        movimiento=pmodels.movimientosDeStockDistribuido.objects.get(pedidoMov=pedidoDeFarmacia)
+    else:
+        movimiento = pmodels.movimientosDeStockDistribuido(
+            farmaciaDeDestino=farmSolicitanteRs,
+            pedidoMov=pedidoDeFarmacia,
+        )
+        movimiento.save()
+
+    for farm in farmaciasADescontar:#Se recorren los renglones
+        decodedJsonfarmaciasADescontar = json.loads(farmaciasADescontar[farm])#Se decodifica el formato json.
+        lote = mmodels.Lote.objects.get(numero = decodedJsonfarmaciasADescontar['lote'])#Se obtiene el lote en base al numero para obtener
+                                                                                        #el medicamento esto se hace para comparar los obj.
+        medicamento=lote.medicamento                                                    #medicamentos y no comparar por su nombre de fantasia
+                                                                                        #que puede ser erroneo.
+        for det in detalles:
+            if (det.medicamento == medicamento):
+                det.cantidadPendiente -= int(decodedJsonfarmaciasADescontar['cantQuitada'])
+                det.save()
+        #Para los movimientos de stock
+        detalleMovimiento = pmodels.detalleDeMovimientos(
+            movimiento = movimiento,
+            farmacia = decodedJsonfarmaciasADescontar['farmacia'],
+            lote = int(decodedJsonfarmaciasADescontar['lote']),
+            cantidadQuitada = int(decodedJsonfarmaciasADescontar['cantQuitada']),
+        )
+        detalleMovimiento.save()
+
+    for det in detalles:
+        if det.cantidadPendiente > 0:
+            estado = "Parcialmente Enviado"
+
+    pedidoDeFarmacia.tieneMovimientos=True
+    pedidoDeFarmacia.estado=estado
+    pedidoDeFarmacia.save()
+
+    msj = "El Movimiento se registro correctamente"
+    response = HttpResponse(msj)
+    return response
+
+
 # ******************************* PEDIDOS DE CLINICA ******************************* #
 
 @login_required(login_url='login')

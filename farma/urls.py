@@ -120,6 +120,7 @@ urlpatterns = [
     url(r'^pedidoDesdeMobilFarmacia/$', pviews.pedidoDesdeMobilFarmacia, name="pedidoDesdeMobilFarmacia"),
     url(r'^notificarPedidosMobiles/$', pviews.notificarPedidosMobiles, name="notificarPedidosMobiles"),
     url(r'^mostrarDetalleMovManual/$', pviews.busquedaManualOptStock, name="mostrarDetalleMovManual"),
+    url(r'^actualizarStockManual/$', pviews.actualizarStockManual, name="actualizarStockManual"),
 
     # ************************************** Pedido de Clinica ***************************************
     url(r'^pedidosDeClinica/$', pviews.pedidosDeClinica, name="pedidosDeClinica"),
