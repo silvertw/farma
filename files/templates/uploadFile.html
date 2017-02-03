@@ -30,10 +30,10 @@
     <script>
 
         window.onload = function() {
-            if('{{invalid}}' == 'True'){
+            if('{{estado}}' == 'False'){
                 alert("Error el archivo tiene incoherencias y no pudo procesarse.");
             }
-            if('{{invalid}}' == 'Procesado'){
+            if('{{estado}}' == 'True'){
                 alert("El Archivo se proceso correctamente.");
                 window.location.assign("/uploads/");
             }

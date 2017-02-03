@@ -1,12 +1,12 @@
-razonSocial de farmacia_fecha
-lote1_cantidad1
-lote2_cantidad2
-lote3_cantidad3
-lote5_cantidad4
-lote5_cantidad5
-lote6_cantidad6
-lote7_cantidad7
-lote8_cantidad8
-lote9_cantidad9
-lote10_cantidad10
-lote11_cantidad11
+pk de farmacia,fecha
+lote1,cantidad1
+lote2,cantidad2
+lote3,cantidad3
+lote5,cantidad4
+lote5,cantidad5
+lote6,cantidad6
+lote7,cantidad7
+lote8,cantidad8
+lote9,cantidad9
+lote10,cantidad10
+lote11,cantidad11

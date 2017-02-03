@@ -9,7 +9,7 @@ import re
 
 def uploadFile(request):
     if request.method == 'POST':
-        invalid=False
+        estado=True
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
             datos = form.cleaned_data["docfile"].read()
@@ -17,54 +17,56 @@ def uploadFile(request):
             #============================PROCESAMIENTO DEL ARCHIVO============================================
 
             farmacias=omodels.Farmacia.objects.all()#Obtiene todas las farmacias.
-            nombresFarmaias=[]
+            pkFarmacias=[]
 
             for farm in farmacias:
-                nombresFarmaias.append(farm.razonSocial)#Guarda sus razones sociales en una lista.
+                pkFarmacias.append(farm.pk)#Guarda sus razones sociales en una lista.
 
             fecha = re.compile(r'^(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\d\d)$')#Exp. reg. para validar fecha
 
             #------------------------------------RECORRIDO PARA VALIDAR---------------------------------------
             i=0
             listaLineas=[]
-            listaErrores=[]
+
             for linea in datos.splitlines():
-                parDeValores=linea.split('_')
+                parDeValores=linea.split(',')
 
                 if i==0:#Primer linea para validar farmacia y fecha
-                    farmacia=parDeValores[0]
-                    if not parDeValores[0] in nombresFarmaias:#Verifica que el nombre de farmacia del archivo sea
+                    pkFarmacia = int(parDeValores[0])
+
+                    if not pkFarmacia in pkFarmacias:#Verifica que el pk de farmacia del archivo sea
                                                                #correcto y sea de una farmacia activa.
-                        invalid=True
+
+                        estado=False
                     if fecha.search(parDeValores[1]) is None:#Verifica que la cadena fecha sea correcta
-                        invalid=True
+                        estado=False
                 else:
 
                     if not parDeValores[0].isdigit():
-                        invalid=True
+                        estado=False
                     if not parDeValores[1].isdigit():
-                        invalid=True
+                        estado=False
 
                     listaLineas.append(linea)
 
                 i += 1
-            #--------------------------RECORIDO PARA DESCONTAR SI EL ARCHIVO ES VALIDO-----------------------------
-            if not invalid:
+            #--------------------------RECORRIDO PARA DESCONTAR SI EL ARCHIVO ES VALIDO-----------------------------
+            if estado:
                 for linea in listaLineas:
-                    parDeValores=linea.split('_')
+                    parDeValores=linea.split(',')
                     lote=parDeValores[0]
                     cantidad=parDeValores[1]
-                    buscarLotesYdescontarStock(farmacia,lote,cantidad)
-                    invalid="Procesado"
+                    buscarLotesYdescontarStock(pkFarmacia,lote,cantidad)
+
         else:
-            invalid=True
+            estado=False
     else:
         form = UploadForm()
-        invalid=False
-    return render(request, "uploadFile.html", {'form': form,'invalid':invalid})
+        estado=None
+    return render(request, "uploadFile.html", {'form': form,'estado':estado})
 
-def buscarLotesYdescontarStock(farmacia,lote,cantidad):
-    stockDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__numero=lote,farmacia__razonSocial=farmacia)
+def buscarLotesYdescontarStock(pkFarmacia,lote,cantidad):
+    stockDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__numero=lote,farmacia__pk=pkFarmacia)
 
     totalQuitado=0
     cantidad=int(cantidad)
