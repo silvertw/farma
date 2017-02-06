@@ -364,8 +364,6 @@ def buscarEnFarmacias(request):
         return render(request, "pedidoDeFarmacia/_detalleInforme.html", {"renglones": renglones})
      else:
 
-
-        #=========================inicio prueba correccion de duplicidad
         if pedido.tieneMovimientos:
             movimiento=pmodels.movimientosDeStockDistribuido().get_movimiento_pedidoFarm(pedido)
         else:
@@ -374,19 +372,6 @@ def buscarEnFarmacias(request):
                 pedidoMov=pedido,
             )
             movimiento.save()
-        #=========================fin inicio prueba correccion de duplicidad
-
-
-
-        #==========lineas normales comentadas
-        #movimiento = pmodels.movimientosDeStockDistribuido(
-        #    farmaciaDeDestino=farmacia.razonSocial,
-        #    pedidoMov=pedido,
-        #)
-        #movimiento.save()
-
-
-
 
         for renglon in renglones:
 
