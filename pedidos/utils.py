@@ -1027,7 +1027,6 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
         for loteActivo in lotesActivos:
             seguirSacandoAlote=True
             nuevoStockDist = mmodels.StockDistribuidoEnFarmacias()
-
         #========PARA EL INFORME A PRESENTAR==========
             i=0
             porcion = 0

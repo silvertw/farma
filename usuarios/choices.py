@@ -4,4 +4,5 @@ CARGO_CHOICES = (
     ('Encargado de Stock', 'Encargado de Stock'),
     ('Encargado de Pedido', 'Encargado de Pedido'),
     ('Empleado de Despacho de Pedido', 'Empleado de Despacho de Pedido'),
+    ('Encargado de Farmacia', 'Encargado de Farmacia')
 )

@@ -18,6 +18,9 @@ class Organizacion(models.Model):
 class Farmacia(Organizacion):
     nombreEncargado = models.CharField(max_length=80, blank=True)
 
+    def get_farmacia_razSocial(self,farmaciaRs):
+        return Farmacia.objects.get(razonSocial=farmaciaRs)
+
     def __str__(self):
         return self.razonSocial
 

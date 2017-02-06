@@ -23,6 +23,8 @@ def get_permiso(tipoCargo):
     if tipoCargo == 'Empleado de Despacho de Pedido':
         return Permission.objects.get(codename="empleado_despacho_pedido")
 
+    if tipoCargo == 'Encargado de Farmacia':
+        return Permission.objects.get(codename="encargado_de_farmacia")
 
 @csrf_protect
 @permission_required('usuarios.encargado_general', login_url='login')

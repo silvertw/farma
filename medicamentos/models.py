@@ -47,7 +47,6 @@ class Medicamento(models.Model):
             return Lote.objects.filter(medicamento=self, fechaVencimiento__gte=lim)
         return None
 
-
 class Presentacion(models.Model):
     FILTROS = ["descripcion__icontains"]
     descripcion = models.CharField(max_length=45)
@@ -114,6 +113,10 @@ class Lote(models.Model):
                 'fechaVencimiento': self.fechaVencimiento.strftime("%d/%m/%y"),
                 'stock': self.stock
             }
+
+    def get_lote_nro(self,nroLote):
+        return Lote.objects.get(numero = nroLote)
+
     #===============IMPORTANTE-DIEGO-FORMA CORRECTA-LOGICA DE NEGOCIO===========================
     #def enviarAFarmacia(self, farmacia, cantidad):
     #    if self.stock < cantidad:
@@ -149,6 +152,14 @@ class StockDistribuidoEnFarmacias(models.Model):
 
     def miNombreFantasia(self):
         return self.lote.medicamento.nombreFantasia.nombreF
+
+    #Devuelve un stock dist en base a la razon social y al numero de lote
+    def get_dist_farmaciaRs_y_loteNro(self,farmaciaRs,nroLote):
+        stockDist = StockDistribuidoEnFarmacias.objects.get(farmacia__razonSocial=farmaciaRs,lote__numero=nroLote)
+        return stockDist
+
+    def get_exist_farmaciaRs_y_loteNro(self,farmacia,lote):
+        return StockDistribuidoEnFarmacias.objects.filter(farmacia__razonSocial=farmacia,lote__numero=lote).exists()
 
     def __str__(self):
         return "nro. lote:%s - Cantidad en: %s - %s" % (self.lote, self.farmacia, self.cantidad)

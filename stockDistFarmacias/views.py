@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
 from stockDistFarmacias import models as distmodels
 from pedidos import models as pmodels
 from medicamentos import models as mmodels
@@ -16,6 +18,9 @@ def get_filtros(get, modelo):
     return mfilter
 
 
+@permission_required('usuarios.encargado_general', login_url='login')
+@permission_required('usuarios.encargado_stock', login_url='login')
+@login_required(login_url='login')
 def stockDistribuido(request):
     mfilters = get_filtros(request.GET, mmodels.StockDistribuidoEnFarmacias)
     distribuidos = mmodels.StockDistribuidoEnFarmacias.objects.filter(**mfilters).exclude(cantidad=0)

@@ -159,6 +159,7 @@ def pedidoDeFarmacia_verRemitos(request, id_pedido):
 
 
 #==================================LOGICA PARA ATENDER PETICIONES DESDE MOBIL================================
+
 def pedidoDesdeMobilFarmacia(request):
     farmaciaSolicitanteRs=request.GET["farmaciaSolicitante"]#Razon social de la farmacia solicitante
     pkMedicamento = request.GET["pkMedicamento"]
@@ -337,7 +338,9 @@ class remitoDeFarmacia(PDFTemplateView):
         )
 
 #==============================================BUSCAR EN FARMACIAS======================================================
-
+@permission_required('usuarios.encargado_general', login_url='login')
+@permission_required('usuarios.empleado_despacho_pedido', login_url='login')
+@login_required(login_url='login')
 def buscarEnFarmacias(request):
 
      verificar=False
@@ -347,8 +350,9 @@ def buscarEnFarmacias(request):
 
         nroPedido = request.GET['nroPedido']
         farmaciaPk = request.GET['farmacia']
-        pedido = pmodels.PedidoDeFarmacia.objects.get(pk=nroPedido)
-        detalles = pmodels.DetallePedidoDeFarmacia.objects.filter(pedidoDeFarmacia__nroPedido=nroPedido)
+        pedido = pmodels.PedidoDeFarmacia().get_pedidoFarmacia_nro(nroPedido)
+        detalles = pedido.get_detalles()
+        #detalles = pmodels.DetallePedidoDeFarmacia.objects.filter(pedidoDeFarmacia__nroPedido=nroPedido)
         farmacia = omodels.Farmacia.objects.get(pk=farmaciaPk)
         haySuficientePedido = utils.verificarCantidad(detalles)
         if not haySuficientePedido:
@@ -359,11 +363,31 @@ def buscarEnFarmacias(request):
      if verificar:
         return render(request, "pedidoDeFarmacia/_detalleInforme.html", {"renglones": renglones})
      else:
-        movimiento = pmodels.movimientosDeStockDistribuido(
-            farmaciaDeDestino=farmacia.razonSocial,
-            pedidoMov=pedido,
-        )
-        movimiento.save()
+
+
+        #=========================inicio prueba correccion de duplicidad
+        if pedido.tieneMovimientos:
+            movimiento=pmodels.movimientosDeStockDistribuido().get_movimiento_pedidoFarm(pedido)
+        else:
+            movimiento = pmodels.movimientosDeStockDistribuido(
+                farmaciaDeDestino=farmacia.razonSocial,
+                pedidoMov=pedido,
+            )
+            movimiento.save()
+        #=========================fin inicio prueba correccion de duplicidad
+
+
+
+        #==========lineas normales comentadas
+        #movimiento = pmodels.movimientosDeStockDistribuido(
+        #    farmaciaDeDestino=farmacia.razonSocial,
+        #    pedidoMov=pedido,
+        #)
+        #movimiento.save()
+
+
+
+
         for renglon in renglones:
 
             detalleMovimiento = pmodels.detalleDeMovimientos(
@@ -379,7 +403,9 @@ def buscarEnFarmacias(request):
 
         return render(request, "pedidoDeFarmacia/_detalleInforme.html", {})
 
-
+@permission_required('usuarios.encargado_general', login_url='login')
+@permission_required('usuarios.empleado_despacho_pedido', login_url='login')
+@login_required(login_url='login')
 def busquedaManualOptStock(request):
 
     nroPedido = request.GET['nroPedido']
@@ -395,10 +421,10 @@ def busquedaManualOptStock(request):
             info.append(detalle)
 
             for detalleDist in detallesDist:
-                if detalleDist.lote.medicamento == detalle.medicamento:
-                    renglones.append(detalleDist)
+                if detalleDist.lote.medicamento.tiene_lotes():
+                    if detalleDist.lote.medicamento == detalle.medicamento:
+                        renglones.append(detalleDist)
     return render(request, "pedidoDeFarmacia/_detalleMovimientosManuales.html", {"renglones": renglones,"info":info,"farmSolicitante":farmSolicitante,"nroPedido":nroPedido})
-
 
 
 class remitoOptimizarStock(PDFTemplateView):
@@ -416,43 +442,47 @@ class remitoOptimizarStock(PDFTemplateView):
             detallesRemito=detalleMovimientos
         )
 
+@permission_required('usuarios.encargado_general', login_url='login')
+@permission_required('usuarios.empleado_despacho_pedido', login_url='login')
+@login_required(login_url='login')
 def actualizarStockManual(request):
 
     farmaciasADescontar = request.GET#Se recuperan todos los renglones que indican la cantidad que hay que quitar a cada farmacia con determinado lote.
     #Actualiza Distribuidos
     for farm in farmaciasADescontar:#Se recorren los renglones
         decodedJsonfarmaciasADescontar = json.loads(farmaciasADescontar[farm])#Se decodifica el formato json
-        stockDist = mmodels.StockDistribuidoEnFarmacias.objects.get(farmacia__razonSocial=decodedJsonfarmaciasADescontar['farmacia'],
-                                                                    lote__numero=decodedJsonfarmaciasADescontar['lote'])#Se obtiene el stock distribuido en base al lote y a la farmacia a quitar.
-        stockDist.cantidad = stockDist.cantidad - int(decodedJsonfarmaciasADescontar['cantQuitada'])#Se descuenta la cantidad solicitada.
-        farmSolicitanteRs=decodedJsonfarmaciasADescontar['farmaciaSolicitante']#Se obtiene la farmacia solicitante
+        farmaciaRs=decodedJsonfarmaciasADescontar['farmacia']
+        nroLote=decodedJsonfarmaciasADescontar['lote']
+        cantidadQuitada = int(decodedJsonfarmaciasADescontar['cantQuitada'])
+        farmSolicitanteRs=decodedJsonfarmaciasADescontar['farmaciaSolicitante']
+        nroPedido=decodedJsonfarmaciasADescontar['nroPedido']
 
-        if not(mmodels.StockDistribuidoEnFarmacias.objects.filter(farmacia__razonSocial=farmSolicitanteRs,
-                                                                  lote__numero=decodedJsonfarmaciasADescontar['lote']).exists()):
+        stockDist = mmodels.StockDistribuidoEnFarmacias().get_dist_farmaciaRs_y_loteNro(farmaciaRs,nroLote)
+        stockDist.cantidad = stockDist.cantidad - cantidadQuitada#Se descuenta la cantidad solicitada.
+        existe = mmodels.StockDistribuidoEnFarmacias().get_exist_farmaciaRs_y_loteNro(farmSolicitanteRs,nroLote)#Pregunta si ya existe la farmacia con ese nro de lote
+
+        if not existe:#si no existe se crea
             stockDistSolicitante = mmodels.StockDistribuidoEnFarmacias()#Si no existe un stock distribuido con el numero de lote de destino este se crea.
-            loteObj=mmodels.Lote.objects.get(numero=decodedJsonfarmaciasADescontar['lote'])
-            farmaciaObj=omodels.Farmacia.objects.get(razonSocial=farmSolicitanteRs)#Se obtiene la farmacia en base a su razon social *(el sistema
+            loteObj=mmodels.Lote().get_lote_nro(nroLote)
+            farmaciaObj=omodels.Farmacia().get_farmacia_razSocial(farmSolicitanteRs)#Se obtiene la farmacia en base a su razon social *(el sistema
                                                                                    #asegura que no se puedan cargar dos iguales).
             stockDistSolicitante.farmacia = farmaciaObj
-            stockDistSolicitante.cantidad += int(decodedJsonfarmaciasADescontar['cantQuitada'])
+            stockDistSolicitante.cantidad += cantidadQuitada
             stockDistSolicitante.lote=loteObj
         #Si ya existe solo se recupera
         else:
-            stockDistSolicitante = mmodels.StockDistribuidoEnFarmacias.objects.get(farmacia__razonSocial=farmSolicitanteRs,
-                                                                                   lote__numero=decodedJsonfarmaciasADescontar['lote'])
-            stockDistSolicitante.cantidad += int(decodedJsonfarmaciasADescontar['cantQuitada'])
+            stockDistSolicitante = mmodels.StockDistribuidoEnFarmacias().get_dist_farmaciaRs_y_loteNro(farmSolicitanteRs,nroLote)
+            stockDistSolicitante.cantidad += cantidadQuitada
         stockDist.save()
         stockDistSolicitante.save()
-
 #=======================================================================================================================
-
     #Actualiza info de pedido, su detalle y movimientos
-    pedidoDeFarmacia=pmodels.PedidoDeFarmacia.objects.get(nroPedido=decodedJsonfarmaciasADescontar['nroPedido'])
-    detalles = pmodels.DetallePedidoDeFarmacia.objects.filter(pedidoDeFarmacia=pedidoDeFarmacia)
+    pedidoDeFarmacia=pmodels.PedidoDeFarmacia().get_pedidoFarmacia_nro(nroPedido)
+    detalles = pedidoDeFarmacia.get_detalles()
     estado="Enviado"
 
     if pedidoDeFarmacia.tieneMovimientos:
-        movimiento=pmodels.movimientosDeStockDistribuido.objects.get(pedidoMov=pedidoDeFarmacia)
+        movimiento=pmodels.movimientosDeStockDistribuido().get_movimiento_pedidoFarm(pedidoDeFarmacia)
     else:
         movimiento = pmodels.movimientosDeStockDistribuido(
             farmaciaDeDestino=farmSolicitanteRs,
@@ -462,10 +492,13 @@ def actualizarStockManual(request):
 
     for farm in farmaciasADescontar:#Se recorren los renglones
         decodedJsonfarmaciasADescontar = json.loads(farmaciasADescontar[farm])#Se decodifica el formato json.
-        lote = mmodels.Lote.objects.get(numero = decodedJsonfarmaciasADescontar['lote'])#Se obtiene el lote en base al numero para obtener
-                                                                                        #el medicamento esto se hace para comparar los obj.
-        medicamento=lote.medicamento                                                    #medicamentos y no comparar por su nombre de fantasia
-                                                                                        #que puede ser erroneo.
+        nroLote = decodedJsonfarmaciasADescontar['lote']
+        lote = mmodels.Lote().get_lote_nro(nroLote)#Se obtiene el lote en base al numero para obtener
+                                                   #el medicamento esto se hace para comparar los obj.
+                                                   #medicamentos y no comparar por su nombre de fantasia
+                                                   #que puede ser erroneo.
+        medicamento=lote.medicamento
+
         for det in detalles:
             if (det.medicamento == medicamento):
                 det.cantidadPendiente -= int(decodedJsonfarmaciasADescontar['cantQuitada'])

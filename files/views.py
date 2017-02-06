@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render, redirect #puedes importar render_to_response
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
 from files.forms import UploadForm
 from files.models import Document
 from organizaciones import models as omodels
@@ -7,6 +9,8 @@ from medicamentos import models as mmodels
 import os
 import re
 
+@permission_required('usuarios.encargado_de_farmacia', login_url='login')
+@login_required(login_url='login')
 def uploadFile(request):
     if request.method == 'POST':
         estado=True

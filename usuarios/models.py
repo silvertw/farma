@@ -14,5 +14,6 @@ class Usuario(AbstractUser):
             ("encargado_medicamentos_vencidos", "Cargo de encargado de medicamentos vencidos"),
             ("encargado_stock", "Cargo Encargado de stock"),
             ("encargado_pedido", "Cargo Encargado de pedido"),
-            ("empleado_despacho_pedido", "Cargo Encargado de despacho de pedido")
+            ("empleado_despacho_pedido", "Cargo Encargado de despacho de pedido"),
+            ("encargado_de_farmacia", "Cargo Responsable de Farmacia")
         )

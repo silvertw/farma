@@ -211,6 +211,9 @@ class PedidoDeFarmacia(PedidoVenta):
             total += detalle.cantidad
         return total
 
+    def get_pedidoFarmacia_nro(self,nroPedido):
+        return PedidoDeFarmacia.objects.get(nroPedido=nroPedido)
+
     def get_instancia_es_mobile(self):
         return "no_mobile"
 
@@ -406,6 +409,9 @@ class movimientosDeStockDistribuido(models.Model):
 
     def get_detalles_movimientos(self):
         return self.detalledemovimientos
+
+    def get_movimiento_pedidoFarm(self,pedidoDeFarmacia):
+        return movimientosDeStockDistribuido.objects.get(pedidoMov=pedidoDeFarmacia)
 
     def __str__(self):
         return 'Farmacia de Destino: %s' % (self.farmaciaDeDestino)
