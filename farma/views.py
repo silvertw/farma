@@ -8,6 +8,7 @@ def get_order(get):
 
 @login_required(login_url='login')
 def inicio(request):
+
     if request.mobile:
         #vista movil
         return render(request, "mobile/inicio_mobile.html")

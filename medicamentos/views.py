@@ -223,7 +223,6 @@ def presentacion_delete(request, id_presentacion):
         clinica.delete()
         return redirect('presentaciones')
 
-
 @login_required(login_url='login')
 def medicamentos(request):
     filters = get_filtros(request.GET, models.Medicamento)
@@ -236,7 +235,7 @@ def medicamentos(request):
     return render(request, "medicamento/medicamentos.html", {"medicamentos": medicamentos, "filtros": filters, 'estadisticas': estadisticas})
 
 
-@permission_required('usuarios.encargado_general', login_url='login')
+@permission_required('usuarios.encargado_de_farmacia', login_url='login')
 @login_required(login_url='login')
 def medicamento_add(request):
     if request.method == 'POST':
@@ -311,7 +310,7 @@ def medicamentoVerStockGlobalMed(request):
     totalEnFarmacias = 0
     pkMedicamento=request.GET["id"]
     medicamento=mmodels.Medicamento.objects.get(pk=pkMedicamento)
-    lotes = medicamento.get_lotes_con_stock()
+    lotes = medicamento.get_lotesPverGlobal()
     for lote in lotes:
         totalEnFarma = lote.stockFarmaYfarmacias.stockFarma + totalEnFarma
         totalEnFarmacias = lote.stockFarmaYfarmacias.stockFarmacias + totalEnFarmacias

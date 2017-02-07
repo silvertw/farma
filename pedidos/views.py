@@ -135,7 +135,6 @@ def pedidoDeFarmacia_ver(request, id_pedido):
     return render(request, "pedidoDeFarmacia/pedidoVer.html", {"pedido": pedido, "detalles": detalles, "remitos": remitos})
 
 
-@json_view
 @login_required(login_url='login')
 def pedidoDeFarmacia_verDetalles(request, id_pedido):
     detalles_json = []
@@ -145,7 +144,8 @@ def pedidoDeFarmacia_verDetalles(request, id_pedido):
     return {'detalles': detalles_json}
 
 #===================================LOGICA PARA EL PDF==============================================
-@json_view
+
+
 @login_required(login_url='login')
 def pedidoDeFarmacia_verRemitos(request, id_pedido):
     remitos_json = []#Prepara una lista para agregar remitos.
@@ -160,6 +160,8 @@ def pedidoDeFarmacia_verRemitos(request, id_pedido):
 
 #==================================LOGICA PARA ATENDER PETICIONES DESDE MOBIL================================
 
+
+@login_required(login_url='login')
 def pedidoDesdeMobilFarmacia(request):
     farmaciaSolicitanteRs=request.GET["farmaciaSolicitante"]#Razon social de la farmacia solicitante
     pkMedicamento = request.GET["pkMedicamento"]
@@ -225,7 +227,6 @@ def pedidoDesdeMobilFarmacia(request):
 
 #============================================================================================================
 
-@json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def pedidoDeFarmacia_registrar(request):
@@ -266,7 +267,6 @@ def detallesPedidoDeFarmacia(request):
     return render(request, "pedidoDeFarmacia/detallesPedido.html", {'pedido': pedido, 'detalles': detalles})
 
 
-@json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def detallePedidoDeFarmacia_add(request):
@@ -290,7 +290,6 @@ def detallePedidoDeFarmacia_add(request):
     return {'success': success, 'form_html': form_html}
 
 
-@json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def detallePedidoDeFarmacia_update(request, id_detalle):
@@ -312,7 +311,6 @@ def detallePedidoDeFarmacia_update(request, id_detalle):
     return {'form_html': form_html}
 
 
-@json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def detallePedidoDeFarmacia_delete(request, id_detalle):
@@ -338,7 +336,7 @@ class remitoDeFarmacia(PDFTemplateView):
         )
 
 #==============================================BUSCAR EN FARMACIAS======================================================
-@permission_required('usuarios.encargado_general', login_url='login')
+
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def buscarEnFarmacias(request):
@@ -388,7 +386,6 @@ def buscarEnFarmacias(request):
 
         return render(request, "pedidoDeFarmacia/_detalleInforme.html", {})
 
-@permission_required('usuarios.encargado_general', login_url='login')
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def busquedaManualOptStock(request):
@@ -427,7 +424,6 @@ class remitoOptimizarStock(PDFTemplateView):
             detallesRemito=detalleMovimientos
         )
 
-@permission_required('usuarios.encargado_general', login_url='login')
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def actualizarStockManual(request):

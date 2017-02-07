@@ -114,16 +114,18 @@
                                     <span class="action-link-icon animated glyphicon glyphicon-eye-open"></span> Ver Remitos
                                 </a>
                             </li>
-                            {% if pedido.get_pendiente_total > 0 and pedido.get_pendiente_total <= max and pedido.estado != "Enviado"%}
-                                <li>
-                                    <a data-toggle="modal" name="informe" data-target="#informe" class="btn btn-primary center-block">Busq.Farm.</a>
-                                </li>
-                            {% endif %}
+                            {% if perms.usuarios.empleado_despacho_pedido %}
+                                {% if pedido.get_pendiente_total > 0 and pedido.get_pendiente_total <= max and pedido.estado != "Enviado"%}
+                                    <li>
+                                        <a data-toggle="modal" name="informe" data-target="#informe" class="btn btn-primary center-block">Busq.Farm.</a>
+                                    </li>
+                                {% endif %}
 
-                            {% if pedido.tieneMovimientos %}
-                                <li>
-                                    <a data-toggle="modal" name="impMov" class="btn btn-primary center-block">Tiene Movimientos</a>
-                                </li>
+                                {% if pedido.tieneMovimientos %}
+                                    <li>
+                                        <a data-toggle="modal" name="impMov" class="btn btn-primary center-block">Tiene Movimientos</a>
+                                    </li>
+                                {% endif %}
                             {% endif %}
 
                         </ul>

@@ -4,6 +4,7 @@ from organizaciones.models import Laboratorio
 from organizaciones.models import Farmacia
 from django.core.validators import MaxValueValidator, MinValueValidator
 from pedidos import config as pconfig
+from django.db.models import Q
 from django.db.models import Avg, Max, Min, Sum
 from . import config
 import datetime
@@ -31,9 +32,13 @@ class Medicamento(models.Model):
                 stockTotal += lote.stock
             return stockTotal
 
-    def get_lotes_con_stock(self):
+    def get_lotes_con_stock(self):#Hay procedimientos que exigen que el stock sea mayor a 0.
         lotes = self.get_lotes_activos()
         return lotes.filter(stock__gt=0)
+
+    def get_lotesPverGlobal(self):#Para ver el stock global no interesa que el stock sea mayor a 0.
+        lotes = self.get_lotes_activos()
+        return lotes
 
     def tiene_lotes(self):
         if self.get_lotes_activos():
@@ -45,6 +50,8 @@ class Medicamento(models.Model):
         if self.id:
             lim = datetime.date.today() + datetime.timedelta(weeks=pconfig.SEMANAS_LIMITE_VENCIDOS)
             return Lote.objects.filter(medicamento=self, fechaVencimiento__gte=lim)
+            #StockDistribuidoEnFarmacias.objects.filter(lote__medicamanto=self,lote__fechaVencimiento__gte=lim)
+
         return None
 
 class Presentacion(models.Model):
@@ -148,7 +155,6 @@ class StockDistribuidoEnFarmacias(models.Model):
     lote=models.ForeignKey(Lote, null=True)
     cantidad=models.PositiveIntegerField(default=0)
     farmacia=models.ForeignKey(Farmacia,null=True)
-
 
     def miNombreFantasia(self):
         return self.lote.medicamento.nombreFantasia.nombreF

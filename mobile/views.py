@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import permission_required
 from pedidos.views import get_filtros as get_filtros_pedidos, get_filtros
 
 
-
+@login_required(login_url='login')
 def VerMedicamentos(request):
     filters = get_filtros(request.GET, Mmodels.Medicamento)
     mfilters = dict(filter(lambda v: v[0] in Mmodels.Medicamento.FILTROS, filters.items()))
@@ -19,7 +19,7 @@ def VerMedicamentos(request):
     return render(request, "medicamentos_mobile.html", {"medicamentos": medicamentos, "filtros": filters, 'estadisticas': estadisticas})
 
 
-
+@login_required(login_url='login')
 def VerOrganizaciones(request):
     filters = get_filtros(request.GET, Omodels.Organizacion)
     mfilters = dict(filter(lambda v: v[0] in Omodels.Organizacion.FILTROS, filters.items()))
@@ -30,7 +30,7 @@ def VerOrganizaciones(request):
     return render(request, "organizaciones_mobile.html", {"organizacionesFarmacia": organizacionesFarmacia, "organizacionesClinica": organizacionesClinica, "organizacionesObraSocial": organizacionesObraSocial, "organizacionesLaboratorio": organizacionesLaboratorio})
 
 
-
+@login_required(login_url='login')
 def VerPedidos(request):
     filters = get_filtros_pedidos(request.GET, Pmodels.PedidoVenta)
     mfilters = dict(filter(lambda v: v[0] in Pmodels.PedidoVenta.FILTROS, filters.items()))
@@ -38,24 +38,24 @@ def VerPedidos(request):
     return render(request, "pedidos_mobile.html", {"pedidosFarm": pedidosFarm})
 
 
-
+@login_required(login_url='login')
 def MostrarMedicamento(request, id_medicamento):
     medicamento = Mmodels.Medicamento.objects.get(pk=id_medicamento)
     return render(request, "mostrar_medicamento_mobile.html", {"medicamento": medicamento})
 
 
-
+@login_required(login_url='login')
 def informacionMobile(request):
     return render(request, "informacion_mobile.html")
 
 
-
+@login_required(login_url='login')
 def MostrarPedido(request, id_pedido):
     pedido = Pmodels.PedidoDeFarmacia.objects.get(pk=id_pedido)
     return render(request, "mostrar_pedidos_mobile.html", {"pedido": pedido})
 
 
-
+@login_required(login_url='login')
 def MostrarOrganizacionFarmacia(request, id_organizacion):
     organizacion = Omodels.Farmacia.objects.get(pk=id_organizacion)
     return render(request, "mostrar_organizacion_mobile.html", {"organizacion": organizacion})

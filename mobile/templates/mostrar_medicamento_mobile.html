@@ -71,7 +71,7 @@
 
 			<li class="ui-body ui-body-b ui-li ui-li-static ui-btn-up-c ui-last-child">
 				<div class="ui-block">
-					{% if perms.usuarios.encargado_pedido %}
+					{% if perms.usuarios.encargado_de_farmacia %}
 						<ul id="nav" data-role="listview" data-inset="true">
 							<li><a href="{% url 'PedirMedicamento' medicamento.pk %}" data-ajax="false">Añadir a pedido</a></li>
 						</ul>
