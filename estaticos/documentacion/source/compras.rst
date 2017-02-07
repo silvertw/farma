@@ -20,10 +20,9 @@ Junto con el listado, se presentarán un conjunto de funcionalidades que permiti
 
 Estas funcionalidades son:
    - :ref:`Registrar Factura de Compra <registrar-factura-compra>`
-
-
    - :ref:`Ver Facturados <ver-facturados>`
-
+   - :ref:`Cancelar Pago <cancelar-pago>`
+   - :ref:`Ver detalle de Pago <ver-detalle-pago>`
    - :ref:`Reportes <reportes>`
    - :ref:`Formulario de Búsqueda Ventas <formulario-busqueda-Ventas>`
    - :ref:`Formulario de Búsqueda Facturas Emitidas <formulario-busqueda-FactEmit>`
@@ -45,11 +44,7 @@ Automaticamente se presentara en pantalla un cartel para completarlos datos corr
 .. image:: _static/btnAccionRegistrarFactura2.png
    :align: center
 
-
-
-
-
-
+Una vez realizado esto desaparecera la factura donde estaba y se podra ver desde el boton de ``Facturas Generadas``.
 
 .. _ver-facturados:
 
@@ -62,8 +57,72 @@ Para ver las facturas que fueron *Facturadas* debemos presionar en el boton de `
 
 El mismo, nos conducira a otra pantalla la cual nos mostrara las ``*Facturas Emitidas*``.
 
+En el caso de que no contenga facturas mostrara un mensaje que diga que "LA TABLA ESTA VACIA"
+
 .. image:: _static/pantallaVerFacturasEmitidasFacturadas.png
    :align: center
+
+Sino, mostrara las facturas ya emitidas.
+
+.. image:: _static/facturasEmitidasCompras.png
+   :align: center
+
+En el boton de ``Accion`` encontraremos un submenu con un boton de ``Ver Factura``.
+
+.. image:: _static/btnVerFacturasEmitidas2.png
+   :align: center
+
+Una vez presionado el boton nos aparecera una pantalla con los datos de la factura en cuestion.
+
+.. image:: _static/facturaDeCompraImpaga.png
+   :align: center
+
+Si queremos realizar el pago debemos presionar el boton de ``Realizar Pago``.
+
+.. image:: _static/btnRealizarPagoCompra.png
+   :align: center
+
+Nos aparecera una pantalla para que carguemos la informacion respectiva de la factura:
+Tener en cuenta que el sistema corrobora la informacion ingresada
+
+.. image:: _static/infoErrorPagoFacturaCompra.png
+   :align: center
+
+Una vez colocada la informacion respectiva precionamos el boton de ``Pagar``
+Y seguido de esto nos aparecera un mensaje de exito.
+
+.. image:: _static/pagoCorrectoCompra.png
+   :align: center
+
+.. _cancelar-pago:
+
+Cancelar Pago
+-------------
+Para ``Cancelar Pago`` una vez pagado, debemos presionar el boton de *Cancelar Pago*.
+
+.. image:: _static/VerPagoOCancelarPago2.png
+   :align: center
+
+Al presionarlo el sistema mostrara un mensaje de confirmacion.
+
+.. image:: _static/cancelarPagoCompra1.png
+   :align: center
+
+.. image:: _static/cancelarPagoCompra2.png
+   :align: center
+
+.. _ver-detalle-pago:
+
+Ver Detalle de Pago
+-------------------
+Para Ver el detalle de un pago realizado, debemos presionar el boton de *Ver Pago*.
+
+.. image:: _static/VerPagoOCancelarPago1.png
+   :align: center
+
+.. image:: _static/verDetalleDePagoCompra.png
+   :align: center
+
 
 .. _reportes:
 

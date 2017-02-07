@@ -98,6 +98,8 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Compras</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#generar-factura-de-compra">Generar Factura de Compra</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ver-facturados">Ver Facturados</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cancelar-pago">Cancelar Pago</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver-detalle-de-pago">Ver Detalle de Pago</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#reportes">Reportes</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#top-10-monto-de-compras-a-laboratorio">Top 10 Monto de Compras a Laboratorio</a></li>
 </ul>
@@ -169,6 +171,8 @@
 <dd><ul class="first last simple">
 <li><span class="xref std std-ref">Registrar Factura de Compra</span></li>
 <li><a class="reference internal" href="#ver-facturados"><span class="std std-ref">Ver Facturados</span></a></li>
+<li><a class="reference internal" href="#cancelar-pago"><span class="std std-ref">Cancelar Pago</span></a></li>
+<li><a class="reference internal" href="#ver-detalle-pago"><span class="std std-ref">Ver detalle de Pago</span></a></li>
 <li><a class="reference internal" href="#reportes"><span class="std std-ref">Reportes</span></a></li>
 <li><a class="reference internal" href="#formulario-busqueda-ventas"><span class="std std-ref">Formulario de Búsqueda Ventas</span></a></li>
 <li><a class="reference internal" href="#formulario-busqueda-factemit"><span class="std std-ref">Formulario de Búsqueda Facturas Emitidas</span></a></li>
@@ -182,16 +186,46 @@
 <p>Automaticamente se presentara en pantalla un cartel para completarlos datos correspondientes de <code class="docutils literal"><span class="pre">La</span> <span class="pre">Factura</span> <span class="pre">de</span> <span class="pre">Compra</span></code>.</p>
 <img alt="_images/btnAccionRegistrarFactura1.png" class="align-center" src="_images/btnAccionRegistrarFactura1.png" />
 <img alt="_images/btnAccionRegistrarFactura2.png" class="align-center" src="_images/btnAccionRegistrarFactura2.png" />
+<p>Una vez realizado esto desaparecera la factura donde estaba y se podra ver desde el boton de <code class="docutils literal"><span class="pre">Facturas</span> <span class="pre">Generadas</span></code>.</p>
 </div>
 <div class="section" id="ver-facturados">
 <span id="id1"></span><h2>Ver Facturados<a class="headerlink" href="#ver-facturados" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Para ver las facturas que fueron <em>Facturadas</em> debemos presionar en el boton de <code class="docutils literal"><span class="pre">Ver</span> <span class="pre">Facturados</span></code>.</p>
 <img alt="_images/btnVerFacturados.png" class="align-center" src="_images/btnVerFacturados.png" />
 <p>El mismo, nos conducira a otra pantalla la cual nos mostrara las <code class="docutils literal"><span class="pre">*Facturas</span> <span class="pre">Emitidas*</span></code>.</p>
+<p>En el caso de que no contenga facturas mostrara un mensaje que diga que &#8220;LA TABLA ESTA VACIA&#8221;</p>
 <img alt="_images/pantallaVerFacturasEmitidasFacturadas.png" class="align-center" src="_images/pantallaVerFacturasEmitidasFacturadas.png" />
+<p>Sino, mostrara las facturas ya emitidas.</p>
+<img alt="_images/facturasEmitidasCompras.png" class="align-center" src="_images/facturasEmitidasCompras.png" />
+<p>En el boton de <code class="docutils literal"><span class="pre">Accion</span></code> encontraremos un submenu con un boton de <code class="docutils literal"><span class="pre">Ver</span> <span class="pre">Factura</span></code>.</p>
+<img alt="_images/btnVerFacturasEmitidas2.png" class="align-center" src="_images/btnVerFacturasEmitidas2.png" />
+<p>Una vez presionado el boton nos aparecera una pantalla con los datos de la factura en cuestion.</p>
+<img alt="_images/facturaDeCompraImpaga.png" class="align-center" src="_images/facturaDeCompraImpaga.png" />
+<p>Si queremos realizar el pago debemos presionar el boton de <code class="docutils literal"><span class="pre">Realizar</span> <span class="pre">Pago</span></code>.</p>
+<img alt="_images/btnRealizarPagoCompra.png" class="align-center" src="_images/btnRealizarPagoCompra.png" />
+<p>Nos aparecera una pantalla para que carguemos la informacion respectiva de la factura:
+Tener en cuenta que el sistema corrobora la informacion ingresada</p>
+<img alt="_images/infoErrorPagoFacturaCompra.png" class="align-center" src="_images/infoErrorPagoFacturaCompra.png" />
+<p>Una vez colocada la informacion respectiva precionamos el boton de <code class="docutils literal"><span class="pre">Pagar</span></code>
+Y seguido de esto nos aparecera un mensaje de exito.</p>
+<img alt="_images/pagoCorrectoCompra.png" class="align-center" src="_images/pagoCorrectoCompra.png" />
+</div>
+<div class="section" id="cancelar-pago">
+<span id="id2"></span><h2>Cancelar Pago<a class="headerlink" href="#cancelar-pago" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Para <code class="docutils literal"><span class="pre">Cancelar</span> <span class="pre">Pago</span></code> una vez pagado, debemos presionar el boton de <em>Cancelar Pago</em>.</p>
+<img alt="_images/VerPagoOCancelarPago2.png" class="align-center" src="_images/VerPagoOCancelarPago2.png" />
+<p>Al presionarlo el sistema mostrara un mensaje de confirmacion.</p>
+<img alt="_images/cancelarPagoCompra1.png" class="align-center" src="_images/cancelarPagoCompra1.png" />
+<img alt="_images/cancelarPagoCompra2.png" class="align-center" src="_images/cancelarPagoCompra2.png" />
+</div>
+<div class="section" id="ver-detalle-de-pago">
+<span id="ver-detalle-pago"></span><h2>Ver Detalle de Pago<a class="headerlink" href="#ver-detalle-de-pago" title="Enlazar permanentemente con este título">¶</a></h2>
+<p>Para Ver el detalle de un pago realizado, debemos presionar el boton de <em>Ver Pago</em>.</p>
+<img alt="_images/VerPagoOCancelarPago1.png" class="align-center" src="_images/VerPagoOCancelarPago1.png" />
+<img alt="_images/verDetalleDePagoCompra.png" class="align-center" src="_images/verDetalleDePagoCompra.png" />
 </div>
 <div class="section" id="reportes">
-<span id="id2"></span><h2>Reportes<a class="headerlink" href="#reportes" title="Enlazar permanentemente con este título">¶</a></h2>
+<span id="id3"></span><h2>Reportes<a class="headerlink" href="#reportes" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Si el usuario desea visualizar y/o generar reportes de estadisticas en relacion a las <em>Ventas</em>, debera seleccionar el boton de <strong>Reportes</strong>.</p>
 <img alt="_images/reportespedfar.png" class="align-center" src="_images/reportespedfar.png" />
 <p>Esta funcionalidad cuenta con la modalidad de:</p>
@@ -243,7 +277,7 @@ El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y
 <div class="section" id="formulario-de-busqueda-facturas-emitidas">
 <span id="formulario-busqueda-factemit"></span><h2>Formulario de Búsqueda Facturas Emitidas<a class="headerlink" href="#formulario-de-busqueda-facturas-emitidas" title="Enlazar permanentemente con este título">¶</a></h2>
 <p>Si el usuario desea visualizar sólo aquellas <em>Facturas Emitidas</em> que cumplan con algunos criterios en específico, deberá utilizar el formulario de búsqueda.</p>
-<img alt="_static/pantallaVerFacturasEmitidasFacturadasBusq.png" class="align-center" src="_static/pantallaVerFacturasEmitidasFacturadasBusq.png" />
+<img alt="_images/pantallaVerFacturasEmitidasFacturadasBusq.png" class="align-center" src="_images/pantallaVerFacturasEmitidasFacturadasBusq.png" />
 <p>Este formulario cuenta con dos modalidades:</p>
 <blockquote>
 <div><ul class="simple">
@@ -257,7 +291,7 @@ El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y
 </div>
 <p>El usuario tendrá que ingresar los parámetros de búsqueda en el formulario, y presionar el botón <code class="docutils literal"><span class="pre">Buscar</span></code>. El sistema visualizará aquellas <em>Facturas Emitidas</em> que cumplan con todas las condiciones especificadas.</p>
 <p>Si el usuario desea limpiar los filtros activos, deberá presionar el boton <code class="docutils literal"><span class="pre">Limpiar</span></code>.</p>
-<img alt="_static/pantallaVerFacturasEmitidasFacturadasBusq2.png" class="align-center" src="_static/pantallaVerFacturasEmitidasFacturadasBusq2.png" />
+<img alt="_images/pantallaVerFacturasEmitidasFacturadasBusq2.png" class="align-center" src="_images/pantallaVerFacturasEmitidasFacturadasBusq2.png" />
 </div>
 </div>
 
