@@ -52,6 +52,25 @@ def facturasEmitidas(request):
           'total': listPedidosClinicas.count(),
           'filtrados': listPedidosClinicas.count(),
     }
+    if "estado" in request.GET:
+        estadoAbuscar= request.GET["estado"]
+        if estadoAbuscar:
+            try:
+               if estadoAbuscar == 'paga':
+                   facturaAclinica = factmodels.FacturaAclinica.objects.get(pagada=True)
+               else:
+                   facturaAclinica = factmodels.FacturaAclinica.objects.get(pagada=False)
+
+               if facturaAclinica:
+                   listPedidosClinicas=[]
+                   pedidoDeClinica = facturaAclinica.pedidoRel
+                   listPedidosClinicas.append(pedidoDeClinica)
+                   estadisticas = {
+                      'total': 1,
+                      'filtrados': 1,
+                   }
+            except:
+                listPedidosClinicas = []
 
     if "nroFactura" in request.GET:
         nroFacturaAbuscar= request.GET["nroFactura"]
@@ -69,6 +88,7 @@ def facturasEmitidas(request):
             except:
                 listPedidosClinicas = []
     return render(request,"obSocialesYclinicas/facturasEmitidas.html",{"listPedidosClinicas":listPedidosClinicas,"filtros":request.GET,"estadisticas":estadisticas})
+
 
 def registrarPagoDeFacturaVenta(request):
     if "nroPedido" in request.GET:

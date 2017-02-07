@@ -26,6 +26,9 @@
 
 <script type="text/javascript">
 
+        var id_importe = formPagar[2].id;
+        $("#"+"id_importe").val({{pieDeFactura.total}});
+
         $("[name='pagar']").on("click", function(e){
 
            formImporte=true;
@@ -33,6 +36,8 @@
            formPago=true
            diferenciaFechas=true;
            formPagar = document.getElementById("formPagar");
+
+
 
            importe = formPagar[2].value;
            fecha = formPagar[3].value;
