@@ -111,7 +111,7 @@ class Lote(models.Model):
     stockFarmaYfarmacias = models.ForeignKey('StockFarmayFarmacias',null=True)
 
     def __str__(self):
-        return "%s - %s" % (self.numero, self.stockFarmaYfarmacias)
+        return "%s" % (self.numero)
 
     def to_json(self):
         if self.numero:

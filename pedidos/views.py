@@ -134,7 +134,7 @@ def pedidoDeFarmacia_ver(request, id_pedido):
     remitos = models.RemitoDeFarmacia.objects.filter(pedidoFarmacia__pk=id_pedido)
     return render(request, "pedidoDeFarmacia/pedidoVer.html", {"pedido": pedido, "detalles": detalles, "remitos": remitos})
 
-
+@json_view
 @login_required(login_url='login')
 def pedidoDeFarmacia_verDetalles(request, id_pedido):
     detalles_json = []
@@ -144,8 +144,7 @@ def pedidoDeFarmacia_verDetalles(request, id_pedido):
     return {'detalles': detalles_json}
 
 #===================================LOGICA PARA EL PDF==============================================
-
-
+@json_view
 @login_required(login_url='login')
 def pedidoDeFarmacia_verRemitos(request, id_pedido):
     remitos_json = []#Prepara una lista para agregar remitos.
@@ -226,7 +225,7 @@ def pedidoDesdeMobilFarmacia(request):
     return response
 
 #============================================================================================================
-
+@json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def pedidoDeFarmacia_registrar(request):
@@ -259,6 +258,7 @@ def pedidoDeFarmacia_registrar(request):
         mensaje_error = "No se puede registrar un pedido sin detalles"
     return {'success': False, 'mensaje-error': mensaje_error}
 
+
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def detallesPedidoDeFarmacia(request):
@@ -266,7 +266,7 @@ def detallesPedidoDeFarmacia(request):
     pedido = request.session['pedidoDeFarmacia']
     return render(request, "pedidoDeFarmacia/detallesPedido.html", {'pedido': pedido, 'detalles': detalles})
 
-
+@json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def detallePedidoDeFarmacia_add(request):
@@ -289,7 +289,7 @@ def detallePedidoDeFarmacia_add(request):
     form_html = render_crispy_form(form, context=update_csrf(request))
     return {'success': success, 'form_html': form_html}
 
-
+@json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def detallePedidoDeFarmacia_update(request, id_detalle):
@@ -310,7 +310,7 @@ def detallePedidoDeFarmacia_update(request, id_detalle):
     form_html = render_crispy_form(form, context=update_csrf(request)) 
     return {'form_html': form_html}
 
-
+@json_view
 @permission_required('usuarios.empleado_despacho_pedido', login_url='login')
 @login_required(login_url='login')
 def detallePedidoDeFarmacia_delete(request, id_detalle):
