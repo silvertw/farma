@@ -324,6 +324,28 @@ def facturasRegistradasCompras(request):
                 listPedidos = []
 
 
+    if "estado" in request.GET:
+        estadoAbuscar= request.GET["estado"]
+        if estadoAbuscar:
+            try:
+               if estadoAbuscar == 'paga':
+                   facturaDeProv = factmodels.FacturaDeProveedor.objects.get(pagada=True)
+               else:
+                   facturaDeProv = factmodels.FacturaDeProveedor.objects.get(pagada=False)
+
+               if facturaDeProv:
+                   listPedidos=[]
+                   pedidoAlabo = facturaDeProv.pedidoRel
+                   listPedidos.append(pedidoAlabo)
+                   estadisticas = {
+                      'total': 1,
+                      'filtrados': 1,
+                   }
+            except:
+                listPedidos = []
+
+
+
     listLaboConPedCompleto=[]
     for laboConPedCompleto in listPedidos:
         listLaboConPedCompleto.append(laboConPedCompleto.laboratorio)
