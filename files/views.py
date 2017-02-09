@@ -45,7 +45,6 @@ def uploadFile(request):
                     if fecha.search(parDeValores[1]) is None:#Verifica que la cadena fecha sea correcta
                         estado=False
                 else:
-
                     if not parDeValores[0].isdigit():
                         estado=False
                     if not parDeValores[1].isdigit():

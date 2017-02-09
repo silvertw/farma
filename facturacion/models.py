@@ -49,11 +49,11 @@ class FacturaDeProveedor(Factura):
     pedidoRel = models.OneToOneField(PedidoAlaboratorio,null=True)
 
     def __str__(self):
-        return "%s - %s %s" % (self.tipo, self.identificador, self.titular)
+        return "%s - %s %s" % (self.tipo, self.nroFactura, self.cuit)
 
     def get_detalles(self):
         response = []
-        if self.identificador:
+        if self.nroFactura:
             response = DetalleFacturaDeProveedor.objects.filter(factura=self)
         return response
 

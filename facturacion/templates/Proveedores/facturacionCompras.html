@@ -119,6 +119,7 @@
 
 
 {% block more-scripts %}
+
     <script>
 
         $(function() {
@@ -159,7 +160,6 @@
 
             //alert('{{ csrf_token }}');
             /*formFact = document.getElementById("formFactura");*/
-
             $.ajax({
                 contentType: 'json',
                 data: {'idRow':dataId[0]},

@@ -452,6 +452,7 @@ def mostrarPago(request):
 
         else:
             pagoRec=None
+        print "--->",pagoRec
     return render(request, "Proveedores/_mostrarPago.html", {"pagoRec":pagoRec,"listaCancelados":listaCancelados,"ultimo":ultimo})
 
 
