@@ -31,11 +31,20 @@ def VerOrganizaciones(request):
 
 
 @login_required(login_url='login')
-def VerPedidos(request):
-    filters = get_filtros_pedidos(request.GET, Pmodels.PedidoVenta)
-    mfilters = dict(filter(lambda v: v[0] in Pmodels.PedidoVenta.FILTROS, filters.items()))
-    pedidosFarm = Pmodels.PedidoDeFarmacia.objects.filter(**mfilters)
-    return render(request, "pedidos_mobile.html", {"pedidosFarm": pedidosFarm})
+def VerPedidos(request,id_farmacia):
+    pedidosFarm = Pmodels.PedidoFarmaciaMobile.objects.filter(farmacia__pk=id_farmacia)
+    pedidosMobiles=[]
+    for pedidoFarm in pedidosFarm:
+        if pedidoFarm.get_instancia_es_mobile()=='mobile':
+           pedidosMobiles.append(pedidoFarm)
+
+    return render(request, "pedidos_mobile.html", {"pedidosFarm": pedidosMobiles})
+
+@login_required(login_url='login')
+def verDetallePedidoMobil(request, nroPedido):
+    pedidoMobil=Pmodels.PedidoFarmaciaMobile.objects.get(nroPedido=nroPedido)
+    detallesMobil=pedidoMobil.get_detalles()
+    return render(request, "ver_detalles_pedidos_mobile.html", {"detallesMobil": detallesMobil})
 
 
 @login_required(login_url='login')
@@ -61,7 +70,6 @@ def MostrarOrganizacionFarmacia(request, id_organizacion):
     return render(request, "mostrar_organizacion_mobile.html", {"organizacion": organizacion})
 
 
-
 def MostrarOrganizacionClinica(request, id_organizacion):
     organizacion = Omodels.Clinica.objects.get(pk=id_organizacion)
     return render(request, "mostrar_organizacion_mobile.html", {"organizacion": organizacion})
@@ -71,7 +79,6 @@ def MostrarOrganizacionClinica(request, id_organizacion):
 def MostrarOrganizacionObSoc(request, id_organizacion):
     organizacion = Omodels.ObraSocial.objects.get(pk=id_organizacion)
     return render(request, "mostrar_organizacion_mobile.html", {"organizacion": organizacion})
-
 
 
 def MostrarOrganizacionLaboratorio(request, id_organizacion):
@@ -84,7 +91,7 @@ def PedirMedicamento(request, id_medicamento):
 
     filters = get_filtros_pedidos(request.GET, Pmodels.PedidoVenta)
     mfilters = dict(filter(lambda v: v[0] in Pmodels.PedidoVenta.FILTROS, filters.items()))
-    pedidosFarm = Pmodels.PedidoDeFarmacia.objects.filter(**mfilters)
+    pedidosFarm = Pmodels.PedidoFarmaciaMobile.objects.filter(**mfilters)
 
     return render(request, "pedir_medicamento_mobile.html", {"medicamento": medicamento, "pedidosFarm": pedidosFarm})
 

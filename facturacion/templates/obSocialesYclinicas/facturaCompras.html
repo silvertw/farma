@@ -4,8 +4,8 @@
     <p class="logo"><img width="100%" src="images/logo-farma.jpg" /></p>
     <p>
         Fecha de Emision: {{factura.fecha}}<br>
-        Titular: {{factura.titular}}<br>
-        Factura: ABZX-000-0001234{{factura.identificador}}<br>
+        Cuit: {{factura.cuit}}<br>
+        Factura: ABZX-000-0001234{{factura.nroFactura}}<br>
         Tel (02965) 43-4159 <br>
         Lezama 479 <br/>
         Trelew, Chubut
@@ -47,7 +47,7 @@
         <td><strong>{{ remito.fecha }}</strong></td>
     </tr-->
     <tr>
-        <td>{{factura.identificador}}</td>
+        <td>{{factura.nroFactura}}</td>
     </tr>
 {% endblock %}
 

@@ -127,7 +127,7 @@ class DetalleRemitoMedicamentosVencido(models.Model):
     medicamento = models.ForeignKey('medicamentos.Medicamento')
     lote = models.ForeignKey('medicamentos.Lote')
     cantidad = models.PositiveIntegerField()
-    dependencia = models.CharField(max_length=50)#Para saber de que farmacia provienen medicamentos
+    dependencia = models.CharField(max_length=100)#Para saber de que farmacia provienen medicamentos
                                                               #vencidos.
     def __str__(self):
         return str(self.id)
@@ -216,7 +216,6 @@ class PedidoDeFarmacia(PedidoVenta):
 
     def get_instancia_es_mobile(self):
         return "no_mobile"
-
 
 
 class DetallePedidoDeFarmacia(DetallePedidoVenta):

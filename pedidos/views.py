@@ -162,13 +162,16 @@ def pedidoDeFarmacia_verRemitos(request, id_pedido):
 
 @login_required(login_url='login')
 def pedidoDesdeMobilFarmacia(request):
+
     farmaciaSolicitanteRs=request.GET["farmaciaSolicitante"]#Razon social de la farmacia solicitante
-    pkMedicamento = request.GET["pkMedicamento"]
-    cantidadApedir = request.GET["cantidadApedir"]
+    farmaciaSolicitante = omodels.Farmacia.objects.get(razonSocial=farmaciaSolicitanteRs)
     fechaMobile = time.strftime("%d/%m/%Y")
     fecha = datetime.datetime.strptime(fechaMobile, '%d/%m/%Y').date()
-    farmaciaSolicitante = omodels.Farmacia.objects.get(razonSocial=farmaciaSolicitanteRs)
-    medicamento = mmodels.Medicamento.objects.get(pk=pkMedicamento)
+
+    if not 'desdeMenuPedido' in request.GET:
+        pkMedicamento = request.GET["pkMedicamento"]
+        cantidadApedir = request.GET["cantidadApedir"]
+        medicamento = mmodels.Medicamento.objects.get(pk=pkMedicamento)
 
     def crearPedido():
         pedidoDeFarmaciaMobile = models.PedidoFarmaciaMobile(

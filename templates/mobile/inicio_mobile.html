@@ -29,7 +29,7 @@
             <div data-role="content" data-theme="a">
                 <a href="{% url 'VerMedicamentos' %}" data-transition="slide" data-role="button" data-theme="a" data-icon="myiconPastilla ui-nodisc-icon">MEDICAMENTOS</a>
                 <a href="{% url 'VerOrganizaciones' %}" data-transition="slide" data-role="button" data-theme="a" data-icon="myiconOrganizaciones ui-nodisc-icon">ORGANIZACIONES</a>
-                <a href="{% url 'VerPedidos' %}" data-transition="slide" data-role="button" data-theme="a" data-icon="myiconPedidos ui-nodisc-icon">PEDIDOS</a>
+                <a href="{% url 'VerPedidos' user.farmacia.pk %}" data-transition="slide" data-role="button" data-theme="a" data-icon="myiconPedidos ui-nodisc-icon">PEDIDOS</a>
             </div>
 
             <div data-role="footer" data-theme="a" class="ui-nodisc-icon ui-btn-icon-right">

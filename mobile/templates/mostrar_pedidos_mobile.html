@@ -46,17 +46,18 @@
 			<!--BUSCAR-->
         </div>
 		<div data-role="content"data-theme="a">
-    		<ul id="nav" data-role="listview" data-inset="true">
+    		<ul data-role="listview" data-inset="true">
         		<h2>Nro Pedido</h2>
 				<li><a href="#">{{pedido.nroPedido}}</a></li>
     		</ul>
-			<ul id="nav" data-role="listview" data-inset="true">
+			<ul data-role="listview" data-inset="true">
         		<h2>Fecha</h2>
 				<li><a href="#">{{pedido.fecha}}</a></li>
     		</ul>
-			<ul id="nav" data-role="listview" data-inset="true">
-        		<h2>Detalle</h2>
+			<ul data-role="listview" data-inset="true">
+				<a href="{% url 'verDetallePedidoMobil' pedido.nroPedido %}" data-ajax="false" data-role="button">Detalle</a>
     		</ul>
+			<button name="finalizar" class="btn btn-default">Finalizar Pedido</button>
 		</div>
 		<div data-role="footer" data-theme="a" class="ui-nodisc-icon ui-btn-icon-right">
 			<p class="text-muted" align="center"><span class=" glyphicon glyphicon-copyright-mark">Usted accedio como: <a>{{user}}</a></br>Encargado de la sucursal: <a>{{user.farmacia}}</a> </br></br></span>Copyright 2017 UNPSJB - Todos los derechos reservados</p>
@@ -65,3 +66,32 @@
 	</div>
 </ul>
 </html>
+<script type="text/javascript">
+
+	$("[name='finalizar']").on("click", function(e){
+		farmaciaSolicitante = '{{pedido.farmacia}}'
+		url={% url 'pedidoDesdeMobilFarmacia' %};
+		data={'farmaciaSolicitante':farmaciaSolicitante,'finalizar':'true','desdeMenuPedido':'desdeMenuPedido'};
+		enviarPedidoDesdeMobil(url,data);
+    });
+
+	function enviarPedidoDesdeMobil(url,data){
+		$.ajax({
+			contentType:'json',
+			data: data,
+			type: 'get',
+			url: url,
+			success:function(response){
+				alert(response);
+				var msj = response
+				if (msj == 'El pedido fue cerrado correctamente'){
+					window.location.assign("{% url 'inicio' %}");
+				}
+				if (msj == 'Error esta intentando cerrar un pedido que ya esta cerrado'){
+					window.location.assign("{% url 'inicio' %}");
+				}
+            }
+		});
+	}
+
+</script>

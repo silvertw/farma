@@ -76,7 +76,7 @@ def facturasEmitidas(request):
         nroFacturaAbuscar= request.GET["nroFactura"]
         if nroFacturaAbuscar:
             try:
-               facturaAclinica = factmodels.FacturaAclinica.objects.get(identificador=nroFacturaAbuscar)
+               facturaAclinica = factmodels.FacturaAclinica.objects.get(nroFactura=nroFacturaAbuscar)
                if facturaAclinica:
                    listPedidosClinicas=[]
                    pedidoDeClinica = facturaAclinica.pedidoRel
@@ -115,7 +115,7 @@ def emitirFactura(request):
 
             tipo=1,
             fecha=time.strftime("%Y-%m-%d"),
-            titular="Cosme",
+            cuit="Cosme",
             pedidoRel=pedidoClinica,
         )
 
@@ -311,7 +311,7 @@ def facturasRegistradasCompras(request):
         nroFacturaAbuscar = request.GET["nroFactura"]
         if nroFacturaAbuscar:
             try:
-               facturaDeProv = factmodels.FacturaDeProveedor.objects.get(identificador=nroFacturaAbuscar)
+               facturaDeProv = factmodels.FacturaDeProveedor.objects.get(nroFactura=nroFacturaAbuscar)
                if facturaDeProv:
                    listPedidos=[]
                    pedidoAlabo = facturaDeProv.pedidoRel

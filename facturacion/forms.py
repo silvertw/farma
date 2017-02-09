@@ -10,28 +10,28 @@ import re
 class FacturaGenerico(forms.ModelForm):
     class Meta:
         model = models.FacturaDeProveedor
-        fields = ["tipo", "identificador", "fecha", "titular"]
+        fields = ["tipo", "nroFactura", "fecha", "cuit"]
         labels = {
             'tipo': _('Tipo'),
             'fecha': _('Fecha'),
-            'identificador': _('Identificador'),
-            'titular': _('Titular'),
+            'nroFactura': _('nroFactura'),
+            'cuit': _('cuit'),
         }
 
-    def clean_identificador(self):
-        identificador = self.cleaned_data['identificador']
-        if identificador:
-            if not re.match(r"^[a-zA-Z]+((\s[a-zA-Z]+)+)?$", identificador):
-                raise forms.ValidationError('el identificador de factura solo puede contener letras, numeros o -')
-        return identificador
 
-    def clean_titular(self):
-        titular = self.cleaned_data['titular']
-        if titular:
-            if not re.match(r"^[a-zA-Z]+((\s[a-zA-Z]+)+)?$", titular):
-                raise forms.ValidationError('La localidad solo puede contener letras y espacios')
-        return titular
+    def clean_nroFactura(self):
+        nroFactura = self.cleaned_data['nroFactura']
+        if nroFactura:
+            if not re.match(r"^[a-zA-Z\d-]+((\s[a-zA-Z\d-]+)+)?$", nroFactura):
+                raise forms.ValidationError('El numero puede contener letras numeros y -')
+        return nroFactura
 
+
+    def clean_cuit(self):
+        cuit = self.cleaned_data['cuit']
+        if not re.match(r"^[0-9]{2}-[0-9]{8}-[0-9]$", cuit):
+            raise forms.ValidationError('CUIT invalido, por favor siga este formato xx-xxxxxxxx-x')
+        return cuit
 
 class RegistrarFactura(FacturaGenerico):
     helper = FormHelper()
@@ -40,9 +40,9 @@ class RegistrarFactura(FacturaGenerico):
     helper.form_action = 'Factura_add'
     helper.layout = Layout(
         Field('tipo',placeholder='Tipo'),
-        Field('identificador', placeholder='Identificador'),
+        Field('nroFactura', placeholder='nroFactura'),
         Field('fecha', placeholder='Fecha',css_class='datepicker'),
-        Field('titular', placeholder='Titular'),
+        Field('cuit', placeholder='cuit'),
         FormActions(
             #StrictButton('Registrar', type="submit", name="_registrar", value="_registrar", id="btn-registrar",
             #            css_class="btn btn-primary"),

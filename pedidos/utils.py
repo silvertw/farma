@@ -602,7 +602,7 @@ def procesar_devolucion(laboratorio, lotes, distribuidos):
         detalleRemito.dependencia = "Drogueria Farma"
 
         for dist in distribuidos:
-            if lote.pk == dist.lote.pk:
+            if lote.pk == dist.lote.pk and dist.cantidad>0:
                 detalleRemitoFarm = models.DetalleRemitoMedicamentosVencido()
                 detalleRemitoFarm.remito = remito
                 detalleRemitoFarm.medicamento = lote.medicamento

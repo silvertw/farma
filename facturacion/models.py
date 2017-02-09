@@ -13,12 +13,11 @@ class Factura(models.Model):
     TIPO = (
         (1, "A"),
         (2, "B"),
-        (3, "C"),
-        (4, "D")
+        (3, "C")
     )
     tipo = models.PositiveIntegerField(choices=TIPO)
     fecha = models.DateField()
-    titular = models.CharField(max_length=45,default="Propietario")
+    cuit = models.CharField(max_length=45)
     pagada = models.BooleanField(default=False)
 
     class Meta:
@@ -46,7 +45,7 @@ class PieDeFactura(models.Model):
 #============================================FACTURA DE PROVEEDORES=====================================================
 class FacturaDeProveedor(Factura):
 
-    identificador = models.CharField(max_length=45,primary_key=True)
+    nroFactura = models.CharField(max_length=45,primary_key=True)
     pedidoRel = models.OneToOneField(PedidoAlaboratorio,null=True)
 
     def __str__(self):
@@ -145,7 +144,7 @@ class pieDeFacturaDeProveedor(PieDeFactura):
 
 #====================================FACTURACION A CLINICA===================================================
 class FacturaAclinica(Factura):
-    identificador=models.AutoField(primary_key=True)
+    nroFactura=models.AutoField(primary_key=True)
     pedidoRel = models.OneToOneField(PedidoDeClinica,null=True)
 
     def __str__(self):

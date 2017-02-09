@@ -177,11 +177,12 @@ urlpatterns = [
     #******************************************Mobile**************************************************
     url(r'^mobileVerMedicamentos/$', moviews.VerMedicamentos, name="VerMedicamentos"),
     url(r'^mobileVerOrganizaciones/$', moviews.VerOrganizaciones, name="VerOrganizaciones"),
-    url(r'^mobileVerPedidos/$', moviews.VerPedidos, name="VerPedidos"),
+    url(r'^mobileVerPedidos/(?P<id_farmacia>\d+)/$', moviews.VerPedidos, name="VerPedidos"),
+    url(r'^verDetallePedidoMobil/(?P<nroPedido>\d+)/$', moviews.verDetallePedidoMobil, name="verDetallePedidoMobil"),
 
     url(r'^mobileMostrarMedicamento/(?P<id_medicamento>\d+)$', moviews.MostrarMedicamento, name="MostrarMedicamento"),
 
-    url(r'^mobileMostrarPedido/(?P<id_pedido>\d+)$', moviews.MostrarPedido, name="MostrarPedido"),
+    url(r'^mobileMostrarPedido/(?P<id_pedido>\d+)/$', moviews.MostrarPedido, name="MostrarPedido"),
     url(r'^mobileMostrarOrganizacionFarmacia/(?P<id_organizacion>\d+)$', moviews.MostrarOrganizacionFarmacia, name='MostrarOrganizacionFarmacia'),
     url(r'^mobileMostrarOrganizacionClinica/(?P<id_organizacion>\d+)$', moviews.MostrarOrganizacionClinica, name='MostrarOrganizacionClinica'),
     url(r'^mobileMostrarOrganizacionObSoc/(?P<id_organizacion>\d+)$', moviews.MostrarOrganizacionObSoc, name='MostrarOrganizacionObSoc'),
