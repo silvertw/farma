@@ -311,9 +311,18 @@ def medicamentoVerStockGlobalMed(request):
     pkMedicamento=request.GET["id"]
     medicamento=mmodels.Medicamento.objects.get(pk=pkMedicamento)
     lotes = medicamento.get_lotesPverGlobal()
-    for lote in lotes:
-        totalEnFarma = lote.stockFarmaYfarmacias.stockFarma + totalEnFarma
-        totalEnFarmacias = lote.stockFarmaYfarmacias.stockFarmacias + totalEnFarmacias
+
+    #for lote in lotes:
+    #    totalEnFarma = lote.stockFarmaYfarmacias.stockFarma + totalEnFarma
+    #    totalEnFarmacias = lote.stockFarmaYfarmacias.stockFarmacias + totalEnFarmacias
+
+    if lotes:
+        totalEnFarma = lotes[0].stockFarmaYfarmacias.stockFarma + totalEnFarma
+        totalEnFarmacias = lotes[0].stockFarmaYfarmacias.stockFarmacias + totalEnFarmacias
+    else:
+        totalEnFarma = 0
+        totalEnFarmacias = 0
+
     sumaTotalMedicamento = totalEnFarmacias + totalEnFarma
 
     return render(request, "medicamento/_modalVerStockGlobal.html", {'totalEnFarma': totalEnFarma, 'totalEnFarmacias': totalEnFarmacias, 'sumaTotalMedicamento': sumaTotalMedicamento})

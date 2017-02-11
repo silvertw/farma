@@ -76,6 +76,7 @@
         var filaActualCantReq = [];//Arreglo deonde se insertan las cantidades requeridas.
         var filaMedActualReq = [];//Arreglo donde se insertan los medicamentos requeridos.
 
+
         $(".disponible").on("change",function(e) {
 
             var nroFilaTbl = e.target.id//En base a la infomacion del evento se obiente el numero de renglon o fila de la tabla html 'disponibles'.
@@ -163,54 +164,58 @@
         var totalesArray = {};
         var paqueteJson
         var i=0;
+
         $( "#btnRegM" ).on("click",function(e) {
 
-            $(".disponible").each(function(){//Se recorre la tabla 'disponibles'.
-
-                var farmacia = $(this).find("td").eq(0).html();
-                var lote = $(this).find("td").eq(1).html();
-                var medicamento = $(this).find("td").eq(2).html();
-                var cantQuitada = $(this).find("input").val();
-                var farmaciaSolicitante = '{{farmSolicitante}}';
-                var nroPedido = '{{nroPedido}}';
+                confirmar = confirm("Realmente desea realizar el movimiento?");
+                if (confirmar){
 
 
-                var paquete = new Object();
-                paquete.farmacia = farmacia;
-                paquete.lote = lote;
-                paquete.medicamento = medicamento;
-                paquete.cantQuitada = cantQuitada;
-                paquete.farmaciaSolicitante=farmaciaSolicitante;
-                paquete.nroPedido = nroPedido;
+                    $(".disponible").each(function(){//Se recorre la tabla 'disponibles'.
 
-                paqueteJson = JSON.stringify(paquete);
+                        var farmacia = $(this).find("td").eq(0).html();
+                        var lote = $(this).find("td").eq(1).html();
+                        var medicamento = $(this).find("td").eq(2).html();
+                        var cantQuitada = $(this).find("input").val();
+                        var farmaciaSolicitante = '{{farmSolicitante}}';
+                        var nroPedido = '{{nroPedido}}';
 
-                if (paquete.cantQuitada != ''){
-                    totalesArray[i]=paqueteJson;
-                }
-                i++;
 
-            });
-            var url = {% url 'actualizarStockManual' %};
+                        var paquete = new Object();
+                        paquete.farmacia = farmacia;
+                        paquete.lote = lote;
+                        paquete.medicamento = medicamento;
+                        paquete.cantQuitada = cantQuitada;
+                        paquete.farmaciaSolicitante=farmaciaSolicitante;
+                        paquete.nroPedido = nroPedido;
 
-            var error = 'false';
+                        paqueteJson = JSON.stringify(paquete);
 
-            $(".solicitud").each(function(){
-
-                var cantidadActual = $(this).find("td").eq(0).html();
-
-                if(parseInt(cantidadActual) < 0){
-                    error = 'true';
+                        if (paquete.cantQuitada != ''){
+                            totalesArray[i]=paqueteJson;
+                        }
+                        i++;
+                    });
                 }
 
-            });
+                var url = {% url 'actualizarStockManual' %};
+                var error = 'false';
 
-            if(error == 'false'){
-                actualizarStock(url,totalesArray);
-            }else{
-                alert('Error en los valores a entregar verificar error en color rojo');
-            }
+                $(".solicitud").each(function(){
 
+                    var cantidadActual = $(this).find("td").eq(0).html();
+
+                    if(parseInt(cantidadActual) < 0){
+                        error = 'true';
+                    }
+
+                });
+
+                if(error == 'false'){
+                    actualizarStock(url,totalesArray);
+                }else{
+                    alert('Error verificar los valores a entregar');
+                }
 
         });
 

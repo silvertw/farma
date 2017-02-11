@@ -409,6 +409,10 @@ class movimientosDeStockDistribuido(models.Model):
     def get_detalles_movimientos(self):
         return self.detalledemovimientos
 
+    def get_detalle_movimiento(self,farmacia,lote):
+        detalles = detalleDeMovimientos.objects.filter(movimiento=self,farmacia=farmacia,lote=lote)
+        return detalles
+
     def get_movimiento_pedidoFarm(self,pedidoDeFarmacia):
         return movimientosDeStockDistribuido.objects.get(pedidoMov=pedidoDeFarmacia)
 

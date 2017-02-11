@@ -374,15 +374,22 @@ def buscarEnFarmacias(request):
             )
             movimiento.save()
 
+
         for renglon in renglones:
 
-            detalleMovimiento = pmodels.detalleDeMovimientos(
-                movimiento = movimiento,
-                farmacia=renglon['farmacia'],
-                lote=renglon['lote'],
-                cantidadQuitada=renglon['totalq']
-            )
-            detalleMovimiento.save()
+            detalleMovimiento=movimiento.get_detalle_movimiento(renglon['farmacia'],renglon['lote'])
+
+            if detalleMovimiento:
+                detalleMovimiento[0].cantidadQuitada += int(renglon['totalq'])
+                detalleMovimiento[0].save()
+            else:
+                detalleMovimiento = pmodels.detalleDeMovimientos(
+                    movimiento = movimiento,
+                    farmacia=renglon['farmacia'],
+                    lote=renglon['lote'],
+                    cantidadQuitada=renglon['totalq']
+                )
+                detalleMovimiento.save()
 
         pedido.tieneMovimientos=True
         pedido.save()
@@ -488,13 +495,19 @@ def actualizarStockManual(request):
                 det.cantidadPendiente -= int(decodedJsonfarmaciasADescontar['cantQuitada'])
                 det.save()
         #Para los movimientos de stock
-        detalleMovimiento = pmodels.detalleDeMovimientos(
-            movimiento = movimiento,
-            farmacia = decodedJsonfarmaciasADescontar['farmacia'],
-            lote = int(decodedJsonfarmaciasADescontar['lote']),
-            cantidadQuitada = int(decodedJsonfarmaciasADescontar['cantQuitada']),
-        )
-        detalleMovimiento.save()
+        detalleMovimiento=movimiento.get_detalle_movimiento(decodedJsonfarmaciasADescontar['farmacia'],decodedJsonfarmaciasADescontar['lote'])
+
+        if detalleMovimiento:
+            detalleMovimiento[0].cantidadQuitada += int(decodedJsonfarmaciasADescontar['cantQuitada'])
+            detalleMovimiento[0].save()
+        else:
+            detalleMovimiento = pmodels.detalleDeMovimientos(
+                movimiento = movimiento,
+                farmacia = decodedJsonfarmaciasADescontar['farmacia'],
+                lote = int(decodedJsonfarmaciasADescontar['lote']),
+                cantidadQuitada = int(decodedJsonfarmaciasADescontar['cantQuitada']),
+            )
+            detalleMovimiento.save()
 
     for det in detalles:
         if det.cantidadPendiente > 0:
