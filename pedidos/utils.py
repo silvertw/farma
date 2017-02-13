@@ -46,7 +46,7 @@ def crear_detalle_json(detalle, renglon):
 # PEDIDO DE FARMACIA
 # **********************
 
-def procesar_pedido_de_farmacia(pedido):#ENTRADA FARMACIA
+def procesar_pedido_de_farmacia(pedido):
 
     detalles = models.DetallePedidoDeFarmacia.objects.filter(pedidoDeFarmacia=pedido.nroPedido)  # obtengo todos los detalles del pedido
     if not es_pendiente(pedido):
@@ -79,64 +79,16 @@ def procesar_detalle_de_farmacia(detalle, remito, pedido):
 
                 stockFyF = lote.stockFarmaYfarmacias
                 stockEnFarma = stockFyF.stockFarma
-
                 cantidadTomadaDeLote = lote.stock
                 lote.stock = 0
-
-                #=======================================================================
                 stockEnFarma -= cantidadTomadaDeLote# Se resta lo que se quito del lote en cuestion (en este caso se quita toda).
                 stockFyF.stockFarma = stockEnFarma
                 stockFyF.stockFarmacias = stockFyF.stockFarmacias + cantidadTomadaDeLote
-                #========================================================================
-
                 stockFyF.save()
-
-                idFarmacia=pedido.farmacia.pk
-                farmacia=Omodels.Farmacia.objects.get(pk=idFarmacia)
-                idLote=lote.pk
-                #si la farmacia y lote ya estan en la lista de distribuidos debe recuperarse:
-
-                farmaciaYLoteEnStockDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote=lote,farmacia=pedido.farmacia)
-                if farmaciaYLoteEnStockDist:
-                    existeStockDist=True
-                else:
-                    existeStockDist=False
-
-                if existeStockDist:
-                    stocDist=farmaciaYLoteEnStockDist[0]#Se recupera farmacia con lote en la lista de stock distribuido
-                else:
-                    #Se obtiene el stock distribuido predeterminado al crearse, que es una lista de un solo elemento:
-                    #Esto pasa por que se esta por usar un lote nuevo recien recibido.
-                    listStocDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__pk=idLote)
-                    stocDist=listStocDist[0]#Se obtiene el primer elemento de la lista,(siempre va a existir se crea de forma
-                                            #predeterminada).
-
-
-                if stocDist.cantidad == 0:#Si en la cantidad figura cero quiere decir que hay que setear el elemento
-                                              #predeterminado.
-                        stocDist.cantidad = stocDist.cantidad + cantidadTomadaDeLote
-                        stocDist.lote=lote
-                        stocDist.farmacia=farmacia
-                else:
-                    if not existeStockDist:#Si no hay que crear un nuevo renglon SI ES NECESARIO y luego setear
-                        stocDist=mmodels.StockDistribuidoEnFarmacias()#Nuevo renglon
-
-                    stocDist.cantidad = stocDist.cantidad + cantidadTomadaDeLote
-                    stocDist.lote=lote
-                    stocDist.farmacia=farmacia
-
-                stocDist.save()
+                crearRenglonStockDistribuido(lote,pedido,cantidadTomadaDeLote)
                 lote.save()
                 #===============================================================
-                detalleRemito = models.DetalleRemitoDeFarmacia()
-                detalleRemito.remito = remito
-                detalleRemito.set_detalle_pedido(detalle)
-                detalleRemito.lote = lote
-                detalleRemito.cantidad = cantidadTomadaDeLote
-                detalleRemito.detallePedidoDeFarmacia = detalle
-                detalleRemito.lote = lote
-                detalleRemito.save()
-
+                crearRenglonDetalleRemito(lote,remito,detalle,cantidadTomadaDeLote)#***********
 
         detalle.cantidadPendiente = detalle.cantidad-stockTotal
         detalle.save()
@@ -154,114 +106,79 @@ def procesar_detalle_de_farmacia(detalle, remito, pedido):
 
                 if lote.stock < cantidadNecesaria:  # el lote no tiene toda la cantidad que necesito
 
-                    #=============================== INICIO MODULARIZAR=====================================
                     cantidadNecesaria -= lote.stock
                     cantidadTomadaDeLote = lote.stock
-                    #=======================================================================
                     stockEnFarma -= cantidadTomadaDeLote# Se resta lo que se quito del lote en cuestion (en este caso se quita toda).
                     stockFyF.stockFarma = stockEnFarma
                     stockFyF.stockFarmacias = stockFyF.stockFarmacias + cantidadTomadaDeLote
-                    #========================================================================
-
                     lote.stock = 0
-
-                    idFarmacia=pedido.farmacia.pk
-                    farmacia=Omodels.Farmacia.objects.get(pk=idFarmacia)
-                    idLote=lote.pk
-                    #si la farmacia y lote ya estan en la lista de distribuidos debe recuperarse:
-
-                    farmaciaYLoteEnStockDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote=lote,farmacia=pedido.farmacia)
-                    if farmaciaYLoteEnStockDist:
-                        existeStockDist=True
-                    else:
-                        existeStockDist=False
-
-                    if existeStockDist:
-                        stocDist=farmaciaYLoteEnStockDist[0]#Se recupera farmacia con lote en la lista de stock distribuido
-                    else:
-                        #Se obtiene el stock distribuido predeterminado al crearse, que es una lista de un solo elemento:
-                        #Esto pasa por que se esta por usar un lote nuevo recien recibido.
-                        listStocDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__pk=idLote)
-                        stocDist=listStocDist[0]#Se obtiene el primer elemento de la lista,(siempre va a existir se crea de forma
-                                                #predeterminada).
-
-                    if stocDist.cantidad == 0:#Si en la cantidad figura cero quiere decir que hay que setear el elemento
-                                              #predeterminado.
-                        stocDist.cantidad = stocDist.cantidad + cantidadTomadaDeLote
-                        stocDist.lote=lote
-                        stocDist.farmacia=farmacia
-                    else:
-                        if not existeStockDist:#Si no hay que crear un nuevo renglon SI ES NECESARIO y luego setear
-                            stocDist=mmodels.StockDistribuidoEnFarmacias()#Nuevo renglon
-
-                        stocDist.cantidad = stocDist.cantidad + cantidadTomadaDeLote
-                        stocDist.lote=lote
-                        stocDist.farmacia=farmacia
-
-                    stocDist.save()
-                    #=======================================FIN MODULARIZAR===========================
+                    crearRenglonStockDistribuido(lote,pedido,cantidadTomadaDeLote)
 
                 else:
 
                     lote.stock = lote.stock - cantidadNecesaria
-
-                    #===================INSERCIONES PARA STOCK DISTRIBUIDO===================
                     stockEnFarma = stockEnFarma - cantidadNecesaria
                     stockFyF.stockFarma=stockEnFarma
                     stockFyF.stockFarmacias = stockFyF.stockFarmacias + cantidadNecesaria
-                    idFarmacia=pedido.farmacia.pk
-                    farmacia=Omodels.Farmacia.objects.get(pk=idFarmacia)
-                    idLote=lote.pk
-                    #si la farmacia y lote ya estan en la lista de distribuidos debe recuperarse:
-
-                    farmaciaYLoteEnStockDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote=lote,farmacia=pedido.farmacia)
-                    if farmaciaYLoteEnStockDist:
-                        existeStockDist=True
-                    else:
-                        existeStockDist=False
-
-                    if existeStockDist:
-                        stocDist=farmaciaYLoteEnStockDist[0]#Se recupera farmacia con lote en la lista de stock distribuido
-                    else:
-                        #Se obtiene el stock distribuido predeterminado al crearse, que es una lista de un solo elemento:
-                        #Esto pasa por que se esta por usar un lote nuevo recien recibido.
-                        listStocDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__pk=idLote)
-                        stocDist=listStocDist[0]#Se obtiene el primer elemento de la lista,(siempre va a existir se crea de forma
-                                                #predeterminada).
-
-                    if stocDist.cantidad == 0:#Si en la cantidad figura cero quiere decir que hay que setear el elemento
-                                              #predeterminado.
-                        stocDist.cantidad = stocDist.cantidad + cantidadNecesaria
-                        stocDist.lote=lote
-                        stocDist.farmacia=farmacia
-                    else:
-                        if not existeStockDist:#Si no hay que crear un nuevo renglon SI ES NECESARIO y luego setear
-                            stocDist=mmodels.StockDistribuidoEnFarmacias()#Nuevo renglon
-
-                        stocDist.cantidad = stocDist.cantidad + cantidadNecesaria
-                        stocDist.lote=lote
-                        stocDist.farmacia=farmacia
-
-                    stocDist.save()
-                    #========================================================================
-
+                    crearRenglonStockDistribuido(lote,pedido,cantidadNecesaria)
                     cantidadTomadaDeLote = cantidadNecesaria
                     cantidadNecesaria = 0
 
+                crearRenglonDetalleRemito(lote,remito,detalle,cantidadTomadaDeLote)#***********
 
-                detalleRemito = models.DetalleRemitoDeFarmacia()
-                detalleRemito.remito = remito
-                detalleRemito.detallePedidoDeFarmacia = detalle
-                detalleRemito.lote = lote
-                detalleRemito.cantidad = cantidadTomadaDeLote
-                detalleRemito.save()
                 lote.save()  # actualizo el stock del lote
                 stockFyF.save()
             i += 1
 
         return True
 
-#def crearRenglonStockDistribuido(lote,pedido,cantidadNecesaria):
+def crearRenglonStockDistribuido(lote,pedido,cantidadNecesaria):
+
+    idFarmacia=pedido.farmacia.pk
+    farmacia=Omodels.Farmacia.objects.get(pk=idFarmacia)
+    idLote=lote.pk
+    #si la farmacia y lote ya estan en la lista de distribuidos debe recuperarse:
+
+    farmaciaYLoteEnStockDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote=lote,farmacia=pedido.farmacia)
+    if farmaciaYLoteEnStockDist:
+        existeStockDist=True
+    else:
+        existeStockDist=False
+
+    if existeStockDist:
+        stocDist=farmaciaYLoteEnStockDist[0]#Se recupera farmacia con lote en la lista de stock distribuido
+    else:
+        #Se obtiene el stock distribuido predeterminado al crearse, que es una lista de un solo elemento:
+        #Esto pasa por que se esta por usar un lote nuevo recien recibido.
+        listStocDist=mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__pk=idLote)
+        stocDist=listStocDist[0]#Se obtiene el primer elemento de la lista,(siempre va a existir se crea de forma
+                                #predeterminada).
+
+    if stocDist.cantidad == 0:#Si en la cantidad figura cero quiere decir que hay que setear el elemento
+                              #predeterminado.
+        stocDist.cantidad = stocDist.cantidad + cantidadNecesaria
+        stocDist.lote=lote
+        stocDist.farmacia=farmacia
+    else:
+        if not existeStockDist:#Si no hay que crear un nuevo renglon SI ES NECESARIO y luego setear
+            stocDist=mmodels.StockDistribuidoEnFarmacias()#Nuevo renglon
+
+        stocDist.cantidad = stocDist.cantidad + cantidadNecesaria
+        stocDist.lote=lote
+        stocDist.farmacia=farmacia
+
+    stocDist.save()
+    #=======================================FIN MODULARIZAR===========================
+
+def crearRenglonDetalleRemito(lote,remito,detalle,cantidadTomadaDeLote):
+
+    detalleRemito = models.DetalleRemitoDeFarmacia()
+    detalleRemito.remito = remito
+    detalleRemito.set_detalle_pedido(detalle)
+    detalleRemito.lote = lote
+    detalleRemito.cantidad = cantidadTomadaDeLote
+    detalleRemito.save()
+
 
 
 
@@ -695,31 +612,45 @@ def procesar_devolucion(laboratorio, lotes, distribuidos):
     remito.save()
 
     for lote in lotes:
-        detalleRemito = models.DetalleRemitoMedicamentosVencido()
-        detalleRemito.remito = remito
-        detalleRemito.medicamento = lote.medicamento
-        detalleRemito.lote = lote
+        if lote.stock > 0:
+            detalleRemito = models.DetalleRemitoMedicamentosVencido()
+            detalleRemito.remito = remito
+            detalleRemito.medicamento = lote.medicamento
+            detalleRemito.lote = lote
+            detalleRemito.cantidad = lote.stock
+            detalleRemito.dependencia = "Farma"
 
-        detalleRemito.cantidad = lote.stock
-        detalleRemito.dependencia = "Drogueria Farma"
+            stockFYF = lote.stockFarmaYfarmacias
+            stockFYF.stockFarma -= lote.stock
+            stockFYF.save()
+
 
         for dist in distribuidos:
-            if lote.pk == dist.lote.pk and dist.cantidad>0:
+            if lote.pk == dist.lote.pk and dist.cantidad >0:
                 detalleRemitoFarm = models.DetalleRemitoMedicamentosVencido()
                 detalleRemitoFarm.remito = remito
                 detalleRemitoFarm.medicamento = lote.medicamento
                 detalleRemitoFarm.lote = lote
                 detalleRemitoFarm.cantidad = dist.cantidad
                 detalleRemitoFarm.dependencia = dist.farmacia.razonSocial
-                dist.lote.stock=0
-                dist.lote.save()
+
+                stockFYF = dist.lote.stockFarmaYfarmacias
+                stockFYF.stockFarmacias -= dist.cantidad
+                stockFYF.save()
+
+
+                #dist.lote.stock=0
+                #dist.lote.save()
                 dist.cantidad=0
                 dist.save()
                 detalleRemitoFarm.save()
 
-        detalleRemito.save()
-        lote.stock = 0
-        lote.save()
+
+
+        if lote.stock>0:
+            detalleRemito.save()
+            lote.stock = 0
+            lote.save()
 
 def hay_medicamentos_con_stock():
     medicamentos = mmodels.Medicamento.objects.all()
@@ -1207,7 +1138,6 @@ def verificarCantidad(detalles):
              farmacia=detalle.pedidoDeFarmacia.farmacia#*******
              #El exclude esta por que la farmacia de destino no debe incluirse ella misma en la cuenta
              stockTotalDistDic = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__medicamento__pk=medicamento.pk).exclude(farmacia=farmacia).aggregate(Sum('cantidad'))
-
              #Se obtienen todos los registros del stock distribuido cuyo medicamanto sea igual al medicamanto del detalle
              distFarmacias = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__medicamento__pk=medicamento.pk)
              medicamentos = []#Para insertar medicamentos
@@ -1223,6 +1153,10 @@ def verificarCantidad(detalles):
                                                                          #por lo que se le resta la cantidad de duplicados.
              stockTotalDist = stockTotalDistDic['cantidad__sum']#Esto es por que aggregate devuelve un diccionario.
              totalMinimoAdejar = cantidadFarmaciasConElMed * parametros.MIN_A_DEJAR
+
+             if stockTotalDistDic['cantidad__sum'] is None:
+                 stockTotalDist=0
+
 
              if (stockTotalDist - cantidadAobtener) >= totalMinimoAdejar:
                 respetaMinimo = True

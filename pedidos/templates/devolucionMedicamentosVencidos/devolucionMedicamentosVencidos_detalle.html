@@ -26,6 +26,7 @@
                 <th>Medicamento</th>
                 <th>Fecha de vencimiento</th>
                 <th>Stock</th>
+                <th>Dependencia</th>
             </tr>
         </thead>
         <tbody>
@@ -35,6 +36,17 @@
                     <td>{{ lote.medicamento}}</td>
                     <td>{{ lote.fechaVencimiento }}</td>
                     <td>{{ lote.stock}}</td>
+                    <td><p>Farma</p></td>
+                </tr>
+            {% endfor %}
+
+            {% for loteDist in lotesDist%}
+                <tr>
+                    <td>{{ loteDist.lote.numero}}</td>
+                    <td>{{ loteDist.lote.medicamento}}</td>
+                    <td>{{ loteDist.lote.fechaVencimiento }}</td>
+                    <td>{{ loteDist.cantidad}}</td>
+                    <td>{{ loteDist.farmacia}}</td>
                 </tr>
             {% endfor %}
         </tbody>

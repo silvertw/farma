@@ -23,7 +23,7 @@ def get_filtros(get, modelo):
 @login_required(login_url='login')
 def stockDistribuido(request):
     mfilters = get_filtros(request.GET, mmodels.StockDistribuidoEnFarmacias)
-    distribuidos = mmodels.StockDistribuidoEnFarmacias.objects.filter(**mfilters).exclude(cantidad=0)
+    distribuidos = mmodels.StockDistribuidoEnFarmacias.objects.filter(**mfilters).exclude(cantidad=0).order_by('farmacia','lote')
     estadisticas = {
         'total': mmodels.StockDistribuidoEnFarmacias.objects.exclude(cantidad=0).count(),
         'filtrados': distribuidos.count()

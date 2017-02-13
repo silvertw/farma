@@ -374,7 +374,6 @@ def buscarEnFarmacias(request):
             )
             movimiento.save()
 
-
         for renglon in renglones:
 
             detalleMovimiento=movimiento.get_detalle_movimiento(renglon['farmacia'],renglon['lote'])
@@ -1052,9 +1051,11 @@ def devolucionMedicamentosVencidos_detalle(request, id_laboratorio):
 
     lt = datetime.date.today() + datetime.timedelta(weeks=26)  # fecha vencimiento.(limite)
     lotes = mmodels.Lote.objects.filter(fechaVencimiento__lte=lt, medicamento__pk__in=lista, stock__gt=0)
+    lotesDist = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__fechaVencimiento__lte=lt, lote__medicamento__pk__in=lista).exclude(cantidad=0).order_by('farmacia')
+
 
     return render(request, "devolucionMedicamentosVencidos/devolucionMedicamentosVencidos_detalle.html",
-                  {'lotes': lotes, 'laboratorio': laboratorio, 'laboratorioId': id_laboratorio, 'fecha': datetime.datetime.now(),
+                  {'lotes': lotes,'lotesDist':lotesDist,'laboratorio': laboratorio, 'laboratorioId': id_laboratorio, 'fecha': datetime.datetime.now(),
                   'numero': utils.get_next_nro_pedido_laboratorio(models.RemitoMedicamentosVencidos, "numero")})
 
 
@@ -1069,8 +1070,8 @@ def devolucionMedicamentosVencidos_registrar(request, id_laboratorio):
         lista.append(m.pk)
 
     lt = datetime.date.today() + datetime.timedelta(weeks=26)  # fecha vencimiento.(limite)
-    lotes = mmodels.Lote.objects.filter(fechaVencimiento__lte=lt, medicamento__pk__in=lista, stock__gt=0)
-    distribuidos = mmodels.StockDistribuidoEnFarmacias.objects.all()
+    lotes = mmodels.Lote.objects.filter(fechaVencimiento__lte=lt, medicamento__pk__in=lista)
+    distribuidos = mmodels.StockDistribuidoEnFarmacias.objects.filter(lote__fechaVencimiento__lte=lt,lote__medicamento__pk__in=lista).order_by('farmacia')
 
     utils.procesar_devolucion(laboratorio, lotes, distribuidos)
     return render(request, "devolucionMedicamentosVencidos/devolucionMedicamentosVencidos_detalle.html",
@@ -1086,7 +1087,7 @@ class remitoDevolucion(PDFTemplateView):
         fechaActual = time.strftime("%d/%m/%Y")
         fecha = datetime.datetime.strptime(fechaActual, '%d/%m/%Y').date()
         remito = models.RemitoMedicamentosVencidos.objects.get(numero=id_remito)
-        detallesRemito = models.DetalleRemitoMedicamentosVencido.objects.filter(remito=remito)
+        detallesRemito = models.DetalleRemitoMedicamentosVencido.objects.filter(remito=remito).order_by('dependencia')
         totalVencidos=0
         for detRemito in detallesRemito:
             totalVencidos += detRemito.cantidad

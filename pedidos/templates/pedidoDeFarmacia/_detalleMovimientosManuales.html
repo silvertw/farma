@@ -1,6 +1,6 @@
     <div class="table-responsive">
 
-          <h1>Seleccione las cantidades manualmente:</h1>
+          <h1 id="msjCabecera">Seleccione las cantidades manualmente:</h1>
 
           <table class="table table-bordered">
           <thead>
@@ -35,7 +35,6 @@
 
           </tbody>
         </table>
-
 
         <table class="table table-bordered">
             <thead>
@@ -77,6 +76,18 @@
         var filaMedActualReq = [];//Arreglo donde se insertan los medicamentos requeridos.
 
 
+        var i=0;
+        $(".disponible").each(function(){
+            i++;
+        });
+
+        if(i==0){
+             $('#btnRegM').hide();
+              $('#msjCabecera').replaceWith('<h1 style="color:#FFFFFF;background:red;">'+'Imposible completar pendiente manualmente debe realizar pedido a laboratorio'+'</h1>');
+        }
+
+
+
         $(".disponible").on("change",function(e) {
 
             var nroFilaTbl = e.target.id//En base a la infomacion del evento se obiente el numero de renglon o fila de la tabla html 'disponibles'.
@@ -98,8 +109,6 @@
 
 
             $(this).find("td").eq(3).replaceWith('<td>' + valor + '</td>');//Se cambia el valor de cantidad disponible para la farmacia actual.
-
-
 
             //===========================================================//
 
@@ -163,7 +172,7 @@
 
         var totalesArray = {};
         var paqueteJson
-        var i=0;
+        //var i=0;
 
         $( "#btnRegM" ).on("click",function(e) {
 
