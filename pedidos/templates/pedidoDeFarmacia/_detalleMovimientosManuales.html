@@ -23,9 +23,8 @@
                   <td>
                       <form class="form-inline" role="form" id="form">
                           <div class="form-group">
-
-                            <input type="number" min = 0 max = {{ renglon.cantidad }} class="form-control"
-                            placeholder="Ingrese cantidad a quitar">
+                            <input id="{{forloop.counter}}" type="number"  min = 0 max = {{ renglon.cantidad }} class="form-control"
+                            placeholder="Ingrese cantidad a quitar" value="0">
                           </div>
                       </form>
                   </td>
@@ -74,7 +73,8 @@
         /*Requeridos*/
         var filaActualCantReq = [];//Arreglo deonde se insertan las cantidades requeridas.
         var filaMedActualReq = [];//Arreglo donde se insertan los medicamentos requeridos.
-
+        var cantConstantes = [];//Arreglo donde se guardan las cantidades iniciales que seran constantes durante todo el proceso
+                                //estas cantidades se iran recuperando en base al numero de renglon en la que esten.
 
         var i=0;
         $(".disponible").each(function(){
@@ -82,11 +82,9 @@
         });
 
         if(i==0){
-             $('#btnRegM').hide();
-              $('#msjCabecera').replaceWith('<h1 style="color:#FFFFFF;background:red;">'+'Imposible completar pendiente manualmente debe realizar pedido a laboratorio'+'</h1>');
+            $('#btnRegM').hide();
+            $('#msjCabecera').replaceWith('<h1 style="color:#FFFFFF;background:red;">'+'Imposible completar pendiente manualmente debe realizar pedido a laboratorio'+'</h1>');
         }
-
-
 
         $(".disponible").on("change",function(e) {
 
@@ -94,18 +92,22 @@
             var cantidadQuitada = e.target.value;//Se otiene la cantidad que se decidio quitar a la farmacia.
             var cantidadDisponible = $(this).find("td").eq(3).html();//Se obtiene la cantidad disponible que posee la farmacia.
 
-            if (filaActualIndice.indexOf(nroFilaTbl) == -1){//Se verifica si el indie de renglon se encuentra en el arreglo.
+            if (filaActualIndice.indexOf(nroFilaTbl) == -1){//Se verifica si el indice de renglon se encuentra en el arreglo.
 
                 filaActualIndice.push(nroFilaTbl);//Si el indice no esta en el arreglo este indice se inserta en el mismo.
                 cantidadConst = parseInt(cantidadDisponible);//Se inicializa la cantidad disponible inicial que tiene la farmacia todo este proceso
                                                              //se realiza por unica vez para cada uno de los renglones de la tabla html 'disponibles'.
+
+                cantConstantes[nroFilaTbl]=cantidadConst;//Se inserta la cantidad inicial disponible segun su numero de fila esta cantidad no
+                                                         //cambiara.
             }
 
             var medicamentoDisponible = $(this).find("td").eq(2).html();//Se obtiene el medicamento el cual estoy quitando o solicitando.
             var cantidadDisponibleInt = parseInt(cantidadDisponible);//Se convierte a integer la cantidad disponible.
 
-            var valor = cantidadConst - cantidadQuitada;//Se calcula la nueva cantidad disponible a cambiar en el html en base a la resta
-                                                        //como se ve aqui entra en juego la cantidad constante (cantidad disponible inicial de la farmacia).
+            var valor = cantConstantes[nroFilaTbl] - cantidadQuitada;//Se calcula la nueva cantidad disponible a cambiar en el html en base a la resta
+                                                                     //como se ve aqui entra en juego la cantidad constante (cantidad disponible inicial
+                                                                     //de la farmacia).
 
 
             $(this).find("td").eq(3).replaceWith('<td>' + valor + '</td>');//Se cambia el valor de cantidad disponible para la farmacia actual.
@@ -205,20 +207,22 @@
                         }
                         i++;
                     });
+
+
+                    var url = {% url 'actualizarStockManual' %};
+                    var error = 'false';
+
+                    $(".solicitud").each(function(){
+
+                        var cantidadActual = $(this).find("td").eq(0).html();
+
+                        if(parseInt(cantidadActual) < 0){
+                            error = 'true';
+                        }
+
+                    });
+
                 }
-
-                var url = {% url 'actualizarStockManual' %};
-                var error = 'false';
-
-                $(".solicitud").each(function(){
-
-                    var cantidadActual = $(this).find("td").eq(0).html();
-
-                    if(parseInt(cantidadActual) < 0){
-                        error = 'true';
-                    }
-
-                });
 
                 if(error == 'false'){
                     actualizarStock(url,totalesArray);

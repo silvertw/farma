@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from minidetector import detect_mobile
@@ -10,7 +11,7 @@ def get_order(get):
 def inicio(request):
 
     if request.mobile:
-        #vista movil
+        #vista mobile
         return render(request, "mobile/inicio_mobile.html")
     else:
         #vista pc

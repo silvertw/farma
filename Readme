@@ -1,0 +1,136 @@
+==================================================================================================
+Sistema Farma:
+
+Tecnologias involucradas para el desarrollado:
+
+Django v1.8.3
+Pyhton v2.7
+html 5
+jQuery v1.11.1
+jQuery v2.2.1
+jQuery UI - v1.11.4
+jQuery Mobile 1.4.5
+Bootstrap v3.3.7
+
+==================================================================================================
+Base de datos utilizada para pruebas de produccion:
+PostgreSQL
+
+==================================================================================================
+Apps prinicipales:
+
+'markupfield',
+'bootstrap3',
+'selectable',
+'crispy_forms',
+'django_bootstrap_dynamic_formsets',
+'easy_pdf',
+'reportlab',
+'django_extensions
+
+==================================================================================================
+
+Dependencias Necesarias:
+
+django-easy-pdf==0.1.0
+django-extensions==1.7.5
+django-jsonview==1.0.0
+django-markup==1.1
+django-markup-deprecated==0.0.3
+django-markupfield==1.4.0
+django-selectable==0.9.0
+django-xhtml2pdf==0.0.3
+docutils==0.11
+duplicity==0.6.23
+et-xmlfile==1.0.1
+html5lib==1.0b8
+httplib2==0.8
+imagesize==0.7.1
+ipython==1.2.1
+jdcal==1.2
+Jinja2==2.7.2
+lockfile==0.8
+lxml==3.3.3
+Markdown==2.6.6
+MarkupSafe==0.18
+Minidetector==0.1
+oauthlib==0.6.1
+oneconf==0.3.7.14.4.1
+openpyxl==2.3.5
+PAM==0.4.2
+pexpect==3.1
+Pillow==3.3.1
+piston-mini-client==0.7.5
+pycrypto==2.6.1
+pycups==1.9.66
+pycurl==7.19.3
+Pygments==2.1.3
+pygobject==3.12.0
+pygraphviz==1.2
+pyOpenSSL==0.13
+PyPDF2==1.26.0
+pyserial==2.6
+pysmbc==1.0.14.1
+python-apt===0.9.3.5ubuntu2
+python-debian===0.1.21-nmu2ubuntu2
+pytz==2016.7
+pyxdg==0.25
+reportlab==3.3.0
+requests==2.2.1
+roman==2.0.0
+sessioninstaller==0.0.0
+simplegeneric==0.8.1
+six==1.5.2
+snowballstemmer==1.2.1
+software-center-aptd-plugins==0.0.0
+Sphinx==1.4.9
+sphinx-rtd-theme==0.1.9
+system-service==0.1.6
+Twisted-Core==13.2.0
+Twisted-Web==13.2.0
+unity-lens-photos==1.0
+urllib3==1.7.1
+utils==0.9.0
+xdiagnose===3.6.3build2
+xhtml2pdf==0.1b3
+XlsxWriter==0.9.3
+xlwt==1.1.2
+yuml==0.1
+zope.interface==4.0.5
+==================================================================================================
+
+Instrucciones para poner en funcionamiento
+*Una vez instaladas todas las dependencias:
+
+1) Se debe copiar el proyecto completo en un directorio llamado por ejemplo 'farmaplus'.
+2) Una vez realizado esto debe navegar por consola a dicho directorio y verificar que se encuentre el archivo llamado 'manage.py'.
+3) Se debe crear la base de datos para comenzar a trabajar, para esto se usa el comando --> python manage.py migrate
+4) Se debe crear un usuario para administrar el sistema, este debe tener todos los privilegios --> python manage.py createsuperuser
+   luego solicitará ingresar nombre de usuario, email y pasword; el email no es obligatorio.
+5) Por último debe correr el server para que el sistema entre en producción con el comando --> python manage.py runserver
+   con este comando el sistema ya esta en funcionamiento accediendo con un navegador ingresando la url --> localhost:8000
+   también puede correr el server con el comando --> python manage.py runserver 0.0.0.0:8080 para poder acceder al sistema
+   desde cualquier pc o dispositivo móvil que este en la misma intranet mediante su direccion ip. Por ejemplo si
+   esta en windows puede averiguar la ip con el comando ipconfig o utilizando ifconfig desde linux.En este caso para poder acceder
+   en el navegador debe colocar la dirección ip seguida del puero 8080 por ejemplo---> http://192.168.2.194:8080/	 			
+=================================================================================================
+Deploy realizado sobre pythonanywhere
+https://www.pythonanywhere.com
+Pruebas de produccion realizadas sobre una cuenta gratuita
+--------------------------------------------------------------------------------------------------
+Dominio para realizar pruebas:
+http://farmaplus.pythonanywhere.com/
+
+
+
+
+
+
+
+
+
+
+
+
+
+

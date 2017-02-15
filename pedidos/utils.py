@@ -1068,8 +1068,6 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
                 porcion = 0
                 while cantidadAobtener > 0 and seguirSacandoAlote:
                     dist = listStockDist[i]
-
-
                     if ((loteActivo.pk == dist.lote.pk) and (farmacia.razonSocial != dist.farmacia.razonSocial)):
 
                         if (dist.cantidad - cantidadAobtener) > parametros.MIN_A_DEJAR:
@@ -1097,9 +1095,10 @@ def buscarYobtenerDeFarmacias(detalles,pedido,farmacia,verificar):
                                 dist.save()
                                 detalle.save()
                                 nuevoStockDist.save()
-
-                        if len(listStockDist)==i-1:
-                            seguirSacandoAlote = False
+                   
+                    print "len",len(listStockDist)                
+                    if len(listStockDist)-1==i:
+                        seguirSacandoAlote = False
 
                     i += 1
 

@@ -404,6 +404,7 @@ def busquedaManualOptStock(request):
     detallePedido = pedidoDeFarmacia.get_detalles()
     detallesDist = mmodels.StockDistribuidoEnFarmacias.objects.all()
     renglones=[]
+
     info=[]
     farmSolicitante=pedidoDeFarmacia.farmacia
 
@@ -415,6 +416,8 @@ def busquedaManualOptStock(request):
                 if detalleDist.lote.medicamento.tiene_lotes():
                     if detalleDist.lote.medicamento == detalle.medicamento:
                         renglones.append(detalleDist)
+
+
     return render(request, "pedidoDeFarmacia/_detalleMovimientosManuales.html", {"renglones": renglones,"info":info,"farmSolicitante":farmSolicitante,"nroPedido":nroPedido})
 
 
