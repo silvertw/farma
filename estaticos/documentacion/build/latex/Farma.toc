@@ -1,86 +1,140 @@
-\select@language {spanish}
 \contentsline {chapter}{\numberline {1}Pantalla Principal}{1}{chapter.1}
 \contentsline {section}{\numberline {1.1}Gesti\IeC {\'o}n de Usuarios}{1}{section.1.1}
 \contentsline {section}{\numberline {1.2}Gesti\IeC {\'o}n de Medicamentos}{2}{section.1.2}
 \contentsline {section}{\numberline {1.3}Gesti\IeC {\'o}n de Organizaciones}{3}{section.1.3}
-\contentsline {section}{\numberline {1.4}Gesti\IeC {\'o}n de Pedidos}{4}{section.1.4}
+\contentsline {section}{\numberline {1.4}Gesti\IeC {\'o}n de Pedidos}{3}{section.1.4}
+\contentsline {section}{\numberline {1.5}Gesti\IeC {\'o}n de Facturacion}{4}{section.1.5}
+\contentsline {section}{\numberline {1.6}Gesti\IeC {\'o}n de Stock Distribuido}{5}{section.1.6}
+\contentsline {section}{\numberline {1.7}Gesti\IeC {\'o}n de Informe de Ventas}{5}{section.1.7}
 \contentsline {chapter}{\numberline {2}Usuarios}{7}{chapter.2}
 \contentsline {section}{\numberline {2.1}Entrar al sistema}{7}{section.2.1}
 \contentsline {section}{\numberline {2.2}Agregar Usuario}{8}{section.2.2}
-\contentsline {section}{\numberline {2.3}Cerrar Sesi\IeC {\'o}n}{10}{section.2.3}
-\contentsline {chapter}{\numberline {3}Medicamentos}{13}{chapter.3}
-\contentsline {section}{\numberline {3.1}Medicamentos}{13}{section.3.1}
-\contentsline {subsection}{\numberline {3.1.1}Alta Medicamento}{13}{subsection.3.1.1}
-\contentsline {subsection}{\numberline {3.1.2}Modificar Stock M\IeC {\'\i }nimo}{15}{subsection.3.1.2}
-\contentsline {subsection}{\numberline {3.1.3}Modificar Precio de Venta}{16}{subsection.3.1.3}
-\contentsline {subsection}{\numberline {3.1.4}Eliminar Medicamento}{17}{subsection.3.1.4}
-\contentsline {subsection}{\numberline {3.1.5}Ver Lotes}{18}{subsection.3.1.5}
-\contentsline {subsection}{\numberline {3.1.6}Formulario de B\IeC {\'u}squeda}{19}{subsection.3.1.6}
-\contentsline {section}{\numberline {3.2}Monodrogas}{20}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Alta Monodroga}{21}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Modificar Monodroga}{22}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Eliminar Monodroga}{23}{subsection.3.2.3}
-\contentsline {subsection}{\numberline {3.2.4}Formulario de B\IeC {\'u}squeda}{24}{subsection.3.2.4}
-\contentsline {section}{\numberline {3.3}Presentaciones}{24}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Alta Presentaci\IeC {\'o}n}{25}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}Modificar Presentaci\IeC {\'o}n}{26}{subsection.3.3.2}
-\contentsline {subsection}{\numberline {3.3.3}Eliminar Presentaci\IeC {\'o}n}{27}{subsection.3.3.3}
-\contentsline {subsection}{\numberline {3.3.4}Formulario de B\IeC {\'u}squeda}{28}{subsection.3.3.4}
-\contentsline {section}{\numberline {3.4}Nombres Fantasia}{29}{section.3.4}
-\contentsline {subsection}{\numberline {3.4.1}Alta Nombre Fantas\IeC {\'\i }a}{30}{subsection.3.4.1}
-\contentsline {subsection}{\numberline {3.4.2}Modificar Nombre Fantas\IeC {\'\i }a}{30}{subsection.3.4.2}
-\contentsline {subsection}{\numberline {3.4.3}Eliminar Nombre Fantas\IeC {\'\i }a}{31}{subsection.3.4.3}
-\contentsline {subsection}{\numberline {3.4.4}Formulario de B\IeC {\'u}squeda}{33}{subsection.3.4.4}
-\contentsline {chapter}{\numberline {4}Organizaciones}{35}{chapter.4}
-\contentsline {section}{\numberline {4.1}Farmacias}{35}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Alta Farmacia}{35}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}Modificar Farmacia}{37}{subsection.4.1.2}
-\contentsline {subsection}{\numberline {4.1.3}Eliminar Farmacia}{38}{subsection.4.1.3}
-\contentsline {subsection}{\numberline {4.1.4}Formulario de B\IeC {\'u}squeda}{40}{subsection.4.1.4}
-\contentsline {section}{\numberline {4.2}Cl\IeC {\'\i }nicas}{41}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Alta Cl\IeC {\'\i }nica}{41}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}Ver Obras Sociales}{43}{subsection.4.2.2}
-\contentsline {subsection}{\numberline {4.2.3}Modificar Cl\IeC {\'\i }nica}{43}{subsection.4.2.3}
-\contentsline {subsection}{\numberline {4.2.4}Eliminar Cl\IeC {\'\i }nica}{45}{subsection.4.2.4}
-\contentsline {subsection}{\numberline {4.2.5}Formulario de B\IeC {\'u}squeda}{45}{subsection.4.2.5}
-\contentsline {section}{\numberline {4.3}Laboratorios}{46}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}Alta Laboratorio}{47}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}Modificar Laboratorio}{48}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Eliminar Laboratorio}{49}{subsection.4.3.3}
-\contentsline {subsection}{\numberline {4.3.4}Formulario de B\IeC {\'u}squeda}{51}{subsection.4.3.4}
-\contentsline {chapter}{\numberline {5}Pedidos}{53}{chapter.5}
-\contentsline {section}{\numberline {5.1}Pedidos de Farmacia}{53}{section.5.1}
-\contentsline {subsection}{\numberline {5.1.1}Alta Pedido}{53}{subsection.5.1.1}
-\contentsline {subsubsection}{Agregar Detalle}{55}{subsubsection*.3}
-\contentsline {subsubsection}{Modificar Detalle}{56}{subsubsection*.4}
-\contentsline {subsubsection}{Eliminar Detalle}{57}{subsubsection*.5}
-\contentsline {subsubsection}{Registrar Pedido}{58}{subsubsection*.6}
-\contentsline {subsection}{\numberline {5.1.2}Ver Detalles}{59}{subsection.5.1.2}
-\contentsline {subsection}{\numberline {5.1.3}Ver Remitos}{60}{subsection.5.1.3}
-\contentsline {subsection}{\numberline {5.1.4}Formulario de B\IeC {\'u}squeda}{60}{subsection.5.1.4}
-\contentsline {section}{\numberline {5.2}Pedidos de Cl\IeC {\'\i }nica}{61}{section.5.2}
-\contentsline {subsection}{\numberline {5.2.1}Alta Pedido}{62}{subsection.5.2.1}
-\contentsline {subsubsection}{Agregar Detalle}{63}{subsubsection*.7}
-\contentsline {subsubsection}{Modificar Detalle}{64}{subsubsection*.8}
-\contentsline {subsubsection}{Eliminar Detalle}{65}{subsubsection*.9}
-\contentsline {subsubsection}{Registrar Pedido}{66}{subsubsection*.10}
-\contentsline {subsection}{\numberline {5.2.2}Ver Detalles}{67}{subsection.5.2.2}
-\contentsline {subsection}{\numberline {5.2.3}Ver Remitos}{68}{subsection.5.2.3}
-\contentsline {subsection}{\numberline {5.2.4}Formulario de B\IeC {\'u}squeda}{68}{subsection.5.2.4}
-\contentsline {section}{\numberline {5.3}Pedidos a Laboratorio}{69}{section.5.3}
-\contentsline {subsection}{\numberline {5.3.1}Alta Pedido}{70}{subsection.5.3.1}
-\contentsline {subsubsection}{Agregar Detalle}{71}{subsubsection*.11}
-\contentsline {subsubsection}{Modificar Detalle}{72}{subsubsection*.12}
-\contentsline {subsubsection}{Eliminar Detalle}{73}{subsubsection*.13}
-\contentsline {subsubsection}{Registrar Pedido}{74}{subsubsection*.14}
-\contentsline {subsection}{\numberline {5.3.2}Cancelar un Pedido}{75}{subsection.5.3.2}
-\contentsline {subsection}{\numberline {5.3.3}Ver Detalles}{76}{subsection.5.3.3}
-\contentsline {subsection}{\numberline {5.3.4}Ver Remitos}{76}{subsection.5.3.4}
-\contentsline {subsection}{\numberline {5.3.5}Formulario de B\IeC {\'u}squeda}{77}{subsection.5.3.5}
-\contentsline {section}{\numberline {5.4}Recepcion de Pedidos de Laboratorio}{78}{section.5.4}
-\contentsline {subsection}{\numberline {5.4.1}Registrar Recepci\IeC {\'o}n}{78}{subsection.5.4.1}
-\contentsline {subsubsection}{Acusar Recepci\IeC {\'o}n de un Detalle}{79}{subsubsection*.15}
-\contentsline {subsubsection}{Registrar Pedido}{82}{subsubsection*.16}
-\contentsline {subsection}{\numberline {5.4.2}Formulario de B\IeC {\'u}squeda}{82}{subsection.5.4.2}
-\contentsline {section}{\numberline {5.5}Registrar Devoluci\IeC {\'o}n de Medicamentos Vencidos}{83}{section.5.5}
-\contentsline {subsection}{\numberline {5.5.1}Registrar Devoluci\IeC {\'o}n}{84}{subsection.5.5.1}
+\contentsline {section}{\numberline {2.3}Cerrar Sesi\IeC {\'o}n}{9}{section.2.3}
+\contentsline {chapter}{\numberline {3}Medicamentos}{11}{chapter.3}
+\contentsline {section}{\numberline {3.1}Medicamentos}{11}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Alta Medicamento}{12}{subsection.3.1.1}
+\contentsline {subsection}{\numberline {3.1.2}Modificar Stock M\IeC {\'\i }nimo}{13}{subsection.3.1.2}
+\contentsline {subsection}{\numberline {3.1.3}Modificar Precio de Venta}{14}{subsection.3.1.3}
+\contentsline {subsection}{\numberline {3.1.4}Eliminar Medicamento}{16}{subsection.3.1.4}
+\contentsline {subsection}{\numberline {3.1.5}Ver Lotes}{17}{subsection.3.1.5}
+\contentsline {subsection}{\numberline {3.1.6}Stock Global}{19}{subsection.3.1.6}
+\contentsline {subsection}{\numberline {3.1.7}Reportes}{20}{subsection.3.1.7}
+\contentsline {subsubsection}{Medicamentos mas solicitados por cantidad}{20}{subsubsection*.3}
+\contentsline {subsubsection}{Medicamentos mas solicitados por pedido}{22}{subsubsection*.4}
+\contentsline {subsubsection}{Organizaciones mas demandantes de un medicamento por cantidad}{24}{subsubsection*.5}
+\contentsline {subsubsection}{Organizaciones mas demandantes de un medicamento por pedido}{27}{subsubsection*.6}
+\contentsline {subsection}{\numberline {3.1.8}Formulario de B\IeC {\'u}squeda}{29}{subsection.3.1.8}
+\contentsline {section}{\numberline {3.2}Monodrogas}{30}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Alta Monodroga}{31}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Modificar Monodroga}{32}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Eliminar Monodroga}{33}{subsection.3.2.3}
+\contentsline {subsection}{\numberline {3.2.4}Formulario de B\IeC {\'u}squeda}{34}{subsection.3.2.4}
+\contentsline {section}{\numberline {3.3}Presentaciones}{34}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Alta Presentaci\IeC {\'o}n}{35}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Modificar Presentaci\IeC {\'o}n}{36}{subsection.3.3.2}
+\contentsline {subsection}{\numberline {3.3.3}Eliminar Presentaci\IeC {\'o}n}{37}{subsection.3.3.3}
+\contentsline {subsection}{\numberline {3.3.4}Formulario de B\IeC {\'u}squeda}{38}{subsection.3.3.4}
+\contentsline {section}{\numberline {3.4}Nombres Fantasia}{39}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Alta Nombre Fantas\IeC {\'\i }a}{40}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}Modificar Nombre Fantas\IeC {\'\i }a}{41}{subsection.3.4.2}
+\contentsline {subsection}{\numberline {3.4.3}Eliminar Nombre Fantas\IeC {\'\i }a}{41}{subsection.3.4.3}
+\contentsline {subsection}{\numberline {3.4.4}Formulario de B\IeC {\'u}squeda}{43}{subsection.3.4.4}
+\contentsline {chapter}{\numberline {4}Organizaciones}{45}{chapter.4}
+\contentsline {section}{\numberline {4.1}Farmacias}{45}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Alta Farmacia}{45}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Modificar Farmacia}{47}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.3}Eliminar Farmacia}{48}{subsection.4.1.3}
+\contentsline {subsection}{\numberline {4.1.4}Formulario de B\IeC {\'u}squeda}{50}{subsection.4.1.4}
+\contentsline {section}{\numberline {4.2}Cl\IeC {\'\i }nicas}{51}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Alta Cl\IeC {\'\i }nica}{51}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Ver Obras Sociales}{53}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Modificar Cl\IeC {\'\i }nica}{53}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.4}Eliminar Cl\IeC {\'\i }nica}{55}{subsection.4.2.4}
+\contentsline {subsection}{\numberline {4.2.5}Formulario de B\IeC {\'u}squeda}{55}{subsection.4.2.5}
+\contentsline {section}{\numberline {4.3}Laboratorios}{56}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Alta Laboratorio}{57}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Modificar Laboratorio}{58}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Eliminar Laboratorio}{60}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {4.3.4}Formulario de B\IeC {\'u}squeda}{61}{subsection.4.3.4}
+\contentsline {section}{\numberline {4.4}Obras Sociales}{62}{section.4.4}
+\contentsline {subsection}{\numberline {4.4.1}Alta Obra Social}{62}{subsection.4.4.1}
+\contentsline {subsection}{\numberline {4.4.2}Modificar Obra Social}{64}{subsection.4.4.2}
+\contentsline {subsection}{\numberline {4.4.3}Eliminar Obra Social}{65}{subsection.4.4.3}
+\contentsline {subsection}{\numberline {4.4.4}Formulario de B\IeC {\'u}squeda}{67}{subsection.4.4.4}
+\contentsline {chapter}{\numberline {5}Pedidos}{69}{chapter.5}
+\contentsline {section}{\numberline {5.1}Pedidos de Farmacia}{69}{section.5.1}
+\contentsline {subsection}{\numberline {5.1.1}Alta Pedido}{69}{subsection.5.1.1}
+\contentsline {subsubsection}{Agregar Detalle}{71}{subsubsection*.7}
+\contentsline {subsubsection}{Modificar Detalle}{72}{subsubsection*.8}
+\contentsline {subsubsection}{Eliminar Detalle}{73}{subsubsection*.9}
+\contentsline {subsubsection}{Registrar Pedido}{74}{subsubsection*.10}
+\contentsline {subsection}{\numberline {5.1.2}Ver Detalles}{75}{subsection.5.1.2}
+\contentsline {subsection}{\numberline {5.1.3}Ver Remitos}{76}{subsection.5.1.3}
+\contentsline {subsection}{\numberline {5.1.4}Pedidos con Faltantes distribuidos}{78}{subsection.5.1.4}
+\contentsline {subsubsection}{Top 10 farmacias con mayor demanda de medicamentos}{82}{subsubsection*.12}
+\contentsline {subsubsection}{Top 10 farmacias con mayor demanda de pedidos}{83}{subsubsection*.13}
+\contentsline {subsection}{\numberline {5.1.5}Formulario de B\IeC {\'u}squeda}{85}{subsection.5.1.5}
+\contentsline {section}{\numberline {5.2}Pedidos de Cl\IeC {\'\i }nica}{86}{section.5.2}
+\contentsline {subsection}{\numberline {5.2.1}Alta Pedido}{87}{subsection.5.2.1}
+\contentsline {subsubsection}{Agregar Detalle}{88}{subsubsection*.14}
+\contentsline {subsubsection}{Modificar Detalle}{90}{subsubsection*.15}
+\contentsline {subsubsection}{Eliminar Detalle}{91}{subsubsection*.16}
+\contentsline {subsubsection}{Registrar Pedido}{91}{subsubsection*.17}
+\contentsline {subsection}{\numberline {5.2.2}Ver Detalles}{92}{subsection.5.2.2}
+\contentsline {subsection}{\numberline {5.2.3}Ver Remitos}{93}{subsection.5.2.3}
+\contentsline {subsection}{\numberline {5.2.4}Reportes}{95}{subsection.5.2.4}
+\contentsline {subsubsection}{Top 10 cl\IeC {\'\i }nicas con mayor demanda de medicamentos}{95}{subsubsection*.18}
+\contentsline {subsubsection}{Top 10 cl\IeC {\'\i }nicas con mayor demanda de pedidos}{97}{subsubsection*.19}
+\contentsline {subsection}{\numberline {5.2.5}Formulario de B\IeC {\'u}squeda}{99}{subsection.5.2.5}
+\contentsline {section}{\numberline {5.3}Pedidos a Laboratorio}{100}{section.5.3}
+\contentsline {subsection}{\numberline {5.3.1}Alta Pedido}{100}{subsection.5.3.1}
+\contentsline {subsubsection}{Agregar Detalle}{101}{subsubsection*.20}
+\contentsline {subsubsection}{Modificar Detalle}{102}{subsubsection*.21}
+\contentsline {subsubsection}{Eliminar Detalle}{103}{subsubsection*.22}
+\contentsline {subsubsection}{Registrar Pedido}{104}{subsubsection*.23}
+\contentsline {subsection}{\numberline {5.3.2}Cancelar un Pedido}{105}{subsection.5.3.2}
+\contentsline {subsection}{\numberline {5.3.3}Ver Detalles}{106}{subsection.5.3.3}
+\contentsline {subsection}{\numberline {5.3.4}Ver Remitos}{106}{subsection.5.3.4}
+\contentsline {subsection}{\numberline {5.3.5}Reportes}{107}{subsection.5.3.5}
+\contentsline {subsubsection}{Top 10 Laboratorios con mayor solicitud de medicamentos}{108}{subsubsection*.24}
+\contentsline {subsubsection}{Top 10 Laboratorios con mayor solicitud de pedidos}{110}{subsubsection*.25}
+\contentsline {subsection}{\numberline {5.3.6}Formulario de B\IeC {\'u}squeda}{112}{subsection.5.3.6}
+\contentsline {section}{\numberline {5.4}Recepcion de Pedidos de Laboratorio}{113}{section.5.4}
+\contentsline {subsection}{\numberline {5.4.1}Registrar Recepci\IeC {\'o}n}{113}{subsection.5.4.1}
+\contentsline {subsubsection}{Acusar Recepci\IeC {\'o}n de un Detalle}{114}{subsubsection*.26}
+\contentsline {subsubsection}{Registrar Pedido}{117}{subsubsection*.27}
+\contentsline {subsection}{\numberline {5.4.2}Formulario de B\IeC {\'u}squeda}{118}{subsection.5.4.2}
+\contentsline {section}{\numberline {5.5}Registrar Devoluci\IeC {\'o}n de Medicamentos Vencidos}{118}{section.5.5}
+\contentsline {subsection}{\numberline {5.5.1}Registrar Devoluci\IeC {\'o}n}{119}{subsection.5.5.1}
+\contentsline {chapter}{\numberline {6}Vista Movil}{121}{chapter.6}
+\contentsline {section}{\numberline {6.1}Pantalla Principal}{121}{section.6.1}
+\contentsline {section}{\numberline {6.2}Campos de la Pantalla Principal}{122}{section.6.2}
+\contentsline {section}{\numberline {6.3}Medicamentos}{122}{section.6.3}
+\contentsline {section}{\numberline {6.4}A\IeC {\~n}adir a Pedido}{124}{section.6.4}
+\contentsline {section}{\numberline {6.5}Organizaciones}{126}{section.6.5}
+\contentsline {section}{\numberline {6.6}Pedidos}{127}{section.6.6}
+\contentsline {section}{\numberline {6.7}Informacion Extra}{129}{section.6.7}
+\contentsline {chapter}{\numberline {7}Facturacion}{131}{chapter.7}
+\contentsline {section}{\numberline {7.1}Ventas}{131}{section.7.1}
+\contentsline {subsection}{\numberline {7.1.1}Generar Factura Venta}{132}{subsection.7.1.1}
+\contentsline {subsection}{\numberline {7.1.2}Ver Facturas Emitidas}{134}{subsection.7.1.2}
+\contentsline {subsection}{\numberline {7.1.3}Imprimir}{135}{subsection.7.1.3}
+\contentsline {subsection}{\numberline {7.1.4}Ver Fecha de Pago}{135}{subsection.7.1.4}
+\contentsline {subsection}{\numberline {7.1.5}Registrar Pago}{136}{subsection.7.1.5}
+\contentsline {subsection}{\numberline {7.1.6}Reportes}{136}{subsection.7.1.6}
+\contentsline {subsubsection}{Top 10 Monto de Ventas}{136}{subsubsection*.29}
+\contentsline {subsection}{\numberline {7.1.7}Formulario de B\IeC {\'u}squeda de Ventas}{138}{subsection.7.1.7}
+\contentsline {subsection}{\numberline {7.1.8}Formulario de B\IeC {\'u}squeda Facturas Emitidas}{139}{subsection.7.1.8}
+\contentsline {section}{\numberline {7.2}Compras}{141}{section.7.2}
+\contentsline {subsection}{\numberline {7.2.1}Generar Factura de Compra}{143}{subsection.7.2.1}
+\contentsline {subsection}{\numberline {7.2.2}Ver Facturados}{145}{subsection.7.2.2}
+\contentsline {subsection}{\numberline {7.2.3}Cancelar Pago}{148}{subsection.7.2.3}
+\contentsline {subsection}{\numberline {7.2.4}Ver Detalle de Pago}{149}{subsection.7.2.4}
+\contentsline {subsection}{\numberline {7.2.5}Reportes}{150}{subsection.7.2.5}
+\contentsline {subsubsection}{Top 10 Monto de Compras a Laboratorio}{151}{subsubsection*.31}
+\contentsline {subsection}{\numberline {7.2.6}Formulario de B\IeC {\'u}squeda de Compras}{152}{subsection.7.2.6}
+\contentsline {subsection}{\numberline {7.2.7}Formulario de B\IeC {\'u}squeda Facturas Emitidas}{153}{subsection.7.2.7}
+\contentsline {section}{\numberline {7.3}Formas de Pago}{154}{section.7.3}
+\contentsline {chapter}{\numberline {8}Stock Distribuido}{157}{chapter.8}
+\contentsline {section}{\numberline {8.1}Formulario de B\IeC {\'u}squeda}{157}{section.8.1}
+\contentsline {chapter}{\numberline {9}Informe de Ventas}{159}{chapter.9}

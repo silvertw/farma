@@ -1,11 +1,11 @@
 Pedidos de Farmacia
 ===================
-Se presentará una pantalla que contendrá un listado con todos los *Pedidos de Farmacia* que se encuentren registrados en el sistema hasta la fecha. 
+Se presentará una pantalla que contendrá un listado con todos los *Pedidos de Farmacia* que se encuentren registrados en el sistema hasta la fecha.
 
 .. image:: _static/pedidosfarmacia.png
    :align: center
 
-Junto con el listado, se ofrecerán un conjunto de funcionalidades que permitirán manipular estos *Pedidos de Farmacia*. 
+Junto con el listado, se ofrecerán un conjunto de funcionalidades que permitirán manipular estos *Pedidos de Farmacia*.
 Estas funcionalidades son:
 
 - :ref:`Alta Pedido <alta-pf>`
@@ -26,11 +26,11 @@ A continuación el sistema lo redirigirá a la siguiente pantalla:
 
 .. image:: _static/altapedfarm.png
    :align: center
-   
+
 En este punto el usuario deberá seleccionar la fecha en que llegó el pedido y la farmacia que lo realizó. A continuación deberá presionar el botón ``Crear Pedido``.
 
 .. ATTENTION::
-    El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará. 
+    El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
     En este punto, las posibles causas de errores son:
 
         - La farmacia ingresada no existe.
@@ -42,7 +42,7 @@ Una vez presionado el botón ``Crear Pedido``, se mostrará la siguiente pantall
 .. image:: _static/detallespedfarm.png
    :align: center
 
-Esta pantalla es la encargada de visualizar aquellos detalles que se irán asociando al *Pedido de Farmacia*. 
+Esta pantalla es la encargada de visualizar aquellos detalles que se irán asociando al *Pedido de Farmacia*.
 La misma ofrece las siguientes funcionalidades:
 
     - :ref:`Agregar Detalle <agregar-detalle-pf>`
@@ -54,7 +54,7 @@ La misma ofrece las siguientes funcionalidades:
 
 Agregar Detalle
 +++++++++++++++
-Si el usuario desea agregar un detalle al *Pedido de Farmacia*, deberá presionar el botón ``Alta Detalle``. 
+Si el usuario desea agregar un detalle al *Pedido de Farmacia*, deberá presionar el botón ``Alta Detalle``.
 
 .. image:: _static/btnadddetallepedfarm.png
    :align: center
@@ -67,7 +67,7 @@ Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (mo
 En esta parte, se presentará un formulario que el usuario deberá completar para poder dar de alta un nuevo detalle.
 
 .. ATTENTION::
-    El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará. 
+    El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
     En este punto, las posibles causas de errores son:
 
         - No se seleccionó un medicamento.
@@ -95,7 +95,7 @@ Una vez realizado el paso anterior aparecerá la siguiente ventana emergente (mo
 En esta parte, se presentará un formulario con la información actual del detalle y el usuario deberá actualizar aquella que considere necesaria.
 
 .. ATTENTION::
-    El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará. 
+    El sistema siempre validará que la información ingresada sea correcta. En caso de que los datos ingresados sean incorrectos el sistema lo informará.
     En este punto, las posibles causas de errores son:
 
         - No se ingresó una cantidad.
@@ -130,7 +130,7 @@ Si el usuario desea registrar el *Pedido de Farmacia*, deberá presionar el bot�
    :align: center
 
 .. ATTENTION::
-    El sistema siempre validará que la información del *Pedido a de Farmacia* sea correcta. En caso de que esta información sea incorrecta el sistema lo informará. 
+    El sistema siempre validará que la información del *Pedido a de Farmacia* sea correcta. En caso de que esta información sea incorrecta el sistema lo informará.
     En este punto, las posibles causas de errores son:
 
         - El pedido no contiene detalles
@@ -181,6 +181,11 @@ El usuario tendra la opción de visualizar un remito en PDF, presionanado el bot
 .. image:: _static/remitopedidofarmacia.png
    :align: center
 
+<<<<<<< HEAD
+.. _notific:
+
+=======
+>>>>>>> 4ce2293ba82133da628a2a37e202a2baa199dea6
 Notificaciones
 --------------
 En el caso de que se halla producido un pedido desde un mobile, mientras el sistema no estaba siendo atendido, se producira una notificacion como la siguiente:
@@ -197,6 +202,59 @@ Al presionar en el boton ``Ver`` se desplegaran los nuevos pedidos:
 .. image:: _static/notificacionDePedidoMobileVer.png
    :align: center
 
+<<<<<<< HEAD
+
+Pedidos con Faltantes distribuidos
+----------------------------------
+Cuando una farmacia hace un pedido (pequeño de hasta 20 productos) y no tenemos stock en drogueria pero si en Farmacia, podemos optar por pedir a la farmacia el envio del faltante.
+En este caso el pedido de ejemplo tenia un pendiente de 10.
+
+.. image:: _static/pendientes1.png
+   :align: center
+
+Para completarlo debemos presionar en el boton de ``Intentar completar con farmacias`` y luego ``Busqueda en Farmacia``.
+
+.. image:: _static/pendientes2.png
+   :align: center
+
+Por defecto nos dara cual es el movimiento de medicamentos optimo. Pero si queremos podemos elejir de farmacias.
+
+.. image:: _static/pendientes3-1.png
+   :align: center
+
+Nos aparecera un cartel de confirmacion.
+
+.. image:: _static/pendienteConfirm.png
+   :align: center
+
+Sino la otra opcion es:
+
+.. image:: _static/pendientes3-2.png
+   :align: center
+
+Al presionar nos mostrara un modal con informacion de donde el sistema ha encontrado stock para quitar:
+
+.. image:: _static/pendientes4.png
+   :align: center
+
+Aqui podremos elejir de que farmacia quitar. A modo de ayuda tenemos colores Rojo y Verde que nos ayudan a saber si me exedi en la cantidad.
+El sistema no permite que la cantidad sea mayor.
+
+.. image:: _static/pendiente5.png
+  :align: center
+
+.. image:: _static/pendiente6.png
+   :align: center
+
+Una vez lista la cantidad de cada uno a quitar presionamos el boton de Registrar.
+
+.. image:: _static/pendienteConfirm.png
+   :align: center
+
+
+
+=======
+>>>>>>> 4ce2293ba82133da628a2a37e202a2baa199dea6
 Reportes
 --------
 Si el usuario desea visualizar y/o generar reportes de estadisticas en relacion a los *Pedidos de Farmacia*, debera seleccionar el boton de **Reportes**.
