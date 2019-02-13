@@ -106,11 +106,9 @@ def buscarLotesYdescontarStock(pkFarmacia,lote,cantidad):
             sd.cantidad -= cantidad
             sd.save()
             if( (sd.cantidad == 0)and(sd.lote.stock == 0) ):
-                print "ENTRE"
                 loteObj=mmodels.Lote.objects.get(numero=lote)
                 loteObj.delete()
                 sd.delete()
-
 
             stockFYF = sd.lote.stockFarmaYfarmacias
             stockFYF.stockFarmacias -= cantidad
